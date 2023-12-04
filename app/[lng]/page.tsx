@@ -1,13 +1,12 @@
 import Footer from '@components/Footer'
 import Header from '@components/Header'
 import Image from 'next/image'
+import Link from 'next/link'
 
-export default function Home() {
+export default function Home({ params: { lng } }: { params: { lng: any } }) {
   return (
     <main className="px-10">
-      <Header />
       Hello Next-Tech
-      <Footer />
     </main>
   )
 }

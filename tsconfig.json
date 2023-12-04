@@ -30,6 +30,9 @@
       "@components/*": ["./components/*"],
       "@pages/*": ["./pages/*"],
       "@ui/*": ["./ui/*"],
+      "@utils/*": ["./utils/*"],
+      "@public/*": ["./public/*"],
+      "@i18n/*": ["./app/i18n/*"],
     }
   },
   "include": [
@@ -37,7 +40,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "next-i18next.config.js"  ],
   "exclude": [
     "node_modules"
   ]

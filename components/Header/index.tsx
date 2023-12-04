@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
         </li>
         <li>
           <Button primary>
-            <Link className='flex items-center gap-1' href="/signin">
+            <Link href="/signin" className='flex items-center gap-1'>
               SignIn
               <ArrowRightIcon className="h-5 w-5 text-darkmain" />
             </Link>
