@@ -4,6 +4,7 @@ import React from 'react';
 import Button from '@ui/Button';
 import Link from 'next/link';
 import { HeartIcon, ShoppingCartIcon, ArrowRightIcon, UserIcon } from '@heroicons/react/24/outline'
+import Dropdown from '../../ui/Dropdown';
 
 
 type HeaderProps = {
@@ -37,6 +38,9 @@ const Header: React.FC<HeaderProps> = ({ }) => {
         </div>
       </Link>
       <ul className="mx-1 flex gap-5 w-auto items-center lg:mx-4">
+        <li>
+          <Dropdown/>
+        </li>
         <li>
           <Button primary>
             <Link className='flex items-center gap-1' href="/signin">
