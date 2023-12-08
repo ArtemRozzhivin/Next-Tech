@@ -5,12 +5,28 @@ import Button from '@ui/Button';
 import Link from 'next/link';
 import { HeartIcon, ShoppingCartIcon, ArrowRightIcon, UserIcon } from '@heroicons/react/24/outline'
 import Dropdown from '../../ui/Dropdown';
+import Flag from 'react-flagkit';
+import { useTranslation } from '@app/i18n/client';
 
+const languages = [
+  { lang: 'uk', name: 'Ukraine', flag: 'UA' },
+  { lang: 'en', name: 'English', flag: 'GB' },
+]
 
 type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ }) => {
+  const { i18n } = useTranslation()
+  const [language, setLanguage] = React.useState(languages[0])
+
+  const changeLang = (lng: {lang: string, name: string, flag: string}) => {
+    setLanguage(lng)
+    i18n.changeLanguage(lng.lang)
+  }
+
+  console.log(i18n)
+
   return (
     <div className="bg-lightmain text-darkmain flex justify-between items-center py-5">
       <div onClick={() => {}} className="mx-1 md:hidden lg:mx-4">
@@ -39,7 +55,27 @@ const Header: React.FC<HeaderProps> = ({ }) => {
       </Link>
       <ul className="mx-1 flex gap-5 w-auto items-center lg:mx-4">
         <li>
-          <Dropdown/>
+        <Dropdown
+          chevron='regular'
+          items={languages}
+          buttonClassName='flex items-center w-full rounded-md border border-gray-300 shadow-sm px-3 md:px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 dark:text-gray-50 dark:border-gray-800 dark:bg-slate-800 dark:hover:bg-slate-700'
+          selectItemClassName='text-gray-700 block px-4 py-2 text-base cursor-pointer hover:bg-gray-200 dark:text-gray-50 dark:bg-slate-800 dark:hover:bg-slate-700'
+          title={(
+            <>
+              <Flag className='rounded-sm mr-1.5' country={language.flag} size={21} alt='' aria-hidden='true' />
+              {language.name}
+            </>
+          )}
+          labelExtractor={(lng: {name: string, flag: string}) => (
+            <div className='flex'>
+              <div className='pt-1'>
+                <Flag className='rounded-sm mr-1.5' country={lng.flag} size={21} alt={lng.flag} />
+              </div>
+              {lng.name}
+            </div>
+          )}
+          onSelect={(lng) => changeLang(lng)}
+          />
         </li>
         <li>
           <Button primary>

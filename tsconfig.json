@@ -40,7 +40,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "next-i18next.config.js"  ],
+, "next-i18next.config.js", "app/[lng]/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]
