@@ -4,6 +4,7 @@ import Header from '@src/components/Header'
 import { Inter } from 'next/font/google'
 import { notFound } from 'next/navigation'
 import './globals.css'
+import { NextIntlClientProvider, useMessages } from 'next-intl'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,6 +23,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode, params: { locale: any }
 }) {
+  const messages = useMessages();
 
   // Validate that the incoming `locale` parameter is valid
   if (!locales.includes(locale as any)) notFound();
@@ -29,9 +31,11 @@ export default function RootLayout({
   return (
     <html lang={locale}>
       <body className={inter.className}>
-        <Header />
-        {children}
-        <Footer />
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Header />
+          {children}
+          <Footer />
+        </NextIntlClientProvider>
         </body>
     </html>
   )

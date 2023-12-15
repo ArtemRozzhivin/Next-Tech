@@ -1,7 +1,7 @@
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl';
 
-export default async function Home({ params: { lng } }: { params: { lng: any } }) {
-  const t = await getTranslations("common");
+export default function Home({ params: { lng } }: { params: { lng: any } }) {
+  const t =  useTranslations("common");
   return (
     <main className="px-10">
       Hello Next-Tech, {t('features')}
