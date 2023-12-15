@@ -45,7 +45,7 @@ const Button = ({
     disabled={disabled || loading}
     type={type}
     onClick={onClick}
-    className={cx('relative inline-flex select-none items-center border leading-4 font-medium rounded-md', {
+    className={cx('relative inline-flex px-2 py-1 select-none items-center border leading-4 font-medium rounded-md', {
       'shadow-sm text-lightmain bg-darkmain hover:bg-slate-700 dark:bg-indigo-700 dark:hover:bg-indigo-800 border-transparent': primary,
       'text-slate-900 bg-slate-300 hover:bg-slate-200 border-transparent': secondary,
       'text-gray-700 bg-white hover:bg-gray-50 border-transparent': white,

@@ -1,4 +1,7 @@
 {
+  "Test": {
+    "test": "Test"
+  },
   "apiNotifications": {
     "somethingWentWrong": "Something went wrong, please try again",
     "emailRegistered": "A user with this email already exists",

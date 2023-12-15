@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import Button from '@ui/Button';
+import Button from '@src/ui/Button';
 import Link from 'next/link';
 import { HeartIcon, ShoppingCartIcon, ArrowRightIcon, UserIcon } from '@heroicons/react/24/outline'
 import Dropdown from '../../ui/Dropdown';

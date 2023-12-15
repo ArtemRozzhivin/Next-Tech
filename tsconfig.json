@@ -29,10 +29,10 @@
       ],
       "@components/*": ["./components/*"],
       "@pages/*": ["./pages/*"],
-      "@ui/*": ["./ui/*"],
+      "@ui/*": ["src/ui/*"],
       "@utils/*": ["./utils/*"],
       "@public/*": ["./public/*"],
-      "@i18n/*": ["./app/i18n/*"],
+      "@i18n/*": ["src/app/i18n/*"],
     }
   },
   "include": [
@@ -40,7 +40,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "next-i18next.config.js", "app/[lng]/page.jsx"  ],
+, "next-i18next.config.js", "src/app/[lng]/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]

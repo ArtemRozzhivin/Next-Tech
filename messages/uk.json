@@ -1,4 +1,7 @@
 {
+  "Test": {
+    "test": "Тест"
+  },
   "apiNotifications": {
     "somethingWentWrong": "Щось пішло не так, будь ласка, спробуйте ще раз",
     "emailRegistered": "Користувач з такою електронною адресою вже існує",
