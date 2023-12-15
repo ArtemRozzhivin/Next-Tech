@@ -1,10 +1,10 @@
 import { useTranslations } from 'next-intl';
 
-export default function Home({ params: { lng } }: { params: { lng: any } }) {
-  const t =  useTranslations("common");
+export default function Home() {
+  const t = useTranslations();
   return (
     <main className="px-10">
-      Hello Next-Tech, {t('features')}
+      Hello Next-Tech, {t('common.features')}
     </main>
   )
 }
