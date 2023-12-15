@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { HeartIcon, ShoppingCartIcon, ArrowRightIcon, UserIcon } from '@heroicons/react/24/outline'
 import Dropdown from '../../ui/Dropdown';
 import Flag from 'react-flagkit';
-import { useTranslation } from '@app/i18n/client';
+import { usePathname, useRouter } from 'next/navigation';
 
 const languages = [
   { lang: 'uk', name: 'Ukraine', flag: 'UA' },
@@ -17,15 +17,8 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ }) => {
-  const { i18n } = useTranslation()
-  const [language, setLanguage] = React.useState(languages[0])
-
-  const changeLang = (lng: {lang: string, name: string, flag: string}) => {
-    setLanguage(lng)
-    i18n.changeLanguage(lng.lang)
-  }
-
-  console.log(i18n)
+  const pathname = usePathname(); // returns '/apples/fresh/item/1'
+  const router = useRouter()
 
   return (
     <div className="bg-lightmain text-darkmain flex justify-between items-center py-5">
@@ -62,10 +55,11 @@ const Header: React.FC<HeaderProps> = ({ }) => {
           selectItemClassName='text-gray-700 block px-4 py-2 text-base cursor-pointer hover:bg-gray-200 dark:text-gray-50 dark:bg-slate-800 dark:hover:bg-slate-700'
           title={(
             <>
-              <Flag className='rounded-sm mr-1.5' country={language.flag} size={21} alt='' aria-hidden='true' />
-              {language.name}
+              {/* <Flag className='rounded-sm mr-1.5' country={language.flag} size={21} alt='' aria-hidden='true' />
+              {language.name} */}
             </>
           )}
+          keyExtractor={(lng: {lang: string, name: string, flag: string}) => lng.lang}
           labelExtractor={(lng: {name: string, flag: string}) => (
             <div className='flex'>
               <div className='pt-1'>
@@ -74,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
               {lng.name}
             </div>
           )}
-          onSelect={(lng) => changeLang(lng)}
+          onSelect={() => {}}
           />
         </li>
         <li>
