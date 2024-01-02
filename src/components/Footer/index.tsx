@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import React, { memo } from 'react'
 import Flag from 'react-flagkit'
+import techLogo from '@assets/techLogo.png'
 
 
 const Footer = (): JSX.Element => {
@@ -15,7 +16,7 @@ const Footer = (): JSX.Element => {
         <div className='xl:grid xl:grid-cols-2 xl:gap-8'>
           <div className='space-y-5 xl:col-span-1'>
             <div className='flex gap-5 flex-wrap'>
-              <Image height={20} width={20} src='/assets/logo_white.png' loading='lazy' alt='logo' />
+              <Image src={techLogo} width={40} alt="logo" loading='lazy' />
               <span className='text-xl font-bold'>NextTech</span>
             </div>
             <p className='text-base'>

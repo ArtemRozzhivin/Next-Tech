@@ -1,10 +1,12 @@
+import CardList from '@src/components/CardList';
 import { useTranslations } from 'next-intl';
 
 export default function Home() {
   const t = useTranslations();
+  console.log(process.env.FIREBASE_API_KEY);
   return (
-    <main className="px-10">
-      Hello Next-Tech, {t('common.features')}
+    <main className='px-10'>
+      <CardList />
     </main>
-  )
+  );
 }

@@ -7,6 +7,8 @@ import Dropdown from '../../ui/Dropdown';
 import Flag from 'react-flagkit';
 import { useRouter, usePathname, Link } from '@src/navigation'
 import { useLocale } from 'next-intl';
+import techLogo from '@assets/techLogo.png'
+import Image from 'next/image';
 
 type Ilanguages = {
   lang: string,
@@ -55,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
         </svg>
       </div>
       <Link href="/" className="mx-1 flex lg:mx-4">
-        <img src="assets/logo.png" alt="logo" />
+        <Image src={techLogo} width={40} alt="logo" />
         <div className="hidden ml-3 md:block">
           <h3 className="font-bold text-xl uppercase leading-6">Next Tech</h3>
           <div className="text-xs lg:text-sm leading-4 text-grayApp">
