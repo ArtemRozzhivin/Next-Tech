@@ -1,4 +1,4 @@
-import CardList from '@src/components/CardList';
+import CardList from '@src/components/ProductsList';
 import { useTranslations } from 'next-intl';
 
 export default function Home() {
