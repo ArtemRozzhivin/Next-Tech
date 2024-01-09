@@ -1,4 +1,5 @@
 import CardList from '@src/components/ProductsList';
+import Input from '@src/ui/Input';
 import { useTranslations } from 'next-intl';
 
 export default function Home() {

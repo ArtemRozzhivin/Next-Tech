@@ -150,7 +150,7 @@ const Signin = ({ params: { lng }, login, loginSuccess, loginFailed, ssrTheme }:
             <Button
               primary
               giant
-              className='w-full justify-center bg-red-600 text-gray-700'
+              className='w-full justify-center'
               type='submit'
               loading={isLoading}>
               {t('auth.signin.button')}

@@ -5,30 +5,39 @@ import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase
 import React, { useEffect } from 'react';
 import { HeartIcon } from '@heroicons/react/24/solid';
 import Button from '@src/ui/Button';
+import Image from 'next/image';
 // import { HeartIcon } from '@heroicons/react/24/outline';
 
-const ProductCard = () => {
+interface IProductCard {
+  model: string;
+  image: string;
+}
+
+const ProductCard = ({ model, image }: IProductCard) => {
+  console.log(image);
+
   return (
     <div>
-      <div className='group border-gray-100/30 flex w-full max-w-xs flex-col self-center overflow-hidden rounded-lg border bg-darkmain shadow-md'>
+      <div className='group border-gray-100/30 flex w-full flex-col self-center overflow-hidden rounded-lg border bg-darkmain shadow-md'>
         <div className='relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl'>
+          {/* {!!image && <Image fill src={image} alt='product-img' />} */}
           <img
-            className='peer absolute top-0 right-0 h-full w-full object-cover'
-            src='https://images.unsplash.com/flagged/photo-1556637640-2c80d3201be8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60?a=b'
+            className='peer absolute top-0 right-0 h-full w-full object-cover object-contain'
+            src={image}
             alt='product image'
           />
-          <img
+          {/* <img
             className='peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0'
             src='https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'
             alt='product image'
-          />
+          /> */}
           <button>
             <HeartIcon className='text-colorMain w-8 h-8 absolute right-2 top-2' />
           </button>
         </div>
         <div className='mt-4 px-5 pb-5'>
           <a href='#'>
-            <h5 className='text-xl tracking-tight text-lightmain'>Nike Air MX Super 2500 - Red</h5>
+            <h5 className='text-xl tracking-tight text-lightmain'>{model}</h5>
           </a>
           <div className='mt-2 mb-5 flex items-center justify-between'>
             <p>
