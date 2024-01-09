@@ -10,7 +10,12 @@ import Image from 'next/image';
 
 interface IProductCard {
   model: string;
-  image: string;
+  image: {
+    large?: string | null;
+    thumbnail?: string | null;
+    back?: string | null;
+    front?: string | null;
+  };
 }
 
 const ProductCard = ({ model, image }: IProductCard) => {
@@ -20,17 +25,18 @@ const ProductCard = ({ model, image }: IProductCard) => {
     <div>
       <div className='group border-gray-100/30 flex w-full flex-col self-center overflow-hidden rounded-lg border bg-darkmain shadow-md'>
         <div className='relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl'>
-          {/* {!!image && <Image fill src={image} alt='product-img' />} */}
           <img
-            className='peer absolute top-0 right-0 h-full w-full object-cover object-contain'
-            src={image}
+            className='peer absolute top-0 right-0 h-full w-full object-contain'
+            src={image.large ? image.large : image.front}
             alt='product image'
           />
-          {/* <img
-            className='peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0'
-            src='https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'
-            alt='product image'
-          /> */}
+          {image.back && (
+            <img
+              className='peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-contain transition-all delay-100 duration-500 hover:right-0'
+              src={image.back}
+              alt='product image'
+            />
+          )}
           <button>
             <HeartIcon className='text-colorMain w-8 h-8 absolute right-2 top-2' />
           </button>

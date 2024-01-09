@@ -1,8 +1,8 @@
 const routes = Object.freeze({
-  signin: '/login',
+  signin: '/signin',
   signup: '/signup',
   reset_password: '/recovery',
   main: '/',
-})
+});
 
-export default routes
+export default routes;

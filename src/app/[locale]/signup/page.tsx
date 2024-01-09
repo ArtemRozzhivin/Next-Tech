@@ -8,7 +8,6 @@ import _omit from 'lodash/omit';
 import _isEmpty from 'lodash/isEmpty';
 
 // import GoogleAuth from 'components/GoogleAuth'
-// import GithubAuth from 'components/GithubAuth'
 // import { withAuthentication, auth } from 'hoc/protected'
 import routes from '@src/routes';
 import Input from '@ui/Input';
@@ -22,52 +21,23 @@ import {
   MAX_PASSWORD_CHARS,
 } from '@src/utils/validator';
 import { useTranslations } from 'next-intl';
-import { Link } from '@src/navigation';
+import { Link, useRouter } from '@src/navigation';
+import { signup } from '@src/firebaseConfig';
+import GoogleAuth from '@src/components/GoogleAuth';
 
 interface ISignupForm {
   email: string;
   password: string;
   repeat: string;
-  tos: boolean;
-  dontRemember: boolean;
-  checkIfLeaked: boolean;
 }
 
-interface ISignup {
-  signup: (
-    data: {
-      email: string;
-      password: string;
-      repeat: string;
-      dontRemember: boolean;
-      checkIfLeaked: boolean;
-    },
-    t: (
-      key: string,
-      options?: {
-        [key: string]: string | number;
-      },
-    ) => string,
-    callback: (res: any) => void,
-  ) => void;
-  authSSO: (
-    provider: string,
-    dontRemember: boolean,
-    t: (key: string) => string,
-    callback: (res: any) => void,
-  ) => void;
-  ssrTheme: string;
-}
-
-const Signup = ({ signup, authSSO, ssrTheme }: ISignup): JSX.Element => {
+const Signup = (): JSX.Element => {
   const t = useTranslations();
+  const router = useRouter();
   const [form, setForm] = useState<ISignupForm>({
     email: '',
     password: '',
     repeat: '',
-    tos: false,
-    dontRemember: false,
-    checkIfLeaked: true,
   });
   const [validated, setValidated] = useState<boolean>(false);
   const [errors, setErrors] = useState<{
@@ -103,10 +73,6 @@ const Signup = ({ signup, authSSO, ssrTheme }: ISignup): JSX.Element => {
       allErrors.password = t('auth.common.passwordTooLong', { amount: MAX_PASSWORD_CHARS });
     }
 
-    if (!form.tos) {
-      allErrors.tos = t('auth.common.tosError');
-    }
-
     const valid = _isEmpty(_keys(allErrors));
 
     setErrors(allErrors);
@@ -117,18 +83,15 @@ const Signup = ({ signup, authSSO, ssrTheme }: ISignup): JSX.Element => {
     validate();
   }, [form]); // eslint-disable-line
 
-  const signUpCallback = (result: any) => {
-    if (result) {
-      // trackCustom('SIGNUP')
-    } else {
-      setIsLoading(false);
-    }
-  };
-
   const onSubmit = (data: ISignupForm) => {
     if (!isLoading) {
       setIsLoading(true);
-      signup(_omit(data, 'tos'), t, signUpCallback);
+      try {
+        signup(data.email, data.password);
+        router.push('/');
+      } catch (error) {
+        console.log('ERROR', error);
+      }
     }
   };
 
@@ -157,8 +120,8 @@ const Signup = ({ signup, authSSO, ssrTheme }: ISignup): JSX.Element => {
       <div className='bg-gray-50 dark:bg-slate-900 flex flex-col py-6 px-4 sm:px-6 lg:px-8'>
         <div className='flex min-h-full flex-1 flex-col justify-center py-6 sm:px-6 lg:px-8'>
           <div className='sm:mx-auto sm:w-full sm:max-w-md'>
-            <p className='text-center text-base text-gray-900 dark:text-gray-50'>
-              {t('auth.signup.noCC')}
+            <p className='text-center text-2xl text-gray-900 dark:text-gray-50'>
+              {t('auth.signup.title')}
             </p>
           </div>
           <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]'>
@@ -213,20 +176,8 @@ const Signup = ({ signup, authSSO, ssrTheme }: ISignup): JSX.Element => {
                     </span>
                   </div>
                 </div>
-                <div className='mt-6 grid grid-cols-2 gap-4'>
-                  {/* <GoogleAuth
-                    setIsLoading={setIsLoading}
-                    authSSO={authSSO}
-                    callback={signUpCallback}
-                    dontRemember={false}
-                  />
-                  <GithubAuth
-                    setIsLoading={setIsLoading}
-                    authSSO={authSSO}
-                    callback={signUpCallback}
-                    dontRemember={false}
-                    ssrTheme={ssrTheme}
-                  /> */}
+                <div className='mt-6 w-full'>
+                  <GoogleAuth className='w-full' />
                 </div>
               </div>
             </div>
@@ -235,7 +186,7 @@ const Signup = ({ signup, authSSO, ssrTheme }: ISignup): JSX.Element => {
               <span>{t('auth.signup.alreadyAMember')} </span>
               <Link
                 href={routes.signin}
-                className='font-semibold leading-6 text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-500'
+                className='font-semibold leading-6 text-colorMain hover:text-colorSecond'
                 aria-label={t('titles.signin')}>
                 {t('auth.common.signinInstead')}
               </Link>

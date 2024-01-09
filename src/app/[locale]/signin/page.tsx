@@ -4,7 +4,8 @@ import React, { useState, useEffect, memo } from 'react';
 import _keys from 'lodash/keys';
 import _isEmpty from 'lodash/isEmpty';
 import _isString from 'lodash/isString';
-import Link from 'next/link';
+import { Link } from '@src/navigation';
+import { signin } from '@src/firebaseConfig';
 // import { useTranslation } from '@i18n/client'
 
 // import GoogleAuth from 'components/GoogleAuth'
@@ -14,42 +15,20 @@ import Input from '@ui/Input';
 import Button from '@ui/Button';
 import { isValidEmail, isValidPassword, MIN_PASSWORD_CHARS } from '@src/utils/validator';
 import { useTranslations } from 'next-intl';
+import GoogleAuth from '@src/components/GoogleAuth';
 // import { IUser } from 'redux/models/IUser'
 // import { submit2FA } from 'api'
 
 interface ISigninForm {
   email: string;
   password: string;
-  dontRemember: boolean;
 }
 
-interface ISignin {
-  params: { lng: any };
-  login: (
-    data: {
-      email: string;
-      password: string;
-      dontRemember: boolean;
-    },
-    callback: (result: boolean, twoFARequired: boolean) => void,
-  ) => void;
-  loginSuccess: (user: string) => void;
-  loginFailed: (error: string) => void;
-  authSSO: (
-    provider: string,
-    dontRemember: boolean,
-    t: (key: string) => string,
-    callback: (res: any) => void,
-  ) => void;
-  ssrTheme: string;
-}
-
-const Signin = ({ params: { lng }, login, loginSuccess, loginFailed, ssrTheme }: ISignin) => {
+const Signin = () => {
   const t = useTranslations();
   const [form, setForm] = useState<ISigninForm>({
     email: '',
     password: '',
-    dontRemember: false,
   });
   const [validated, setValidated] = useState<boolean>(false);
   const [errors, setErrors] = useState<{
@@ -83,16 +62,10 @@ const Signin = ({ params: { lng }, login, loginSuccess, loginFailed, ssrTheme }:
     validate();
   }, [form]); // eslint-disable-line
 
-  const loginCallback = (result: boolean, twoFARequired: boolean) => {
-    if (!result) {
-      setIsLoading(false);
-    }
-  };
-
   const onSubmit = (data: ISigninForm) => {
     if (!isLoading) {
       setIsLoading(true);
-      login(data, loginCallback);
+      signin(data.email, data.password);
     }
   };
 
@@ -132,6 +105,7 @@ const Signin = ({ params: { lng }, login, loginSuccess, loginFailed, ssrTheme }:
               label={t('auth.common.email')}
               value={form.email}
               className='mt-4'
+              placeholder='example@gmail.com'
               onChange={handleInput}
               error={beenSubmitted ? errors.email : ''}
             />
@@ -168,17 +142,22 @@ const Signin = ({ params: { lng }, login, loginSuccess, loginFailed, ssrTheme }:
                 </span>
               </div>
             </div>
-            <div className='mt-6 grid grid-cols-2 gap-4'>
-              {/* <GoogleAuth
-                  setIsLoading={setIsLoading}
-                  authSSO={authSSO}
-                  callback={loginCallback}
-                  dontRemember={false}
-                /> */}
+            <div className='mt-6 w-full'>
+              <GoogleAuth className='w-full' />
             </div>
           </div>
         </div>
       </div>
+
+      <p className='mt-10 text-center text-sm text-gray-500 dark:text-gray-200'>
+        <span>{t('auth.signup.notRegisteredYet')} </span>
+        <Link
+          href={routes.signup}
+          className='font-semibold leading-6 text-colorMain hover:text-colorSecond'
+          aria-label={t('titles.signup')}>
+          {t('auth.common.signupInstead')}
+        </Link>
+      </p>
     </div>
   );
 };

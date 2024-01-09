@@ -58,7 +58,7 @@ const Input = ({
           onChange={onChange}
           onKeyDown={onKeyDown}
           className={cx(
-            'p-2 shadow-sm border-2 text-darksecond border-colorSecond hover:border-colorThird rounded-md focus:border-colorMain block w-full sm:text-sm',
+            'p-2 shadow-sm border-2 text-darksecond border-colorMain hover:border-colorSecond rounded-md focus:border-colorSecond block w-full sm:text-sm',
             {
               'border-red-300 text-red-900 placeholder-red-300': isError,
               'cursor-text': disabled,

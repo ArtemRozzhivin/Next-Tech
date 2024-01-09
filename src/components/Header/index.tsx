@@ -9,6 +9,7 @@ import { useRouter, usePathname, Link } from '@src/navigation';
 import { useLocale } from 'next-intl';
 import techLogo from '@assets/techLogo.png';
 import Image from 'next/image';
+import { auth } from '@src/firebaseConfig';
 
 type Ilanguages = {
   lang: string;
@@ -28,6 +29,10 @@ const Header: React.FC<HeaderProps> = ({}) => {
   const router = useRouter();
   const locale = useLocale();
   const [language, setLanguage] = React.useState<Ilanguages>(languages[0]);
+
+  const user = auth.currentUser;
+
+  console.log(user);
 
   useEffect(() => {
     const lang = languages.find((lng) => lng.lang === locale);
@@ -108,17 +113,23 @@ const Header: React.FC<HeaderProps> = ({}) => {
           </Link>
         </li>
         <li>
-          <Button primary>
-            <Link href='/signin'>SignIn</Link>
-          </Button>
-        </li>
-        <li>
-          <Button primary>
+          {!!user ? (
+            <div>user</div>
+          ) : (
+            <div>
+              <Link href='/signin'>
+                <Button noBorder giant>
+                  <UserIcon className='h-8 w-8 text-colorSecond' />
+                </Button>
+              </Link>
+            </div>
+          )}
+          {/* <Button primary>
             <Link className='flex items-center gap-1' href='/signin'>
               Профіль
               <UserIcon className='h-5 w-5 text-white' />
             </Link>
-          </Button>
+          </Button> */}
         </li>
       </ul>
     </div>

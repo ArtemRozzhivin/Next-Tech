@@ -66,14 +66,14 @@ const Button = ({
     className={cx(
       'relative inline-flex px-2 py-1 select-none items-center border leading-4 font-medium rounded-md',
       {
-        'shadow-sm text-lightmain bg-colorMain hover:bg-colorThird border-transparent': primary,
-        'text-colorThird bg-lightmain hover:bg-lightsecond border-colorThird': secondary,
+        'shadow-sm text-lightmain bg-colorMain hover:bg-colorSecond border-transparent': primary,
+        'text-colorMain bg-transparent hover:bg-colorThird border-colorMain': secondary,
         'text-gray-700 bg-lightsecond hover:bg-lightmain border-transparent': white,
         'text-gray-50 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 border-transparent':
           danger,
         'text-red-500 hover:text-red-600 border-red-600 dark:text-red-300 dark:hover:text-red-400 dark:border-red-500 border-1':
           semiDanger,
-        'focus:border-none border-none text-gray-700 dark:text-white focus:ring-0 focus:ring-offset-0':
+        'focus:border-none hover:bg-colorThird border-none text-gray-700 dark:text-white focus:ring-0 focus:ring-offset-0':
           noBorder,
         'px-2.5 py-1.5 text-xs': small,
         'px-2.5 py-1.5 text-sm': semiSmall,
