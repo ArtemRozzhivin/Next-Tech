@@ -25,16 +25,28 @@ const ProductCard = ({ model, image }: IProductCard) => {
     <div>
       <div className='group border-gray-100/30 flex w-full flex-col self-center overflow-hidden rounded-lg border bg-darkmain shadow-md'>
         <div className='relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl'>
-          <img
+          {/* <img
             className='peer absolute top-0 right-0 h-full w-full object-contain'
             src={image.large ? image.large : image.front}
             alt='product image'
+          /> */}
+          <Image
+            className='peer absolute top-0 right-0 h-full w-full object-contain'
+            fill
+            src={image.large ? image.large : image.front}
+            alt='product'
           />
           {image.back && (
-            <img
+            // <img
+            //   className='peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-contain transition-all delay-100 duration-500 hover:right-0'
+            //   src={image.back}
+            //   alt='product image'
+            // />
+            <Image
               className='peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-contain transition-all delay-100 duration-500 hover:right-0'
+              fill
               src={image.back}
-              alt='product image'
+              alt='product'
             />
           )}
           <button>

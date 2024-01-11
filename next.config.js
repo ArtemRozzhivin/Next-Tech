@@ -6,9 +6,18 @@ const nextConfig = withNextIntl({
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'i.techspecs.io',
+        hostname: 'i.techspecs.io/**',
         port: '',
-        pathname: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i-techspecs-io.s3.us-west-1.amazonaws.com/**',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com/**',
+        port: '',
       },
     ],
   },

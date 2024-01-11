@@ -10,6 +10,8 @@ import { useLocale } from 'next-intl';
 import techLogo from '@assets/techLogo.png';
 import Image from 'next/image';
 import { auth } from '@src/firebaseConfig';
+import ProfileMenu from '../ProfileMenu';
+import axios from 'axios';
 
 type Ilanguages = {
   lang: string;
@@ -33,6 +35,8 @@ const Header: React.FC<HeaderProps> = ({}) => {
   const user = auth.currentUser;
 
   console.log(user);
+
+  const logoutHandler = () => {};
 
   useEffect(() => {
     const lang = languages.find((lng) => lng.lang === locale);
@@ -114,7 +118,9 @@ const Header: React.FC<HeaderProps> = ({}) => {
         </li>
         <li>
           {!!user ? (
-            <div>user</div>
+            <div>
+              <ProfileMenu user={auth.currentUser} logoutHandler={logoutHandler} />
+            </div>
           ) : (
             <div>
               <Link href='/signin'>
