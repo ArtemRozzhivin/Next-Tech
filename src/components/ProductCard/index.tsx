@@ -19,8 +19,6 @@ interface IProductCard {
 }
 
 const ProductCard = ({ model, image }: IProductCard) => {
-  console.log(image);
-
   return (
     <div>
       <div className='group border-gray-100/30 flex w-full flex-col self-center overflow-hidden rounded-lg border bg-darkmain shadow-md'>

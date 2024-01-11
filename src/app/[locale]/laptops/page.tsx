@@ -1,5 +1,6 @@
 'use client';
 
+import ProductPage from '@src/components/ProductPage';
 import CardList, { IProductItem } from '@src/components/ProductsList';
 import { db } from '@src/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
@@ -33,8 +34,9 @@ const Laptops = () => {
 
   return (
     <div>
-      <h2>Laptops</h2>
-      <CardList items={laptops} />
+      <ProductPage title={'Laptops'}>
+        <CardList items={laptops} />
+      </ProductPage>
     </div>
   );
 };

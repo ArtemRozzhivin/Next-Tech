@@ -6,12 +6,12 @@ import { db } from '@src/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 
-const Tablets = () => {
-  const [tablets, setTablets] = useState<IProductItem[]>([]);
+const Smartwatches = () => {
+  const [smartwatches, setSmartwatches] = useState<IProductItem[]>([]);
 
-  const fetchTablets = async () => {
+  const fetchSmartwatches = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, 'tablets'));
+      const querySnapshot = await getDocs(collection(db, 'smartwatches'));
       const productsArray = [];
 
       const dataArray = querySnapshot.docs.map((doc) => doc.data());
@@ -21,24 +21,23 @@ const Tablets = () => {
         productsArray.push(doc.data());
       });
 
-      setTablets(dataArray as IProductItem[]);
+      setSmartwatches(dataArray as IProductItem[]);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
   };
 
   useEffect(() => {
-    fetchTablets();
-    // fetchTablets();
+    fetchSmartwatches();
   }, []);
 
   return (
     <div>
-      <ProductPage title={'Tablets'}>
-        <CardList items={tablets} />
+      <ProductPage title={'Smartwatches'}>
+        <CardList items={smartwatches} />
       </ProductPage>
     </div>
   );
 };
 
-export default Tablets;
+export default Smartwatches;

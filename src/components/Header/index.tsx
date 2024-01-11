@@ -103,17 +103,10 @@ const Header: React.FC<HeaderProps> = ({}) => {
           />
         </li>
         <li>
-          <Button primary>
-            <Link className='flex items-center gap-1' href='/signin'>
-              Кошик
-              <ShoppingCartIcon className='h-5 w-5 text-darkmain' />
-            </Link>
-          </Button>
-        </li>
-        <li className='hidden md:block'>
-          <Link className='flex items-center gap-1' href='/'>
-            Улюблені
-            <HeartIcon className='h-5 w-5 text-darkmain' />
+          <Link className='flex items-center gap-1' href='/signin'>
+            <Button noBorder giant>
+              <ShoppingCartIcon className='h-8 w-8 text-colorSecond' />
+            </Button>
           </Link>
         </li>
         <li>

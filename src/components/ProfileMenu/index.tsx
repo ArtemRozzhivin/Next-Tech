@@ -7,6 +7,7 @@ import { Fragment } from 'react';
 import cx from 'clsx';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import routes from '@src/routes';
 
 const ProfileMenu = ({ user, logoutHandler }: { user: any; logoutHandler: () => void }) => {
   const t = useTranslations();
@@ -48,11 +49,11 @@ const ProfileMenu = ({ user, logoutHandler }: { user: any; logoutHandler: () => 
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  href='#'
+                  href={routes.wishlist}
                   className={cx('block px-4 py-2 text-sm text-gray-700 dark:text-gray-50', {
                     'bg-gray-100 dark:bg-slate-800': active,
                   })}>
-                  {t('Збережені товари')}
+                  {t('Список бажань')}
                 </Link>
               )}
             </Menu.Item>
@@ -63,7 +64,7 @@ const ProfileMenu = ({ user, logoutHandler }: { user: any; logoutHandler: () => 
                   className={cx('block px-4 py-2 text-sm text-gray-700 dark:text-gray-50', {
                     'bg-gray-100 dark:bg-slate-800': active,
                   })}>
-                  {t('Куплені товари')}
+                  {t('Мої замовлення')}
                 </Link>
               )}
             </Menu.Item>
@@ -72,7 +73,7 @@ const ProfileMenu = ({ user, logoutHandler }: { user: any; logoutHandler: () => 
           <Menu.Item>
             {({ active }) => (
               <Link
-                href='#'
+                href={routes.profile}
                 className={cx('block px-4 py-2 text-sm text-gray-700 dark:text-gray-50', {
                   'bg-gray-100 dark:bg-slate-800': active,
                 })}>

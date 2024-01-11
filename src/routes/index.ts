@@ -1,8 +1,10 @@
 const routes = Object.freeze({
-  signin: '/signin',
-  signup: '/signup',
-  reset_password: '/recovery',
   main: '/',
+  signup: '/signup',
+  signin: '/signin',
+  profile: '/profile',
+  wishlist: '/wishlist',
+  orders: '/orders',
 });
 
 export default routes;
