@@ -11,7 +11,8 @@ import techLogo from '@assets/techLogo.png';
 import Image from 'next/image';
 import { auth } from '@src/firebaseConfig';
 import ProfileMenu from '../ProfileMenu';
-import axios from 'axios';
+import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 type Ilanguages = {
   lang: string;
@@ -30,13 +31,31 @@ const Header: React.FC<HeaderProps> = ({}) => {
   const pathname = usePathname();
   const router = useRouter();
   const locale = useLocale();
+  const dispatch = useAppDispatch();
+  const { userRedux } = useAppSelector((state) => state.auth);
   const [language, setLanguage] = React.useState<Ilanguages>(languages[0]);
+  const [user, setUser] = React.useState();
 
-  const user = auth.currentUser;
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUser(user);
+      console.log(user);
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
 
-  console.log(user);
-
-  const logoutHandler = () => {};
+  const logoutHandler = async () => {
+    await signOut(auth);
+    setUser(null);
+    console.log('logout');
+    console.log(user);
+  };
 
   useEffect(() => {
     const lang = languages.find((lng) => lng.lang === locale);
@@ -68,7 +87,11 @@ const Header: React.FC<HeaderProps> = ({}) => {
         <Image src={techLogo} width={40} alt='logo' />
         <div className='hidden ml-3 md:block'>
           <h3 className='font-bold text-xl uppercase leading-6'>Next Tech</h3>
-          <div className='text-xs lg:text-sm leading-4 text-grayApp'>Магазин найкращої техніки</div>
+          <button
+            onClick={() => setTest(!test)}
+            className='text-xs lg:text-sm leading-4 text-grayApp'>
+            Магазин найкращої техніки
+          </button>
         </div>
       </Link>
       <ul className='mx-1 flex gap-5 w-auto items-center lg:mx-4'>
