@@ -13,6 +13,7 @@ import { auth } from '@src/firebaseConfig';
 import ProfileMenu from '../ProfileMenu';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { authActions } from '@src/redux/reducers/auth';
 
 type Ilanguages = {
   lang: string;
@@ -32,29 +33,12 @@ const Header: React.FC<HeaderProps> = ({}) => {
   const router = useRouter();
   const locale = useLocale();
   const dispatch = useAppDispatch();
-  const { userRedux } = useAppSelector((state) => state.auth);
+  const user = useAppSelector((state) => state.auth.user);
   const [language, setLanguage] = React.useState<Ilanguages>(languages[0]);
-  const [user, setUser] = React.useState();
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUser(user);
-      console.log(user);
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-      const uid = user.uid;
-      // ...
-    } else {
-      // User is signed out
-      // ...
-    }
-  });
 
   const logoutHandler = async () => {
     await signOut(auth);
-    setUser(null);
-    console.log('logout');
-    console.log(user);
+    dispatch(authActions.logout());
   };
 
   useEffect(() => {
@@ -135,7 +119,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
         <li>
           {!!user ? (
             <div>
-              <ProfileMenu user={auth.currentUser} logoutHandler={logoutHandler} />
+              <ProfileMenu user={user} logoutHandler={logoutHandler} />
             </div>
           ) : (
             <div>

@@ -4,20 +4,14 @@ import React, { useState, useEffect, memo } from 'react';
 import _keys from 'lodash/keys';
 import _isEmpty from 'lodash/isEmpty';
 import _isString from 'lodash/isString';
-import { Link } from '@src/navigation';
+import { Link, useRouter } from '@src/navigation';
 import { signin } from '@src/firebaseConfig';
-// import { useTranslation } from '@i18n/client'
-
-// import GoogleAuth from 'components/GoogleAuth'
-// import GithubAuth from 'components/GithubAuth'
 import routes from '@src/routes';
 import Input from '@ui/Input';
 import Button from '@ui/Button';
 import { isValidEmail, isValidPassword, MIN_PASSWORD_CHARS } from '@src/utils/validator';
 import { useTranslations } from 'next-intl';
 import GoogleAuth from '@src/components/GoogleAuth';
-// import { IUser } from 'redux/models/IUser'
-// import { submit2FA } from 'api'
 
 interface ISigninForm {
   email: string;
@@ -26,6 +20,7 @@ interface ISigninForm {
 
 const Signin = () => {
   const t = useTranslations();
+  const router = useRouter();
   const [form, setForm] = useState<ISigninForm>({
     email: '',
     password: '',
@@ -66,6 +61,7 @@ const Signin = () => {
     if (!isLoading) {
       setIsLoading(true);
       signin(data.email, data.password);
+      router.push('/');
     }
   };
 

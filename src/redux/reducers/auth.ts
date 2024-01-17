@@ -5,17 +5,16 @@ import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import _filter from 'lodash/filter';
 import _map from 'lodash/map';
 import { IUser } from '../models/IUser';
+import { User } from 'firebase/auth';
 
 interface IAuthState {
-  user: IUser;
-  redirectPath: string | null;
+  user: User | null;
   authenticated: boolean;
   loading: boolean;
 }
 
 const initialState: IAuthState = {
-  user: {} as IUser,
-  redirectPath: null,
+  user: null,
   authenticated: false,
   loading: true,
 };
@@ -27,29 +26,26 @@ const authSlice = createSlice({
     finishLoading: (state) => {
       state.loading = false;
     },
-    loginSuccessful: (state, { payload }: PayloadAction<IUser>) => {
+    loginSuccessful: (state, { payload }: PayloadAction<User>) => {
       state.user = payload;
       state.authenticated = true;
     },
-    signupUpSuccessful: (state, { payload }: PayloadAction<IUser>) => {
+    signupUpSuccessful: (state, { payload }: PayloadAction<User>) => {
       state.user = payload;
       state.authenticated = true;
     },
     logout: (state) => {
-      state.user = {} as IUser;
+      state.user = null;
       state.authenticated = false;
-    },
-    savePath: (state, { payload }: PayloadAction<string>) => {
-      state.redirectPath = payload;
     },
     deleteAccountSuccess: (state) => {
-      state.user = {} as IUser;
+      state.user = {} as User;
       state.authenticated = false;
     },
-    updateUserData: (state, { payload }: PayloadAction<IUser>) => {
+    updateUserData: (state, { payload }: PayloadAction<User>) => {
       state.user = { ...state.user, ...payload };
     },
-    setUser: (state, { payload }: PayloadAction<IUser>) => {
+    setUser: (state, { payload }: PayloadAction<User>) => {
       state.user = { ...state.user, ...payload };
     },
   },

@@ -8,15 +8,24 @@ import cx from 'clsx';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import routes from '@src/routes';
+import { User } from 'firebase/auth';
 
-const ProfileMenu = ({ user, logoutHandler }: { user: any; logoutHandler: () => void }) => {
+const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () => void }) => {
   const t = useTranslations();
 
   return (
     <Menu as='div' className='relative ml-3'>
       <div>
         <Menu.Button className='flex justify-center items-center gap-2 font-semibold leading-6 text-base text-slate-800 hover:text-slate-700 dark:text-slate-200 dark:hover:text-white'>
-          <Image className='rounded-full' width={40} height={40} src={user.photoURL} alt='avatar' />
+          {user.photoURL && (
+            <Image
+              className='rounded-full'
+              width={40}
+              height={40}
+              src={user.photoURL}
+              alt='avatar'
+            />
+          )}
           <span>{t('common.account')}</span>
           <ChevronDownIcon className='h-4 w-4 ml-1 stroke-2' aria-hidden='true' />
         </Menu.Button>

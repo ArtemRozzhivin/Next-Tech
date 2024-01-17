@@ -1,11 +1,28 @@
+'use client';
+
 import Categories from '@src/components/Categories';
 import CardList from '@src/components/ProductsList';
+import { auth } from '@src/firebaseConfig';
+import { useAppDispatch } from '@src/redux/hooks';
 import Input from '@src/ui/Input';
+import { onAuthStateChanged } from 'firebase/auth';
 import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
+import { authActions } from '@redux/reducers/auth';
+import { IUser } from '@src/redux/models/IUser';
 
 export default function Home() {
   const t = useTranslations();
-  console.log(process.env.FIREBASE_API_KEY);
+  const dispatch = useAppDispatch();
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      dispatch(authActions.setUser(user));
+    } else {
+      dispatch(authActions.logout());
+    }
+  });
+
   return (
     <main className='px-10'>
       <Categories />
