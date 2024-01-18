@@ -2,9 +2,24 @@ import { IProductItem } from '@src/redux/models';
 import React from 'react';
 import Image from 'next/image';
 import Button from '@src/ui/Button';
-import { HeartIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { HeartIcon, TrashIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { useAppDispatch } from '@src/redux/hooks';
+import { productsActions } from '@src/redux/reducers/products';
 
 const ProductCartItem = ({ product, image }: IProductItem) => {
+  const dispatch = useAppDispatch();
+
+  const removeFromCart = async () => {
+    if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
+      const item = {
+        product,
+        image,
+      };
+
+      dispatch(productsActions.removeFromCart(item));
+    }
+  };
+
   return (
     <div className='w-full bg-lightmain p-2'>
       <div className='flex items-center gap-3'>
@@ -36,14 +51,23 @@ const ProductCartItem = ({ product, image }: IProductItem) => {
                   <div>В обране</div>
                 </div>
               </Button>
-              <Button secondary>
+              <Button onClick={removeFromCart} secondary>
                 <div className='flex items-center justify-center gap-1'>
                   <TrashIcon className='w-5 h-5' />
                   <div>Видалити</div>
                 </div>
               </Button>
             </div>
-            <div>Price & count</div>
+
+            <div className='flex items-center gap-2'>
+              <Button secondary>
+                <MinusIcon className='w-5 h-5' />
+              </Button>
+              <div>Count</div>
+              <Button secondary>
+                <PlusIcon className='w-5 h-5' />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

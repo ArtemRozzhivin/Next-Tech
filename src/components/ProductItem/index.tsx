@@ -13,10 +13,11 @@ import { productsActions } from '@src/redux/reducers/products';
 const ProductItem = ({ product, image }: IProductItem) => {
   const dispatch = useAppDispatch();
 
-  const handleAddToCart = async () => {
+  const addToCart = async () => {
     const item = {
       product,
       image,
+      count: 1,
     };
 
     dispatch(productsActions.addToCart(item));
@@ -55,7 +56,7 @@ const ProductItem = ({ product, image }: IProductItem) => {
           </div>
           <Button
             primary
-            onClick={handleAddToCart}
+            onClick={addToCart}
             className='w-full rounded-md border border-transparent bg-colorMain px-5 py-2.5 text-sm font-medium text-white'>
             <div className='w-full text-center flex items-center justify-center gap-2'>
               <ShoppingCartIcon className='w-6 h-6' />

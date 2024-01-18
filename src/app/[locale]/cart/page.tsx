@@ -1,29 +1,80 @@
 'use client';
 
 import React from 'react';
-import { ArrowLongLeftIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, ArrowLongLeftIcon, TrashIcon } from '@heroicons/react/24/outline';
 import ProductCartItem from '@src/components/ProductCartItem';
-import { useAppSelector } from '@src/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
+import { Link, useRouter } from '@src/navigation';
+import Button from '@src/ui/Button';
+import { productsActions } from '@src/redux/reducers/products';
 
 const Cart = () => {
-  const { cartProducts, cartProductsCount } = useAppSelector((state) => state.products);
+  const { cartProducts, cartProductsCount, cartProductsTotalPrice } = useAppSelector(
+    (state) => state.products,
+  );
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const redirectToPreviousPage = () => {
+    router.back();
+  };
+
+  const clearCart = () => {
+    if (window.confirm('Ви впевнені, що хочете очистити кошик?')) {
+      dispatch(productsActions.clearCart());
+    }
+  };
 
   return (
     <div>
-      <div className='flex items-center gap-2'>
-        <ArrowLongLeftIcon className='w-10 h-10' />
-        <h2>Кошик</h2>
-        {!!cartProductsCount ? <div>{cartProductsCount} товарів</div> : ''}
+      <div className='flex items-center gap-4'>
+        <button
+          onClick={redirectToPreviousPage}
+          className='flex items-center gap-2 hover:text-colorMain'>
+          <ArrowLeftIcon className='w-6 h-6' />
+          <h2 className='text-xl font-semibold'>Назад</h2>
+        </button>
+        {!!cartProductsCount ? (
+          <div className='text-gray-600'>{cartProductsCount} товарів</div>
+        ) : (
+          ''
+        )}
       </div>
 
-      <div className='bg-lightmain p-5 flex justify-start items-center gap-5'>
-        <TrashIcon className='w-5 h-5' />
-        <div>Очистити кошик</div>
-      </div>
-      <div className='px-2 py-4 flex flex-col gap-3 justify-center items-center'>
-        {cartProducts.map((item) => (
-          <ProductCartItem key={item.product.model} {...item} />
-        ))}
+      <div className='flex items-start'>
+        <div className='border border-red-400'>
+          <div className='bg-lightmain p-5'>
+            <Button onClick={clearCart} danger primary>
+              <div className='flex justify-start items-center gap-3'>
+                <TrashIcon className='w-5 h-5' />
+                <div>Очистити кошик</div>
+              </div>
+            </Button>
+          </div>
+          <div className='px-2 py-4 flex flex-col gap-3 justify-center items-center'>
+            {cartProducts.map((item) => (
+              <ProductCartItem key={item.product.version} {...item} />
+            ))}
+          </div>
+        </div>
+
+        <div className='bg-lightmain p-2'>
+          <div className='flex items-center justify-between'>
+            <div>{cartProductsCount} товарів</div>
+            <div>{cartProductsTotalPrice} ₴</div>
+          </div>
+          {/* <div className='flex items-center justify-between'>
+            <div>Знижка</div>
+            <div>Якась знижка</div>
+          </div> */}
+          <div className='flex items-center justify-between'>
+            <div>Загальна сума</div>
+            <div>{cartProductsTotalPrice} ₴</div>
+          </div>
+          <Button giant primary className=''>
+            Оформлення
+          </Button>
+        </div>
       </div>
     </div>
   );
