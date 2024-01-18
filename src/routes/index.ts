@@ -5,6 +5,7 @@ const routes = Object.freeze({
   profile: '/profile',
   wishlist: '/wishlist',
   orders: '/orders',
+  cart: '/cart',
 });
 
 export default routes;

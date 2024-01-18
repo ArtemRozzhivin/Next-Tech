@@ -1,0 +1,273 @@
+{
+  "status": 200,
+  "message": "Product list retrieved successfully",
+  "data": {
+    "total_results": 56,
+    "total_results_per_page": 20,
+    "total_pages": 3,
+    "page": "1",
+    "type": "listAllProducts",
+    "items": [
+      {
+        "product": {
+          "id": "646f83b581980c969226c48e",
+          "brand": "Palit",
+          "model": "Palit GeForce GTX 1650 GP",
+          "version": "NE6165001BG1-1175A",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226c489",
+          "brand": "Palit",
+          "model": "Palit GeForce GTX 1650 GP OC",
+          "version": "NE61650S1BG1-1175A",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226c19f",
+          "brand": "Inno3D",
+          "model": "Inno3D GeForce GTX 1650 GDDR6 Compact",
+          "version": "N16501-04D6-1177VA19",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226bf56",
+          "brand": "Gainward",
+          "model": "Gainward GeForce GTX 1650 D6 Ghost",
+          "version": "NE6165001BG1-1175D (Barcode: 471056224-1808)",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226bf54",
+          "brand": "Gainward",
+          "model": "Gainward GeForce GTX 1650 D6 Ghost OC",
+          "version": "NE61650S1BG1-1175D (Barcode: 471056224-1785)",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226bec1",
+          "brand": "Gainward",
+          "model": "Gainward GeForce RTX 3060 Ti Ghost",
+          "version": "NE6306T019P2-190AB (Barcode: 471056224-2270)",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226bebf",
+          "brand": "Gainward",
+          "model": "Gainward GeForce RTX 3060 Pegasus OC",
+          "version": "NE63060S19K9-190AE (Barcode: 471056224-2492)",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226bebe",
+          "brand": "Gainward",
+          "model": "Gainward GeForce RTX 3060 Ghost",
+          "version": "NE63060019K9-190AU (Barcode: 471056224-2430)",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226bebc",
+          "brand": "Gainward",
+          "model": "Gainward GeForce RTX 3060 Ghost OC",
+          "version": "NE63060T19K9-190AU (Barcode: 471056224-2478)",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226beba",
+          "brand": "Gainward",
+          "model": "Gainward GeForce RTX 3060 Pegasus",
+          "version": "NE63060019K9-190AE (Barcode: 471056224-2454)",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226beb9",
+          "brand": "Gainward",
+          "model": "Gainward GeForce RTX 3060 Ti Ghost OC",
+          "version": "NE6306TS19P2-190AB (Barcode: 471056224-2294)",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226beb8",
+          "brand": "Gainward",
+          "model": "Gainward GeForce RTX 3060 Ti Phoenix â€œGSâ€",
+          "version": "NE6306TT19P2-1041X (Barcode: 471056224-2256)",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226b795",
+          "brand": "Galax",
+          "model": "Galax GeForce GTX 1650 (1-Click OC) GDDR6",
+          "version": "65SQL8DS66SS",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226b78e",
+          "brand": "Galax",
+          "model": "Galax GeForce GTX 1650 Prodigy GDDR6",
+          "version": "65SQL8DS67PY",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226b726",
+          "brand": "Galax",
+          "model": "Galax GeForce RTX 3060 (1-Click OC)",
+          "version": "36NOL7MD1VOC",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226b725",
+          "brand": "Galax",
+          "model": "Galax GeForce RTX 3060 Ti EX (1-Click OC)",
+          "version": "36ISL6MD1WGG",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226b724",
+          "brand": "Galax",
+          "model": "Galax GeForce RTX 3060 Ti EX White (1-Click OC)",
+          "version": "36ISL6MD1XHH",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226b723",
+          "brand": "Galax",
+          "model": "Galax GeForce RTX 3060 Ti (1-Click OC)",
+          "version": "36ISL6MD1VDD",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226b5db",
+          "brand": "GIGABYTE",
+          "model": "GIGABYTE GeForce GTX 1650 D6 OC 4G",
+          "version": "GV-N1656OC-4GD",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      },
+      {
+        "product": {
+          "id": "646f83b581980c969226b5d5",
+          "brand": "GIGABYTE",
+          "model": "GIGABYTE GeForce GTX 1650 D6 WINDFORCE OC 4G",
+          "version": "GV-N1656WF2OC-4GD",
+          "category": "GPUs"
+        },
+        "image": {
+          "i": null,
+          "ii": null
+        }
+      }
+    ]
+  }
+}

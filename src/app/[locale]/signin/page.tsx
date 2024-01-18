@@ -60,8 +60,8 @@ const Signin = () => {
   const onSubmit = (data: ISigninForm) => {
     if (!isLoading) {
       setIsLoading(true);
-      signin(data.email, data.password);
       router.push('/');
+      signin(data.email, data.password);
     }
   };
 

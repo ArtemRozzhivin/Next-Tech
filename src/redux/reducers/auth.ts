@@ -4,7 +4,6 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import _filter from 'lodash/filter';
 import _map from 'lodash/map';
-import { IUser } from '../models/IUser';
 import { User } from 'firebase/auth';
 
 interface IAuthState {

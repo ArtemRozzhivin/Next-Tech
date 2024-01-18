@@ -35,9 +35,11 @@ export const signin = (email: string, password: string) =>
 
 export const logout = () => signOut(auth);
 
-export const loginWithGoogle = () => {
+export const loginWithGoogle = (callback: any) => {
   const googleProvide = new GoogleAuthProvider();
-  return signInWithPopup(auth, googleProvide);
+  return signInWithPopup(auth, googleProvide).then((res) => {
+    callback();
+  });
 };
 
 // Initialize Firebase

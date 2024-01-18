@@ -9,7 +9,6 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 import { authActions } from '@redux/reducers/auth';
-import { IUser } from '@src/redux/models/IUser';
 
 export default function Home() {
   const t = useTranslations();

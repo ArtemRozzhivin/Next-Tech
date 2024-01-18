@@ -14,6 +14,7 @@ import ProfileMenu from '../ProfileMenu';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { authActions } from '@src/redux/reducers/auth';
+import products from '@src/data/products.json';
 
 type Ilanguages = {
   lang: string;
@@ -34,6 +35,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
   const locale = useLocale();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
+  const cartProductCount = useAppSelector((state) => state.products.cartProductsCount);
   const [language, setLanguage] = React.useState<Ilanguages>(languages[0]);
 
   const logoutHandler = async () => {
@@ -71,11 +73,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
         <Image src={techLogo} width={40} alt='logo' />
         <div className='hidden ml-3 md:block'>
           <h3 className='font-bold text-xl uppercase leading-6'>Next Tech</h3>
-          <button
-            onClick={() => setTest(!test)}
-            className='text-xs lg:text-sm leading-4 text-grayApp'>
-            Магазин найкращої техніки
-          </button>
+          <div className='text-xs lg:text-sm leading-4 text-grayApp'>Магазин найкращої техніки</div>
         </div>
       </Link>
       <ul className='mx-1 flex gap-5 w-auto items-center lg:mx-4'>
@@ -110,9 +108,16 @@ const Header: React.FC<HeaderProps> = ({}) => {
           />
         </li>
         <li>
-          <Link className='flex items-center gap-1' href='/signin'>
+          <Link className='flex items-center gap-1' href='/cart'>
             <Button noBorder giant>
-              <ShoppingCartIcon className='h-8 w-8 text-colorSecond' />
+              <div className='relative'>
+                <ShoppingCartIcon className='h-8 w-8 text-colorSecond' />
+                {!!cartProductCount && (
+                  <div className='absolute -top-[7px] -right-1 bg-colorMain rounded-full text-white text-xs py-[1px] px-[5px]'>
+                    {cartProductCount}
+                  </div>
+                )}
+              </div>
             </Button>
           </Link>
         </li>
@@ -130,12 +135,6 @@ const Header: React.FC<HeaderProps> = ({}) => {
               </Link>
             </div>
           )}
-          {/* <Button primary>
-            <Link className='flex items-center gap-1' href='/signin'>
-              Профіль
-              <UserIcon className='h-5 w-5 text-white' />
-            </Link>
-          </Button> */}
         </li>
       </ul>
     </div>

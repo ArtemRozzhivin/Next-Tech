@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import Button from '@ui/Button';
 import GoogleGSVG from '@ui/icons/GoogleGSVG';
 import { loginWithGoogle } from '@src/firebaseConfig';
+import { useRouter } from 'next/navigation';
 
 interface IGoogleAuth {
   setIsLoading?: (isLoading: boolean) => void;
@@ -23,9 +24,14 @@ interface IGoogleAuth {
 
 const GoogleAuth: React.FC<IGoogleAuth> = ({ className }) => {
   const t = useTranslations();
+  const router = useRouter();
+
+  const redirectToMainPage = () => {
+    router.push('/');
+  };
 
   const googleSignin = async () => {
-    loginWithGoogle();
+    loginWithGoogle(redirectToMainPage);
   };
 
   return (

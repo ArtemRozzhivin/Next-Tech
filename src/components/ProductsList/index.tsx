@@ -1,41 +1,24 @@
 'use client';
 
-import ProductCard from '@src/components/ProductCard';
+import ProductItem from '@src/components/ProductItem';
 import { db } from '@src/firebaseConfig';
 import Input from '@src/ui/Input';
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import PagePlaceholder from '../PagePlaceholder';
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
-
-export interface IProductItem {
-  image: {
-    large: string;
-    thumbnail?: string;
-    back: string | null;
-    front: string | null;
-  };
-  product: {
-    id: string;
-    category: string;
-    model: string;
-    brand: string;
-    version: string;
-  };
-}
+import { IProductItem } from '@src/redux/models';
 
 interface ICardList {
   items?: IProductItem[];
 }
 
-const CardList = ({ items }: ICardList) => {
+const ProductsList = ({ items }: ICardList) => {
   return (
     <div className='p-10'>
-      <div className='grid grid-cols-4 grid-rows-3 gap-3'>
+      <div className='grid grid-cols-4  grid-rows-3 gap-3'>
         {!!items ? (
-          items.map(({ product, image }) => (
-            <ProductCard key={product.model} model={product.model} image={image} />
-          ))
+          items.map((item) => <ProductItem key={item.product.model} {...item} />)
         ) : (
           <PagePlaceholder
             icon={<FaceFrownIcon className='w-10 h-10 text-colorMain' />}
@@ -48,4 +31,4 @@ const CardList = ({ items }: ICardList) => {
   );
 };
 
-export default CardList;
+export default ProductsList;
