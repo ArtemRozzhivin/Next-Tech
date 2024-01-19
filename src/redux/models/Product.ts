@@ -14,3 +14,7 @@ export interface IProductItem {
     version: string;
   };
 }
+
+export interface IProductCartItem extends IProductItem {
+  count: number;
+}

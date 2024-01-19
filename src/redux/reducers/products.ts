@@ -44,8 +44,28 @@ const productsSlice = createSlice({
       state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
     },
 
-    plusProductCart: (state, { payload }: PayloadAction<IProductCartItem>) => {
-      state.cartProductsCount = state.cartProducts.length;
+    plusProductCart: (state, { payload }: PayloadAction<string>) => {
+      const existingCartItem = state.cartProducts.find((item) => item.product.id === payload);
+
+      if (existingCartItem) {
+        existingCartItem.count += 1;
+      }
+
+      state.cartProductsCount = calculateTotalCount(state.cartProducts);
+      state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
+    },
+
+    minusProductCart: (state, { payload }: PayloadAction<string>) => {
+      const existingCartItem = state.cartProducts.find((item) => item.product.id === payload);
+
+      if (existingCartItem && existingCartItem.count > 1) {
+        existingCartItem.count -= 1;
+      } else if (existingCartItem && existingCartItem.count === 1) {
+        return state;
+      }
+
+      state.cartProductsCount = calculateTotalCount(state.cartProducts);
+      state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
     },
 
     clearCart: (state) => {
@@ -60,8 +80,8 @@ const productsSlice = createSlice({
         (product) => product.product.id !== payload.product.id,
       );
       state.cartProducts = cartProducts;
-      state.cartProductsCount = cartProducts.length;
-      state.cartProductsTotalPrice = state.cartProductsTotalPrice - payload.product.price;
+      state.cartProductsCount = calculateTotalCount(state.cartProducts);
+      state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
     },
   },
 });

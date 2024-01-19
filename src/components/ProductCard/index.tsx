@@ -6,21 +6,27 @@ import React, { useEffect } from 'react';
 import { HeartIcon, ShoppingCartIcon } from '@heroicons/react/24/solid';
 import Button from '@src/ui/Button';
 import Image from 'next/image';
-import { IProductItem } from '@src/redux/models';
+import { IProductCartItem, IProductItem } from '@src/redux/models';
 import { useAppDispatch } from '@src/redux/hooks';
 import { productsActions } from '@src/redux/reducers/products';
 
-const ProductItem = ({ product, image }: IProductItem) => {
+interface IProductCard {
+  item: IProductItem;
+  addProductToCart: (product: IProductCartItem) => void;
+}
+
+const ProductCard = ({ addProductToCart, item }: IProductCard) => {
   const dispatch = useAppDispatch();
+  const { product, image } = item;
 
   const addToCart = async () => {
     const item = {
       product,
       image,
       count: 1,
-    };
+    } as IProductCartItem;
 
-    dispatch(productsActions.addToCart(item));
+    addProductToCart(item);
   };
 
   return (
@@ -69,4 +75,4 @@ const ProductItem = ({ product, image }: IProductItem) => {
   );
 };
 
-export default ProductItem;
+export default ProductCard;

@@ -1,4 +1,4 @@
-import { IProductItem } from '@src/redux/models';
+import { IProductCartItem, IProductItem } from '@src/redux/models';
 import React from 'react';
 import Image from 'next/image';
 import Button from '@src/ui/Button';
@@ -6,14 +6,23 @@ import { HeartIcon, TrashIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/o
 import { useAppDispatch } from '@src/redux/hooks';
 import { productsActions } from '@src/redux/reducers/products';
 
-const ProductCartItem = ({ product, image }: IProductItem) => {
+const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
   const dispatch = useAppDispatch();
+
+  const handlePlusProduct = () => {
+    dispatch(productsActions.plusProductCart(product.id));
+  };
+
+  const handleMinusProduct = () => {
+    dispatch(productsActions.minusProductCart(product.id));
+  };
 
   const removeFromCart = async () => {
     if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
       const item = {
         product,
         image,
+        count,
       };
 
       dispatch(productsActions.removeFromCart(item));
@@ -60,11 +69,11 @@ const ProductCartItem = ({ product, image }: IProductItem) => {
             </div>
 
             <div className='flex items-center gap-2'>
-              <Button secondary>
+              <Button onClick={handleMinusProduct} secondary>
                 <MinusIcon className='w-5 h-5' />
               </Button>
-              <div>Count</div>
-              <Button secondary>
+              <div>{count}</div>
+              <Button onClick={handlePlusProduct} secondary>
                 <PlusIcon className='w-5 h-5' />
               </Button>
             </div>
