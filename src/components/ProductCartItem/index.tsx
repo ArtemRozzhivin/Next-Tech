@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Button from '@src/ui/Button';
 import { HeartIcon, TrashIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { useAppDispatch } from '@src/redux/hooks';
-import { productsActions } from '@src/redux/reducers/products';
+import { productsActions } from '@src/redux/reducers/Products/products';
 
 const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
   const dispatch = useAppDispatch();
@@ -19,13 +19,7 @@ const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
 
   const removeFromCart = async () => {
     if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
-      const item = {
-        product,
-        image,
-        count,
-      };
-
-      dispatch(productsActions.removeFromCart(item));
+      dispatch(productsActions.removeFromCart(product.id));
     }
   };
 

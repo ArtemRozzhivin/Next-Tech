@@ -2,7 +2,7 @@ import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import _filter from 'lodash/filter';
 import _map from 'lodash/map';
 import { User } from 'firebase/auth';
-import { IProductCartItem, IProductItem } from '../models';
+import { IProductCartItem, IProductItem } from '../../models';
 
 const calculateTotalCount = (cartProducts: IProductCartItem[]) => {
   console.log(cartProducts.reduce((total, cartItem) => total + cartItem.count, 0));
@@ -19,6 +19,7 @@ const calculateTotalPrice = (cartProducts: IProductCartItem[]): number => {
 interface IProductsState {
   products: IProductItem[];
   cartProducts: IProductCartItem[];
+  currentProductToCart: IProductCartItem | null;
   cartProductsCount: number;
   cartProductsTotalPrice: number;
 }
@@ -26,6 +27,7 @@ interface IProductsState {
 const initialState: IProductsState = {
   products: [],
   cartProducts: [],
+  currentProductToCart: null,
   cartProductsCount: 0,
   cartProductsTotalPrice: 0,
 };
@@ -36,6 +38,10 @@ const productsSlice = createSlice({
   reducers: {
     setProducts: (state, { payload }: PayloadAction<IProductItem[]>) => {
       state.products = { ...state.products, ...payload };
+    },
+
+    setCurrentProductToCart: (state, { payload }: PayloadAction<IProductCartItem>) => {
+      state.currentProductToCart = payload;
     },
 
     addToCart: (state, { payload }: PayloadAction<IProductCartItem>) => {
@@ -51,6 +57,10 @@ const productsSlice = createSlice({
         existingCartItem.count += 1;
       }
 
+      state.currentProductToCart = {
+        ...state.currentProductToCart,
+        count: ++state.currentProductToCart.count,
+      };
       state.cartProductsCount = calculateTotalCount(state.cartProducts);
       state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
     },
@@ -64,6 +74,10 @@ const productsSlice = createSlice({
         return state;
       }
 
+      state.currentProductToCart = {
+        ...state.currentProductToCart,
+        count: --state.currentProductToCart.count,
+      };
       state.cartProductsCount = calculateTotalCount(state.cartProducts);
       state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
     },
@@ -74,11 +88,8 @@ const productsSlice = createSlice({
       state.cartProductsTotalPrice = 0;
     },
 
-    removeFromCart: (state, { payload }: PayloadAction<IProductCartItem>) => {
-      const cartProducts = _filter(
-        state.cartProducts,
-        (product) => product.product.id !== payload.product.id,
-      );
+    removeFromCart: (state, { payload }: PayloadAction<string>) => {
+      const cartProducts = _filter(state.cartProducts, (item) => item.product.id !== payload);
       state.cartProducts = cartProducts;
       state.cartProductsCount = calculateTotalCount(state.cartProducts);
       state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);

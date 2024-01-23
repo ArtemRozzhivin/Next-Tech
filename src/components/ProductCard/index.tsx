@@ -3,12 +3,13 @@
 import { db } from '@src/firebaseConfig';
 import { collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import React, { useEffect } from 'react';
-import { HeartIcon, ShoppingCartIcon } from '@heroicons/react/24/solid';
+import { HeartIcon, ShoppingCartIcon, CheckIcon } from '@heroicons/react/24/solid';
 import Button from '@src/ui/Button';
 import Image from 'next/image';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
-import { useAppDispatch } from '@src/redux/hooks';
-import { productsActions } from '@src/redux/reducers/products';
+import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
+import { productsActions } from '@src/redux/reducers/Products/products';
+import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
 
 interface IProductCard {
   item: IProductItem;
@@ -18,6 +19,9 @@ interface IProductCard {
 const ProductCard = ({ addProductToCart, item }: IProductCard) => {
   const dispatch = useAppDispatch();
   const { product, image } = item;
+  const itemCart = useAppSelector(selectCartItemById(product.id));
+
+  console.log(itemCart);
 
   const addToCart = async () => {
     const item = {
@@ -60,15 +64,26 @@ const ProductCard = ({ addProductToCart, item }: IProductCard) => {
               <span className='text-xl font-semibold text-lightmain'>{product.price} ₴</span>
             </p>
           </div>
-          <Button
-            primary
-            onClick={addToCart}
-            className='w-full rounded-md border border-transparent bg-colorMain px-5 py-2.5 text-sm font-medium text-white'>
-            <div className='w-full text-center flex items-center justify-center gap-2'>
-              <ShoppingCartIcon className='w-6 h-6' />
-              Add to cart
-            </div>
-          </Button>
+          {!!itemCart ? (
+            <Button
+              primary
+              className='w-full bg-green-600 hover:bg-green-700 rounded-md border border-transparent px-5 py-2.5 text-sm font-medium text-white'>
+              <div className='w-full text-center flex items-center justify-center gap-2'>
+                <CheckIcon className='w-6 h-6' />
+                In the cart
+              </div>
+            </Button>
+          ) : (
+            <Button
+              primary
+              onClick={addToCart}
+              className='w-full rounded-md border border-transparent bg-colorMain px-5 py-2.5 text-sm font-medium text-white'>
+              <div className='w-full text-center flex items-center justify-center gap-2'>
+                <ShoppingCartIcon className='w-6 h-6' />
+                Add to cart
+              </div>
+            </Button>
+          )}
         </div>
       </div>
     </div>

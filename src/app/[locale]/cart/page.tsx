@@ -6,7 +6,7 @@ import ProductCartItem from '@src/components/ProductCartItem';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { Link, useRouter } from '@src/navigation';
 import Button from '@src/ui/Button';
-import { productsActions } from '@src/redux/reducers/products';
+import { productsActions } from '@src/redux/reducers/Products/products';
 
 const Cart = () => {
   const { cartProducts, cartProductsCount, cartProductsTotalPrice } = useAppSelector(
