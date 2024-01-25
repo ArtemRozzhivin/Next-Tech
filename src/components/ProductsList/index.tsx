@@ -9,11 +9,14 @@ import Modal from '@src/ui/Modal';
 import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import ProductCartItem from '../ProductCartItem';
-import { productsActions } from '@src/redux/reducers/Products/products';
+import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
 import Button from '@src/ui/Button';
-import Link from 'next/link';
 import Image from 'next/image';
 import { HeartIcon, TrashIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { Link } from '@src/navigation';
+import { arrayRemove, arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@src/firebaseConfig';
+import { getUserHistory } from '@src/api/user';
 
 const AddedProductModal = ({
   item,
@@ -100,20 +103,18 @@ const AddedProductModal = ({
         </div>
 
         <div className='flex items-center justify-between gap-10'>
-          <Link className='h-full' href='/cart'>
-            <Button giant noBorder onClick={() => setOpenModal(true)}>
-              Продовжити покупки
-            </Button>
-          </Link>
+          <Button giant noBorder onClick={() => setOpenModal(false)}>
+            Продовжити покупки
+          </Button>
 
           <div className='flex items-center gap-3'>
             <Link className='h-full' href='/cart'>
-              <Button giant primary onClick={() => setOpenModal(true)}>
+              <Button giant primary onClick={() => setOpenModal(false)}>
                 Перейти до кошику
               </Button>
             </Link>
             <Link className='h-full' href='/cart'>
-              <Button giant secondary onClick={() => setOpenModal(true)}>
+              <Button giant secondary onClick={() => setOpenModal(false)}>
                 Оформити замовлення
               </Button>
             </Link>
@@ -131,13 +132,43 @@ interface ICardList {
 const ProductsList = ({ items }: ICardList) => {
   const t = useTranslations('');
   const dispatch = useAppDispatch();
-  const currentProductToCart = useAppSelector((state) => state.products.currentProductToCart);
+  const { userHistory, currentProductToCart } = useAppSelector((state) => state.products);
+  const user = useAppSelector((state) => state.auth.user);
+
   const [isShowModal, setShowModal] = useState(false);
 
   const handleAddProductToCart = (product: IProductCartItem) => {
     dispatch(productsActions.addToCart(product));
     dispatch(productsActions.setCurrentProductToCart(product));
     setShowModal(true);
+  };
+
+  const handleAddToWishList = async (product: IProductItem) => {
+    if (user) {
+      try {
+        const productRef = doc(db, 'users', user.uid);
+
+        if (userHistory?.wishlist?.find((item) => item.product.id === product.product.id)) {
+          console.log('remove');
+          await updateDoc(productRef, {
+            user: user.uid,
+            wishlist: arrayRemove(product),
+          });
+        } else {
+          console.log('add');
+          await updateDoc(productRef, {
+            user: user.uid,
+            wishlist: arrayUnion(product),
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    getUserHistory(user).then((userHistory) => {
+      if (userHistory) dispatch(productsActions.setUserHistory(userHistory as IUserHistory));
+    });
   };
 
   return (
@@ -149,6 +180,7 @@ const ProductsList = ({ items }: ICardList) => {
               <ProductCard
                 key={item.product.model}
                 item={item}
+                addToWishList={(product: IProductItem) => handleAddToWishList(product)}
                 addProductToCart={handleAddProductToCart}
               />
             ))

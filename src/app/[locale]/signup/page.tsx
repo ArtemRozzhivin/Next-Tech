@@ -83,11 +83,12 @@ const Signup = (): JSX.Element => {
     validate();
   }, [form]); // eslint-disable-line
 
-  const onSubmit = (data: ISignupForm) => {
+  const onSubmit = async (data: ISignupForm) => {
     if (!isLoading) {
       setIsLoading(true);
       try {
-        signup(data.email, data.password);
+        await signup(data.email, data.password);
+
         router.push('/');
       } catch (error) {
         console.log('ERROR', error);

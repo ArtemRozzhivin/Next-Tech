@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { Link, useRouter } from '@src/navigation';
 import Button from '@src/ui/Button';
 import { productsActions } from '@src/redux/reducers/Products/products';
+import { arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '@src/firebaseConfig';
 
 const Cart = () => {
   const { cartProducts, cartProductsCount, cartProductsTotalPrice } = useAppSelector(
@@ -14,6 +16,7 @@ const Cart = () => {
   );
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const user = useAppSelector((state) => state.auth.user);
 
   const redirectToPreviousPage = () => {
     router.back();
@@ -23,6 +26,21 @@ const Cart = () => {
     if (window.confirm('Ви впевнені, що хочете очистити кошик?')) {
       dispatch(productsActions.clearCart());
     }
+  };
+
+  const buyProducts = async () => {
+    if (user) {
+      try {
+        const productRef = doc(db, 'users', user.uid);
+
+        await updateDoc(productRef, {
+          purchases: arrayUnion(...cartProducts),
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    dispatch(productsActions.clearCart());
   };
 
   return (
@@ -71,7 +89,7 @@ const Cart = () => {
             <div>Загальна сума</div>
             <div>{cartProductsTotalPrice} ₴</div>
           </div>
-          <Button giant primary className=''>
+          <Button onClick={buyProducts} giant primary className=''>
             Оформлення
           </Button>
         </div>

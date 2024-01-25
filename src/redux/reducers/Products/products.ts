@@ -16,8 +16,15 @@ const calculateTotalPrice = (cartProducts: IProductCartItem[]): number => {
   );
 };
 
+export interface IUserHistory {
+  user: string;
+  purchases: IProductCartItem[] | null;
+  wishlist: IProductItem[] | null;
+}
+
 interface IProductsState {
   products: IProductItem[];
+  userHistory: IUserHistory | null;
   cartProducts: IProductCartItem[];
   currentProductToCart: IProductCartItem | null;
   cartProductsCount: number;
@@ -27,6 +34,7 @@ interface IProductsState {
 const initialState: IProductsState = {
   products: [],
   cartProducts: [],
+  userHistory: null,
   currentProductToCart: null,
   cartProductsCount: 0,
   cartProductsTotalPrice: 0,
@@ -38,6 +46,10 @@ const productsSlice = createSlice({
   reducers: {
     setProducts: (state, { payload }: PayloadAction<IProductItem[]>) => {
       state.products = { ...state.products, ...payload };
+    },
+
+    setUserHistory: (state, { payload }: PayloadAction<IUserHistory>) => {
+      state.userHistory = payload;
     },
 
     setCurrentProductToCart: (state, { payload }: PayloadAction<IProductCartItem>) => {

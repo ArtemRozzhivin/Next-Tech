@@ -11,6 +11,7 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { getStorage, ref } from 'firebase/storage';
+import { addUserHistory } from './api/user';
 
 // TODO: Add SDKs for Firebase products that you want to use
 
@@ -27,18 +28,19 @@ const firebaseConfig = {
   measurementId: 'G-7W8YK2BMSF',
 };
 
-export const signup = (email: string, password: string) =>
+export const signup = (email: string, password: string) => {
   createUserWithEmailAndPassword(auth, email, password);
+};
 
 export const signin = (email: string, password: string) =>
   signInWithEmailAndPassword(auth, email, password);
 
 export const logout = () => signOut(auth);
 
-export const loginWithGoogle = (callback: any) => {
+export const loginWithGoogle = (callback: (user: string) => void) => {
   const googleProvide = new GoogleAuthProvider();
   return signInWithPopup(auth, googleProvide).then((res) => {
-    callback();
+    callback(res.user.uid);
   });
 };
 

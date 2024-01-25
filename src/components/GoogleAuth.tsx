@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import cx from 'clsx';
 
@@ -7,6 +9,7 @@ import Button from '@ui/Button';
 import GoogleGSVG from '@ui/icons/GoogleGSVG';
 import { loginWithGoogle } from '@src/firebaseConfig';
 import { useRouter } from 'next/navigation';
+import { addUserHistory } from '@src/api/user';
 
 interface IGoogleAuth {
   setIsLoading?: (isLoading: boolean) => void;
@@ -26,12 +29,14 @@ const GoogleAuth: React.FC<IGoogleAuth> = ({ className }) => {
   const t = useTranslations();
   const router = useRouter();
 
-  const redirectToMainPage = () => {
+  const redirectToMainPage = (user: string) => {
     router.push('/');
+    addUserHistory(user);
+    console.log(user, 'USER');
   };
 
   const googleSignin = async () => {
-    loginWithGoogle(redirectToMainPage);
+    await loginWithGoogle((user) => redirectToMainPage(user));
   };
 
   return (

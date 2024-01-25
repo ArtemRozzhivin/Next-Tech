@@ -1,7 +1,7 @@
 'use client';
 
 import ProductPage from '@src/components/ProductPage';
-import CardList, { IProductItem } from '@src/components/ProductsList';
+import ProductsList, { IProductItem } from '@src/components/ProductsList';
 import { db } from '@src/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
@@ -35,7 +35,7 @@ const Laptops = () => {
   return (
     <div>
       <ProductPage title={'Laptops'}>
-        <CardList items={laptops} />
+        <ProductsList items={laptops} />
       </ProductPage>
     </div>
   );
