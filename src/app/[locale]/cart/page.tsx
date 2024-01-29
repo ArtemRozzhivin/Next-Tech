@@ -10,6 +10,7 @@ import { IUserHistory, productsActions } from '@src/redux/reducers/Products/prod
 import { arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@src/firebaseConfig';
 import { getUserHistory } from '@src/api/user';
+import routes from '@src/routes';
 
 export const Cart = () => {
   const { cartProducts, cartProductsCount, cartProductsTotalPrice } = useAppSelector(
@@ -64,9 +65,9 @@ export const Cart = () => {
         )}
       </div>
 
-      <div className='flex items-start gap-5'>
-        <div className='border border-red-400'>
-          <div className='bg-lightmain p-5'>
+      <div className='flex items-start gap-3'>
+        <div className='flex-1 flex flex-col gap-3'>
+          <div className='rounded-md bg-lightmain p-5'>
             <Button onClick={clearCart} danger primary>
               <div className='flex justify-start items-center gap-3'>
                 <TrashIcon className='w-5 h-5' />
@@ -74,29 +75,37 @@ export const Cart = () => {
               </div>
             </Button>
           </div>
-          <div className='px-2 py-4 flex flex-col gap-3 justify-center items-center'>
+          <div className='flex flex-col gap-3 justify-center items-center'>
             {cartProducts.map((item) => (
               <ProductCartItem key={item.product.version} {...item} />
             ))}
           </div>
         </div>
 
-        <div className='bg-lightmain p-2'>
-          <div className='flex items-center justify-between'>
-            <div>{cartProductsCount} товарів</div>
-            <div>{cartProductsTotalPrice} ₴</div>
+        <div className='rounded-md flex flex-col gap-10 bg-lightmain p-5'>
+          <div className='flex flex-col gap-3'>
+            <div className='text-2xl flex items-center gap-32 justify-between'>
+              <div>{cartProductsCount} товарів</div>
+              <div className='font-semibold'>{cartProductsTotalPrice} ₴</div>
+            </div>
+            <div className='text-2xl flex items-center gap-32 justify-between'>
+              <div>Знижка</div>
+              <div className='font-semibold'>3000 $</div>
+            </div>
+            <div className='flex items-center gap-32 justify-between'>
+              <div className='text-3xl'>Загальна сума</div>
+              <div className='font-semibold text-3xl'>{cartProductsTotalPrice} ₴</div>
+            </div>
           </div>
-          <div className='flex items-center justify-between'>
-            <div>Знижка</div>
-            <div>3000 $</div>
-          </div>
-          <div className='flex items-center justify-between'>
-            <div>Загальна сума</div>
-            <div>{cartProductsTotalPrice} ₴</div>
-          </div>
-          <Button onClick={buyProducts} giant primary className=''>
-            Оформлення
-          </Button>
+          <Link href={routes.ordering}>
+            <Button
+              // onClick={buyProducts}
+              giant
+              primary
+              className='w-full text-center flex justify-center'>
+              Оформлення
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

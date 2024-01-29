@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import './globals.css';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import StoreProvider from './StoreProvider';
+import cx from 'clsx';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,7 +31,7 @@ export default function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={inter.className}>
+      <body className={cx(inter.className, 'bg-lightsecond')}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <StoreProvider>
             <Header />
