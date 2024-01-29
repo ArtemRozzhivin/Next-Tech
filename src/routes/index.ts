@@ -3,8 +3,8 @@ const routes = Object.freeze({
   signup: '/signup',
   signin: '/signin',
   profile: '/profile',
-  wishlist: '/wishlist',
-  orders: '/orders',
+  wishlist: '/profile/wishlist',
+  orders: '/profile/orders',
   cart: '/cart',
 });
 

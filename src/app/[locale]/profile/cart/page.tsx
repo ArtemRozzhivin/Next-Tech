@@ -49,7 +49,7 @@ export const Cart = () => {
   };
 
   return (
-    <div className='flex flex-col gap-5 p-5'>
+    <div>
       <div className='flex items-center gap-4'>
         <button
           onClick={redirectToPreviousPage}
@@ -64,7 +64,7 @@ export const Cart = () => {
         )}
       </div>
 
-      <div className='flex items-start gap-5'>
+      <div className='flex items-start'>
         <div className='border border-red-400'>
           <div className='bg-lightmain p-5'>
             <Button onClick={clearCart} danger primary>
@@ -86,10 +86,10 @@ export const Cart = () => {
             <div>{cartProductsCount} товарів</div>
             <div>{cartProductsTotalPrice} ₴</div>
           </div>
-          <div className='flex items-center justify-between'>
+          {/* <div className='flex items-center justify-between'>
             <div>Знижка</div>
-            <div>3000 $</div>
-          </div>
+            <div>Якась знижка</div>
+          </div> */}
           <div className='flex items-center justify-between'>
             <div>Загальна сума</div>
             <div>{cartProductsTotalPrice} ₴</div>

@@ -17,113 +17,8 @@ import { Link } from '@src/navigation';
 import { arrayRemove, arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@src/firebaseConfig';
 import { getUserHistory } from '@src/api/user';
-
-const AddedProductModal = ({
-  item,
-  isOpen,
-  setOpenModal,
-}: {
-  item: IProductCartItem;
-  isOpen: boolean;
-  setOpenModal: (value: boolean) => void;
-}) => {
-  const dispatch = useAppDispatch();
-  const { product, image, count } = item;
-
-  const handlePlusProduct = () => {
-    dispatch(productsActions.plusProductCart(product.id));
-  };
-
-  const handleMinusProduct = () => {
-    dispatch(productsActions.minusProductCart(product.id));
-  };
-
-  const removeFromCart = async () => {
-    if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
-      dispatch(productsActions.removeFromCart(product.id));
-      setOpenModal(false);
-    }
-  };
-
-  return (
-    <Modal
-      onClose={() => setOpenModal(false)}
-      title={'Товар додано до кошику'}
-      type='info'
-      isOpened={isOpen}>
-      <div className='flex flex-col gap-8'>
-        <div className='flex items-center gap-4'>
-          <div className='bg-white p-3'>
-            <Image
-              className='h-full w-full object-contain'
-              width={200}
-              height={200}
-              src={image.large ? image.large : image.front}
-              alt='product'
-            />
-          </div>
-
-          <div className='w-full flex-grow flex flex-col items-center justify-center gap-6'>
-            <div className='w-full flex items-start justify-between'>
-              <div>
-                <div className='text-2xl'>{product.model}</div>
-                <div className='text-lg text-gray-600'>
-                  {product.version}, {product.category}
-                </div>
-              </div>
-              <div className='text-2xl font-semibold'>{product.price} ₴</div>
-            </div>
-            <div className='w-full flex items-center justify-between'>
-              <div className='flex items-center justify-center gap-4'>
-                <Button secondary>
-                  <div className='flex items-center justify-center gap-1'>
-                    <HeartIcon className='w-5 h-5' />
-                    <div>В обране</div>
-                  </div>
-                </Button>
-                <Button onClick={removeFromCart} secondary>
-                  <div className='flex items-center justify-center gap-1'>
-                    <TrashIcon className='w-5 h-5' />
-                    <div>Видалити</div>
-                  </div>
-                </Button>
-              </div>
-
-              <div className='flex items-center gap-2'>
-                <Button onClick={handleMinusProduct} secondary>
-                  <MinusIcon className='w-5 h-5' />
-                </Button>
-                <div>{count}</div>
-                <Button onClick={handlePlusProduct} secondary>
-                  <PlusIcon className='w-5 h-5' />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className='flex items-center justify-between gap-10'>
-          <Button giant noBorder onClick={() => setOpenModal(false)}>
-            Продовжити покупки
-          </Button>
-
-          <div className='flex items-center gap-3'>
-            <Link className='h-full' href='/cart'>
-              <Button giant primary onClick={() => setOpenModal(false)}>
-                Перейти до кошику
-              </Button>
-            </Link>
-            <Link className='h-full' href='/cart'>
-              <Button giant secondary onClick={() => setOpenModal(false)}>
-                Оформити замовлення
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </Modal>
-  );
-};
+import AddedProductModal from '../AddedProductModal';
+import { getAuth, updateProfile } from 'firebase/auth';
 
 interface ICardList {
   items?: IProductItem[];
@@ -174,7 +69,7 @@ const ProductsList = ({ items }: ICardList) => {
   return (
     <>
       <div className='p-10'>
-        <div className='grid grid-cols-4  grid-rows-3 gap-3'>
+        <div className='grid grid-flow-row grid-cols-4 gap-3'>
           {!!items ? (
             items.map((item) => (
               <ProductCard
@@ -194,8 +89,9 @@ const ProductsList = ({ items }: ICardList) => {
         </div>
       </div>
 
-      {!!currentProductToCart && (
+      {currentProductToCart && (
         <AddedProductModal
+          handleAddToWishList={(product: IProductItem) => handleAddToWishList(product)}
           item={currentProductToCart}
           isOpen={isShowModal}
           setOpenModal={setShowModal}
