@@ -17,6 +17,8 @@ interface IInput {
   value?: string | number;
   disabled?: boolean;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const Input = ({
@@ -32,6 +34,8 @@ const Input = ({
   value,
   disabled,
   onKeyDown,
+  onFocus,
+  onBlur,
 }: IInput): JSX.Element => {
   const identifier = id || name || type;
   const isError = !_isEmpty(error);
@@ -57,6 +61,8 @@ const Input = ({
           id={identifier}
           onChange={onChange}
           onKeyDown={onKeyDown}
+          onFocus={onFocus}
+          onBlur={onBlur}
           className={cx(
             'p-2 shadow-sm border-2 text-darksecond border-colorMain hover:border-colorSecond rounded-md focus:border-colorSecond block w-full sm:text-sm',
             {
