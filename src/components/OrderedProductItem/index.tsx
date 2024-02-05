@@ -4,6 +4,7 @@ import { IOrderedItem } from '@src/redux/models';
 import ProductOrderingItem from '../ProductOrderingItem';
 import { useState } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import OrderedInfoBlock from '../OrderedInfoBlock';
 
 interface IProductOrderingItem {
   purchase: IOrderedItem;
@@ -27,7 +28,9 @@ const OrderedProductItem = ({ purchase, email }: IProductOrderingItem) => {
   };
 
   return (
-    <button onClick={() => setIsInfoOpen((prevState) => !prevState)} className='p-5 bg-lightmain'>
+    <button
+      onClick={() => setIsInfoOpen((prevState) => !prevState)}
+      className='rounded-md shadow-xl p-5 bg-lightmain'>
       <div className='flex justify-end'>
         {isInfoOpen ? (
           <div className='flex items-center gap-1'>
@@ -40,55 +43,51 @@ const OrderedProductItem = ({ purchase, email }: IProductOrderingItem) => {
         )}
       </div>
 
-      {isInfoOpen && (
-        <div className='flex flex-col gap-5'>
-          <div className='flex justify-start'>
-            <div>
-              <div>Спосіб доставки</div>
-              <div>{transformDeliveryMethod(purchase.info.method)}</div>
+      <div className='flex flex-col gap-5'>
+        {isInfoOpen && (
+          <div className='flex flex-col gap-5'>
+            <div className='flex justify-start'>
+              <OrderedInfoBlock
+                title='Спосіб доставки'
+                text={purchase.info.method}
+                textExtractor={(text) => transformDeliveryMethod(text)}
+              />
+            </div>
+
+            <div className='flex items-center gap-10'>
+              <OrderedInfoBlock title='Місто' text={purchase.info.city.Present} />
+
+              <OrderedInfoBlock
+                title='Адреса'
+                text={purchase.info.address.Description}
+                textExtractor={() => {
+                  if (purchase.info.method === 'to-nova-poshta-office') {
+                    return <div>{purchase.info.address.Description}</div>;
+                  }
+
+                  return <div>{purchase.info.address.Present}</div>;
+                }}
+              />
+            </div>
+
+            <div className='flex items-center gap-10'>
+              <OrderedInfoBlock
+                title="Прізвище Ім'я По-батькові"
+                text={`${purchase.info.lastName} ${purchase.info.firstName} ${purchase.info.patronymic}`}
+              />
+              <OrderedInfoBlock title='Електронна пошта' text={email} />
+
+              <OrderedInfoBlock title='Номер телефону' text={purchase.info.phone} />
             </div>
           </div>
+        )}
 
-          <div className='flex items-center gap-10'>
-            <div>
-              <div>Місто</div>
-              <div>{purchase.info.city.Present}</div>
-            </div>
-            <div>
-              <div>Адреса</div>
-              {purchase.info.method === 'to-nova-poshta-office' ? (
-                <div>{purchase.info.address.Description}</div>
-              ) : (
-                <div>{purchase.info.address.Present}</div>
-              )}
-            </div>
-          </div>
-
-          <div className='flex items-center gap-10'>
-            <div>
-              <div>Прізвище Ім'я По-батькові</div>
-              <div>
-                {purchase.info.lastName} {purchase.info.firstName} {purchase.info.patronymic}
-              </div>
-            </div>
-            <div>
-              <div>Електронна пошта</div>
-              <div>{email}</div>
-            </div>
-
-            <div>
-              <div>Телефон</div>
-              <div>{purchase.info.phone}</div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <ProductOrderingItem
-        count={purchase.count}
-        image={purchase.image}
-        product={purchase.product}
-      />
+        <ProductOrderingItem
+          count={purchase.count}
+          image={purchase.image}
+          product={purchase.product}
+        />
+      </div>
     </button>
   );
 };
