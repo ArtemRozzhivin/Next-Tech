@@ -18,3 +18,16 @@ export interface IProductItem {
 export interface IProductCartItem extends IProductItem {
   count: number;
 }
+
+export interface IOrderedItem extends IProductCartItem {
+  info: {
+    method: string;
+    city: string;
+    address: string;
+    phone: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    patronymic: string;
+  };
+}

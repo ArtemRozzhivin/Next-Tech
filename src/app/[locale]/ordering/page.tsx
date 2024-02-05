@@ -1,8 +1,6 @@
 'use client';
 
 import React, { Fragment } from 'react';
-import { ArrowLeftIcon, ArrowLongLeftIcon, TrashIcon } from '@heroicons/react/24/outline';
-import ProductCartItem from '@src/components/ProductCartItem';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { Link, useRouter } from '@src/navigation';
 import Button from '@src/ui/Button';
@@ -14,16 +12,13 @@ import routes from '@src/routes';
 import ProductOrderingItem from '@src/components/ProductOrderingItem';
 import Input from '@src/ui/Input';
 import Image from 'next/image';
-import Select from 'react-select';
 import novaPoshta from '@src/assets/novaPoshta.svg';
 import comfy from '@src/assets/comfy.svg';
 import cx from 'clsx';
-import { Dialog, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import Modal from '@src/ui/Modal';
 import axios from 'axios';
-import { useDebounce, useDebouncedCallback } from 'use-debounce';
-import InputSelect from '@src/ui/InputSelect';
+import { useDebouncedCallback } from 'use-debounce';
 
 interface ICity {
   AddressDeliveryAllowed: boolean;
@@ -169,6 +164,7 @@ export const Ordering = () => {
   const [house, setHouse] = React.useState<string>('');
   const [flat, setFlat] = React.useState<string>('');
 
+  const [phone, setPhone] = React.useState<string>('');
   const [firstName, setFirstName] = React.useState<string>('');
   const [lastName, setLastName] = React.useState<string>('');
   const [patronymic, setPatronymic] = React.useState<string>('');
@@ -220,8 +216,6 @@ export const Ordering = () => {
     setAllOfficeAddress(response.data.data);
   };
 
-  console.log(city);
-
   const debouncedCallback = useDebouncedCallback((callback) => {
     callback();
   }, 1500);
@@ -265,8 +259,6 @@ export const Ordering = () => {
     router.back();
   };
 
-  console.log(allOfficeAddress, 'allOfficeAddress');
-
   const clearCart = () => {
     if (window.confirm('Ви впевнені, що хочете очистити кошик?')) {
       dispatch(productsActions.clearCart());
@@ -276,10 +268,25 @@ export const Ordering = () => {
   const buyProducts = async () => {
     if (user) {
       try {
+        const orderedProducts = cartProducts.map((item) => {
+          return {
+            ...item,
+            info: {
+              method: currentDelivery,
+              city: city,
+              address: currentDelivery === 'to-nova-poshta-office' ? officeAddress : address,
+              phone,
+              firstName,
+              lastName,
+              patronymic,
+            },
+          };
+        });
+
         const productRef = doc(db, 'users', user.uid);
 
         await updateDoc(productRef, {
-          purchases: arrayUnion(...cartProducts),
+          purchases: arrayUnion(...orderedProducts),
         });
       } catch (error) {
         console.log(error);
@@ -300,7 +307,9 @@ export const Ordering = () => {
             <div className='text-2xl font-semibold'>1. Товари</div>
             <div className='flex flex-col gap-3 justify-center items-center'>
               {cartProducts.map((item) => (
-                <ProductOrderingItem key={item.product.version} {...item} />
+                <div className='rounded-md w-full bg-lightmain p-5'>
+                  <ProductOrderingItem key={item.product.version} {...item} />
+                </div>
               ))}
             </div>
           </div>
@@ -313,18 +322,9 @@ export const Ordering = () => {
                   name='phone'
                   type='tel'
                   label='Номер телефону'
-                  // value={}
+                  value={phone}
                   placeholder='example@gmail.com'
-                  // onChange={handleInput}
-                />
-
-                <Input
-                  name='email'
-                  type='text'
-                  label='Електронна пошта'
-                  // value={}
-                  placeholder='example@gmail.com'
-                  // onChange={handleInput}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
             </div>
@@ -402,6 +402,52 @@ export const Ordering = () => {
                   </div>
                   {currentDelivery === 'courier-nova-poshta' && (
                     <div className='flex flex-col gap-5'>
+                      <div>
+                        <>
+                          <button
+                            type='button'
+                            onClick={() => setIsSearchAdressOpen(true)}
+                            className='flex items-center justify-between text-left rounded-md bg-black/20 p-4 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'>
+                            {address !== null ? (
+                              <div>{address.Present}</div>
+                            ) : (
+                              <div>Оберіть ваше адресу</div>
+                            )}
+                            <div>
+                              <ChevronDownIcon className='w-7 h-7' />
+                            </div>
+                          </button>
+
+                          <Modal
+                            size='large'
+                            isOpened={isSearchAdressOpen}
+                            onClose={() => setIsSearchAdressOpen(false)}
+                            title='Оберіть вашу адресу'
+                            type='info'>
+                            <div className='flex flex-col gap-5'>
+                              <Input
+                                label='Вашу адреса'
+                                value={searchAdress}
+                                onChange={(e) => handleAdressInput(e)}
+                                name='city'
+                              />
+
+                              <div className='max-h-64 overflow-auto flex flex-col gap-2'>
+                                {allAdresses.length === 0 ? (
+                                  <div>No adress</div>
+                                ) : (
+                                  allAdresses.map((item) => (
+                                    <Button onClick={() => handleAdressClick(item)} giant noBorder>
+                                      {item.Present}
+                                    </Button>
+                                  ))
+                                )}
+                              </div>
+                            </div>
+                          </Modal>
+                        </>
+                      </div>
+
                       <div className='flex items-center gap-5'>
                         <Input
                           name='house'
@@ -694,7 +740,7 @@ export const Ordering = () => {
             </div>
             <Link href={routes.ordering}>
               <Button
-                // onClick={buyProducts}
+                onClick={buyProducts}
                 giant
                 primary
                 className='w-full text-center flex justify-center'>

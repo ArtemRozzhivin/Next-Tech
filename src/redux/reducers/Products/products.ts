@@ -2,7 +2,7 @@ import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import _filter from 'lodash/filter';
 import _map from 'lodash/map';
 import { User } from 'firebase/auth';
-import { IProductCartItem, IProductItem } from '../../models';
+import { IOrderedItem, IProductCartItem, IProductItem } from '../../models';
 
 const calculateTotalCount = (cartProducts: IProductCartItem[]) => {
   console.log(cartProducts.reduce((total, cartItem) => total + cartItem.count, 0));
@@ -18,7 +18,7 @@ const calculateTotalPrice = (cartProducts: IProductCartItem[]): number => {
 
 export interface IUserHistory {
   user: string;
-  purchases: IProductCartItem[] | null;
+  purchases: IOrderedItem[] | null;
   wishlist: IProductItem[] | null;
 }
 
@@ -26,6 +26,7 @@ interface IProductsState {
   products: IProductItem[];
   userHistory: IUserHistory | null;
   cartProducts: IProductCartItem[];
+  orderedProducts: IOrderedItem[];
   currentProductToCart: IProductCartItem | null;
   cartProductsCount: number;
   cartProductsTotalPrice: number;
@@ -34,6 +35,7 @@ interface IProductsState {
 const initialState: IProductsState = {
   products: [],
   cartProducts: [],
+  orderedProducts: [],
   userHistory: null,
   currentProductToCart: null,
   cartProductsCount: 0,
@@ -105,6 +107,10 @@ const productsSlice = createSlice({
       state.cartProducts = cartProducts;
       state.cartProductsCount = calculateTotalCount(state.cartProducts);
       state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
+    },
+
+    setOrderedProducts: (state, { payload }: PayloadAction<IOrderedItem[]>) => {
+      state.orderedProducts = payload;
     },
   },
 });

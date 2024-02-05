@@ -24,7 +24,7 @@ const ProductOrderingItem = ({ product, image, count }: IProductCartItem) => {
   };
 
   return (
-    <div className='rounded-md w-full bg-lightmain p-5'>
+    <div className='rounded-md w-full bg-lightmain'>
       <div className='flex items-center gap-3'>
         <div className='bg-white p-3'>
           <Image
