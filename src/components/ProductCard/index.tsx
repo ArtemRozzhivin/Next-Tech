@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { productsActions } from '@src/redux/reducers/Products/products';
 import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
 import HeartSolidIcon from '@src/assets/heart.svg';
+import { Link } from '@src/navigation';
 
 interface IProductCard {
   item: IProductItem;
@@ -49,22 +50,14 @@ const ProductCard = ({ addProductToCart, addToWishList, item }: IProductCard) =>
   return (
     <div className='group border-gray-100/30 flex w-full flex-col self-center overflow-hidden rounded-lg border bg-darkmain shadow-2xl'>
       <div className='relative p-2 bg-white'>
-        <div className='relative m-3 flex h-60 rounded-md'>
+        <Link href={`/laptops/${item.product.id}`} className='relative m-3 flex h-60 rounded-md'>
           <Image
-            className='peer absolute top-0 right-0 h-full w-full object-contain'
+            className='h-full w-full object-contain'
             fill
-            src={image.large ? image.large : image.front}
+            src={image.large && image.large}
             alt='product'
           />
-          {image.back && (
-            <Image
-              className='peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-contain transition-all delay-100 duration-500 hover:right-0'
-              fill
-              src={image.back}
-              alt='product'
-            />
-          )}
-        </div>
+        </Link>
 
         <div className='absolute right-3 top-3'>
           <button

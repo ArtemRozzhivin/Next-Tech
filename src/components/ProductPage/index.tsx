@@ -11,7 +11,6 @@ interface IProductPage {
 const ProductPage = ({ title, children }: IProductPage) => {
   const pathname = usePathname();
 
-  console.log(pathname);
   return (
     <div>
       <div className='flex justify-start items-center gap-1'>

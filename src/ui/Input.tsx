@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 
 interface IInput {
-  label: string | JSX.Element;
+  label?: string | JSX.Element;
   hint?: string | JSX.Element;
   placeholder?: string;
   type?: string;

@@ -3,7 +3,6 @@
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
 import OrderedProductItem from '@src/components/OrderedProductItem';
 import PagePlaceholder from '@src/components/PagePlaceholder';
-import ProductOrderingItem from '@src/components/ProductOrderingItem';
 import { useAppSelector } from '@src/redux/hooks';
 import React, { use } from 'react';
 
@@ -12,8 +11,8 @@ const Purchases = () => {
   const user = useAppSelector((state) => state.auth.user);
 
   return (
-    <div>
-      <h2>Мої замовлення</h2>
+    <div className='flex flex-col gap-5'>
+      <h2 className='text-3xl font-semibold'>Мої замовлення</h2>
       {!!userHistory?.purchases?.length ? (
         <div className='flex flex-col gap-5'>
           {userHistory.purchases?.map((purchase) => (

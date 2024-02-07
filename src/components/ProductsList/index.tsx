@@ -68,7 +68,7 @@ const ProductsList = ({ items }: ICardList) => {
 
   return (
     <>
-      <div className='p-10'>
+      <div className=''>
         <div className='grid grid-flow-row grid-cols-4 gap-3'>
           {!!items ? (
             items.map((item) => (
