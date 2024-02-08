@@ -64,7 +64,7 @@ const Button = ({
     type={type}
     onClick={onClick}
     className={cx(
-      'w-full relative inline-flex px-2 py-1 text-center select-none items-center justify-center border leading-4 font-medium rounded-md transition-all duration-300',
+      'relative inline-flex px-2 py-1 text-center select-none items-center justify-center border leading-4 font-medium rounded-md transition-all duration-300',
       {
         'shadow-sm text-lightmain bg-colorMain hover:bg-colorSecond border-transparent': primary,
         'text-colorMain bg-transparent hover:bg-colorMain hover:text-white border-colorMain':

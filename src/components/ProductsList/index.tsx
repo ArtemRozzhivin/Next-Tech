@@ -19,6 +19,7 @@ import { db } from '@src/firebaseConfig';
 import { getUserHistory } from '@src/api/user';
 import AddedProductModal from '../AddedProductModal';
 import { getAuth, updateProfile } from 'firebase/auth';
+import { handleAddToWishList } from '@src/api/products';
 
 interface ICardList {
   items?: IProductItem[];
@@ -38,34 +39,6 @@ const ProductsList = ({ items }: ICardList) => {
     setShowModal(true);
   };
 
-  const handleAddToWishList = async (product: IProductItem) => {
-    if (user) {
-      try {
-        const productRef = doc(db, 'users', user.uid);
-
-        if (userHistory?.wishlist?.find((item) => item.product.id === product.product.id)) {
-          console.log('remove');
-          await updateDoc(productRef, {
-            user: user.uid,
-            wishlist: arrayRemove(product),
-          });
-        } else {
-          console.log('add');
-          await updateDoc(productRef, {
-            user: user.uid,
-            wishlist: arrayUnion(product),
-          });
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    getUserHistory(user).then((userHistory) => {
-      if (userHistory) dispatch(productsActions.setUserHistory(userHistory as IUserHistory));
-    });
-  };
-
   return (
     <>
       <div className=''>
@@ -75,7 +48,9 @@ const ProductsList = ({ items }: ICardList) => {
               <ProductCard
                 key={item.product.model}
                 item={item}
-                addToWishList={(product: IProductItem) => handleAddToWishList(product)}
+                addToWishList={(product: IProductItem) =>
+                  handleAddToWishList(product, userHistory, user, dispatch)
+                }
                 addProductToCart={handleAddProductToCart}
               />
             ))
@@ -91,7 +66,9 @@ const ProductsList = ({ items }: ICardList) => {
 
       {currentProductToCart && (
         <AddedProductModal
-          handleAddToWishList={(product: IProductItem) => handleAddToWishList(product)}
+          handleAddToWishList={(product: IProductItem) =>
+            handleAddToWishList(product, userHistory, user, dispatch)
+          }
           item={currentProductToCart}
           isOpen={isShowModal}
           setOpenModal={setShowModal}

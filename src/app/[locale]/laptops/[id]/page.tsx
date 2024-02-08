@@ -1,8 +1,20 @@
 'use client';
 
+import { Tab } from '@headlessui/react';
 import axios from 'axios';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
+import cx from 'clsx';
+import Button from '@src/ui/Button';
+import { CheckIcon, HeartIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
+import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
+import { IProductCartItem, IProductItem } from '@src/redux/models';
+import { productsActions } from '@src/redux/reducers/Products/products';
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { db } from '@src/firebaseConfig';
+import { handleAddToWishList } from '@src/api/products';
+import AddedProductModal from '@src/components/AddedProductModal';
 
 interface IProductDetail {
   product: {
@@ -292,7 +304,7 @@ const data: IProductDetail = {
   },
 };
 
-const InfoBlock = ({ title, info }) => {
+const InfoBlock = ({ title, info }: { title: string; info: string }) => {
   return (
     <div className='flex items-end justify-between'>
       {title}
@@ -301,6 +313,304 @@ const InfoBlock = ({ title, info }) => {
     </div>
   );
 };
+
+const CharacteristicsItem = ({ title, info }: { title: string; info: ReactNode[] }) => {
+  return (
+    <div className='flex flex-col gap-1'>
+      <h2 className='text-xl font-medium'>{title}</h2>
+      <div className='flex flex-col gap-1'>
+        {info.map((item, index) => (
+          <div key={index}>{item}</div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
+  return (
+    <div>
+      <h2 className='text-2xl font-semibold'>Характеристики {product?.product.model}</h2>
+
+      <div className='flex flex-col gap-5'>
+        <CharacteristicsItem
+          title='Екран'
+          info={[
+            <InfoBlock title='Діагональ екрану' info={product?.display.diagonal} />,
+            <InfoBlock
+              title='Роздільна здатність екрану'
+              info={`${product?.display['resolution_(h_x_w)']} ${product?.display.definition}`}
+            />,
+            <InfoBlock title='Частота оновлення екрану' info={product?.display.refresh_rate} />,
+            <InfoBlock title='Тип матриці' info={product?.display.type} />,
+          ]}
+        />
+
+        <CharacteristicsItem
+          title='Корпус'
+          info={[
+            <InfoBlock title='Ширина' info={product.design.body['width_(longer_side)']} />,
+            <InfoBlock title='Висота' info={product.design.body['height_(shorter_side)']} />,
+            <InfoBlock title='Товщина' info={product.design.body.thickness} />,
+            <InfoBlock title='Вага' info={product.design.body.weight} />,
+          ]}
+        />
+
+        <CharacteristicsItem
+          title='Камера'
+          info={[
+            <InfoBlock
+              title='Особливості'
+              info={product.camera.front_camera.additional_features}
+            />,
+            <InfoBlock
+              title='Роздільна здатність'
+              info={`${product.camera.front_camera.definition} ${product.camera.front_camera['resolution_(h_x_w)']}`}
+            />,
+          ]}
+        />
+
+        <CharacteristicsItem
+          title='Відеокарта'
+          info={[
+            <InfoBlock title='Модель' info={product.inside.gpu.integrated_card_model} />,
+            <InfoBlock title='Особливості' info={product?.inside.gpu.additional_features} />,
+          ]}
+        />
+
+        <CharacteristicsItem
+          title='Процесор'
+          info={[
+            <InfoBlock
+              title='Процесор'
+              info={`${product?.inside.cpu.family} ${product.inside.cpu.model}`}
+            />,
+            <InfoBlock title='Покоління' info={product.inside.cpu.generation} />,
+            <InfoBlock title='Кількість ядер' info={product.inside.cpu.number_of_cores} />,
+          ]}
+        />
+
+        <CharacteristicsItem
+          title="Оперативна пам'ять"
+          info={[
+            <InfoBlock title="Обсяг оперативної пам'яті" info={product.inside.ram.capacity} />,
+            <InfoBlock title="Тип оперативної пам'яті" info={product.inside.ram.type} />,
+            <InfoBlock
+              title="Характеристики оперативної пам'яті"
+              info={product.inside.ram.clock_speed}
+            />,
+          ]}
+        />
+
+        <CharacteristicsItem
+          title='Жорсткий диск'
+          info={[
+            <InfoBlock title='Тип накопичувача' info={product.inside.ssd.storage_type} />,
+            <InfoBlock title='Кількість накопичувачів' info={product.inside.ssd.number_of_ssds} />,
+            <InfoBlock title="Об'єм накопичувача" info={product.inside.ssd.total_ssd_capacity} />,
+          ]}
+        />
+
+        <CharacteristicsItem
+          title='Аудіо'
+          info={[
+            <InfoBlock
+              title='Кількість динаміків'
+              info={product.inside.audio.number_of_speakers}
+            />,
+            <InfoBlock
+              title='Додаткові характеристики'
+              info={product.inside.audio.number_of_speakers}
+            />,
+          ]}
+        />
+
+        <CharacteristicsItem
+          title='Батарея'
+          info={[
+            <InfoBlock title='Тип батареї' info={product.inside.battery.type} />,
+            <InfoBlock title='Ємність' info={product.inside.battery['capacity_(mah)']} />,
+            <InfoBlock title='Час роботи' info={product.inside.battery.life} />,
+          ]}
+        />
+
+        <CharacteristicsItem
+          title='Програмне забезпечення'
+          info={[
+            <InfoBlock
+              title='Операційна система'
+              info={product.inside.software.operating_system_version}
+            />,
+            <InfoBlock
+              title='Версія розрядності'
+              info={product.inside.software.operating_system_bit_version}
+            />,
+          ]}
+        />
+
+        <CharacteristicsItem
+          title='Підключення'
+          info={[
+            <InfoBlock
+              title='Блютуз'
+              info={`${product.inside.wireless.additional_features} ${product.inside.wireless.bluetooth_version}`}
+            />,
+            <InfoBlock
+              title='WiFi'
+              info={product.inside.wireless.wifi_standards.split(',').join(', ')}
+            />,
+            <InfoBlock title='Ehernet' info={product.inside.wired.additional_features} />,
+            <InfoBlock title='Ehernet швидкість' info={product.inside.wired.ethernet_speed} />,
+          ]}
+        />
+      </div>
+    </div>
+  );
+};
+
+const MainBlock = ({ product }: { product: IProductDetail }) => {
+  const dispatch = useAppDispatch();
+  const [inWishlist, setInWishlist] = React.useState<boolean>(false);
+  const [isShowModal, setShowModal] = useState(false);
+  const user = useAppSelector((state) => state.auth.user);
+  const { userHistory, currentDetailProduct, currentProductToCart } = useAppSelector(
+    (state) => state.products,
+  );
+  const itemCart = useAppSelector(selectCartItemById(product.product.id));
+
+  useEffect(() => {
+    if (userHistory?.wishlist) {
+      const inWIshList = userHistory?.wishlist.some(
+        (item) => product.product.id === item.product.id,
+      );
+      setInWishlist(inWIshList);
+    }
+  }, [userHistory]);
+
+  console.log(currentDetailProduct);
+
+  const handleAddProductToCart = (product: IProductCartItem) => {
+    dispatch(productsActions.addToCart(product));
+    dispatch(productsActions.setCurrentProductToCart(product));
+    setShowModal(true);
+  };
+
+  const addToCart = async () => {
+    const item = {
+      product: currentDetailProduct?.product,
+      image: currentDetailProduct?.image,
+      count: 1,
+    } as IProductCartItem;
+
+    handleAddProductToCart(item);
+  };
+
+  return (
+    <div className='flex flex-wrap -mx-4'>
+      <div className='w-full mb-8 md:w-1/2 md:mb-0'>
+        <div className='sticky top-0 z-10 overflow-hidden '>
+          <div className='relative mb-6 lg:mb-10 lg:h-2/4'>
+            <Image
+              width={500}
+              height={500}
+              src={product?.image.large}
+              alt='product'
+              className='object-cover w-full lg:h-full'
+            />
+          </div>
+        </div>
+      </div>
+      <div className='w-full px-4 md:w-1/2'>
+        <div className='lg:pl-20'>
+          <div className='mb-8'>
+            <h2 className='max-w-xl mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl'>
+              {product?.product.model}
+            </h2>
+            <p className='inline-block mb-6 text-4xl font-bold text-gray-700 dark:text-gray-400'>
+              <span>{currentDetailProduct?.product.price}₴</span>
+            </p>
+            <div>
+              <div>Номер: {product?.product.id}</div>
+              <div>Категорія: {product?.product.category}</div>
+              <div>Бренд: {product?.product.brand}</div>
+              <div>Сім'я: {product?.product.family}</div>
+              <div>Серія: {product?.product.series}</div>
+              <div>Версія: {product?.product.alias}</div>
+
+              <div>Дата випуску: {product.key_aspects.release_date}</div>
+              <div>Батарея: {product.key_aspects.battery}</div>
+              <div>Процесор: {product.key_aspects.processor}</div>
+              <div>Відеокарта: {product.key_aspects.integrated_graphics_card}</div>
+              <div>Оперативна пам'ять: {product.key_aspects.ram} </div>
+              <div>Жорсткий диск: {product.key_aspects.storage} </div>
+            </div>
+          </div>
+          {!!itemCart ? (
+            <Button
+              primary
+              className='w-full bg-green-600 hover:bg-green-700 rounded-md border border-transparent px-5 py-2.5 text-sm font-medium text-white'>
+              <div className='w-full text-center flex items-center justify-center gap-2'>
+                <CheckIcon className='w-6 h-6' />
+                In the cart
+              </div>
+            </Button>
+          ) : (
+            <div className='w-full flex items-center gap-2'>
+              <Button className='w-full' primary onClick={addToCart} large>
+                <div className='w-full text-center flex items-center justify-center gap-2'>
+                  <ShoppingCartIcon className='w-6 h-6' />
+                  Add to cart
+                </div>
+              </Button>
+
+              {inWishlist ? (
+                <Button
+                  className='w-full bg-green-600 hover:bg-green-700 text-white'
+                  onClick={addToCart}
+                  large
+                  primary>
+                  <div className='flex items-center justify-center gap-1'>
+                    <HeartIcon className='w-6 h-6' />
+                    <div>В обраному</div>
+                  </div>
+                </Button>
+              ) : (
+                <Button
+                  className='w-full'
+                  secondary
+                  onClick={() =>
+                    handleAddToWishList(currentDetailProduct, userHistory, user, dispatch)
+                  }
+                  large>
+                  <div className='w-full text-center flex items-center justify-center gap-2'>
+                    <HeartIcon className='w-6 h-6' />
+                    Add to wishlist
+                  </div>
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {currentProductToCart && (
+        <AddedProductModal
+          handleAddToWishList={(product: IProductItem) =>
+            handleAddToWishList(product, userHistory, user, dispatch)
+          }
+          item={currentProductToCart}
+          isOpen={isShowModal}
+          setOpenModal={setShowModal}
+        />
+      )}
+    </div>
+  );
+};
+
+const tabs = [
+  { id: 1, title: 'Все про товар' },
+  { id: 2, title: 'Характеристики' },
+];
 
 const LaptopDetail: React.FC = ({ params }) => {
   const [product, setProduct] = React.useState<IProductDetail | null>(data);
@@ -336,106 +646,38 @@ const LaptopDetail: React.FC = ({ params }) => {
   console.log(product);
 
   return (
-    <section className='overflow-hidden bg-white py-11 font-poppins dark:bg-gray-800'>
-      <div className='max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6'>
-        <div className='flex flex-wrap -mx-4'>
-          <div className='w-full mb-8 md:w-1/2 md:mb-0'>
-            <div className='sticky top-0 z-50 overflow-hidden '>
-              <div className='relative mb-6 lg:mb-10 lg:h-2/4'>
-                <Image
-                  width={500}
-                  height={500}
-                  src={product?.image.large}
-                  alt='product'
-                  className='object-cover w-full lg:h-full'
-                />
-              </div>
-              {/* <div className='flex flex-wrap hidden md:flex'>
-                {[1, 2, 3, 4].map((index) => (
-                  <div key={index} className='w-1/2 p-2 sm:w-1/4'>
-                    <a href='#' className='block border border-blue-300 hover:border-blue-300'>
-                      <img
-                        src='https://i.postimg.cc/6qcPhTQg/R-18.png'
-                        alt={`Product ${index}`}
-                        className='object-cover w-full lg:h-20'
-                      />
-                    </a>
-                  </div>
-                ))}
-              </div>
-              <div className='px-6 pb-6 mt-6 border-t border-gray-300 dark:border-gray-400'>
-                <div className='flex flex-wrap items-center mt-6'>
-                  <span className='mr-2'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='16'
-                      height='16'
-                      fill='currentColor'
-                      className='w-4 h-4 text-gray-700 dark:text-gray-400 bi bi-truck'
-                      viewBox='0 0 16 16'>
-                      <path d='M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z' />
-                    </svg>
-                  </span>
-                  <h2 className='text-lg font-bold text-gray-700 dark:text-gray-400'>
-                    Free Shipping
-                  </h2>
-                </div>
-                <div className='mt-2 px-7'>
-                  <a className='text-sm text-blue-400 dark:text-blue-200' href='#'>
-                    Get delivery dates
-                  </a>
-                </div>
-              </div> */}
-            </div>
-          </div>
-          <div className='w-full px-4 md:w-1/2'>
-            <div className='lg:pl-20'>
-              <div className='mb-8'>
-                <h2 className='max-w-xl mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl'>
-                  {product?.product.model}
-                </h2>
-                <p className='inline-block mb-6 text-4xl font-bold text-gray-700 dark:text-gray-400'>
-                  <span>$1500.99</span>
-                  {/* <span className='text-base font-normal text-gray-500 line-through dark:text-gray-400'>
-                    $1800.99
-                  </span> */}
-                </p>
-                <p className='max-w-md text-gray-700 dark:text-gray-400'>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in ex augue.
-                  Curabitur eu nisl at risus consequat pharetra.
-                </p>
-              </div>
-              <div className='flex flex-wrap items-center gap-4'>
-                <button className='w-full p-4 bg-blue-500 rounded-md lg:w-2/5 dark:text-gray-200 text-gray-50 hover:bg-blue-600 dark:bg-blue-500 dark:hover:bg-blue-700'>
-                  Add to cart
-                </button>
-                <button className='flex items-center justify-center w-full p-4 text-blue-500 border border-blue-500 rounded-md lg:w-2/5 dark:text-gray-200 dark:border-blue-600 hover:bg-blue-600 hover:border-blue-600 hover:text-gray-100 dark:bg-blue-500 dark:hover:bg-blue-700 dark:hover:border-blue-700 dark:hover:text-gray-300'>
-                  Buy Now
-                </button>
-              </div>
-
-              <div>
-                <div>Номер: {product?.product.id}</div>
-                <div>Категорія: {product?.product.category}</div>
-                <div>Бренд: {product?.product.brand}</div>
-                <div>Сім'я: {product?.product.family}</div>
-                <div>Серія: {product?.product.series}</div>
-                <div>Версія: {product?.product.alias}</div>
-              </div>
-
-              <div>
-                <h2>Характеристики {product?.product.model}</h2>
-                <InfoBlock title='Діагональ екрану' info={product?.display.diagonal} />
-                <InfoBlock
-                  title='Роздільна здатність екрану'
-                  info={`${product?.display['resolution_(h_x_w)']} ${product?.display.definition}`}
-                />
-                <InfoBlock title='Частота оновлення екрану' info={product?.display.refresh_rate} />
-                <InfoBlock title='Тип матриці' info={product?.display.type} />
-              </div>
-            </div>
-          </div>
-        </div>
+    <section className='overflow-hidden p-10 bg-white'>
+      <div className=''>
+        <Tab.Group>
+          <Tab.List className='w-full flex rounded-xl bg-blue-900/20 p-1'>
+            {tabs.map((tab) => (
+              <Tab
+                key={tab.id}
+                className={({ selected }) =>
+                  cx(
+                    'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
+                    'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                    selected
+                      ? 'bg-white text-blue-700 shadow'
+                      : 'text-blue-100 hover:bg-white/[0.12] hover:text-white',
+                  )
+                }>
+                {tab.title}
+              </Tab>
+            ))}
+          </Tab.List>
+          <Tab.Panels className='mt-2'>
+            {tabs.map((tab) => (
+              <Tab.Panel key={tab.id} className={'rounded-xl bg-white py-7'}>
+                {tab.id === 1 ? (
+                  <MainBlock product={product} />
+                ) : (
+                  <CharacteristicsBlock product={product} />
+                )}
+              </Tab.Panel>
+            ))}
+          </Tab.Panels>
+        </Tab.Group>
       </div>
     </section>
   );

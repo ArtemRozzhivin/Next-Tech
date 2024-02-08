@@ -26,8 +26,6 @@ const AddedProductModal = ({
   const { product, image, count } = item;
   const [inWishlist, setInWishlist] = useState<boolean>(false);
 
-  console.log(inWishlist, 'inWishlist');
-
   useEffect(() => {
     if (userHistory?.wishlist) {
       const inWIshList = userHistory?.wishlist.some(

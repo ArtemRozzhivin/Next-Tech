@@ -47,10 +47,17 @@ const ProductCard = ({ addProductToCart, addToWishList, item }: IProductCard) =>
     addProductToCart(item);
   };
 
+  const handleCurrentDetailProduct = () => {
+    dispatch(productsActions.setCurrentDetailProduct(item));
+  };
+
   return (
     <div className='group border-gray-100/30 flex w-full flex-col self-center overflow-hidden rounded-lg border bg-darkmain shadow-2xl'>
       <div className='relative p-2 bg-white'>
-        <Link href={`/laptops/${item.product.id}`} className='relative m-3 flex h-60 rounded-md'>
+        <Link
+          onClick={handleCurrentDetailProduct}
+          href={`/laptops/${item.product.id}`}
+          className='relative m-3 flex h-60 rounded-md'>
           <Image
             className='h-full w-full object-contain'
             fill

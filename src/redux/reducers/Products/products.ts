@@ -26,6 +26,7 @@ interface IProductsState {
   products: IProductItem[];
   userHistory: IUserHistory | null;
   cartProducts: IProductCartItem[];
+  currentDetailProduct: IProductItem | null;
   orderedProducts: IOrderedItem[];
   currentProductToCart: IProductCartItem | null;
   cartProductsCount: number;
@@ -36,6 +37,7 @@ const initialState: IProductsState = {
   products: [],
   cartProducts: [],
   orderedProducts: [],
+  currentDetailProduct: null,
   userHistory: null,
   currentProductToCart: null,
   cartProductsCount: 0,
@@ -111,6 +113,10 @@ const productsSlice = createSlice({
 
     setOrderedProducts: (state, { payload }: PayloadAction<IOrderedItem[]>) => {
       state.orderedProducts = payload;
+    },
+
+    setCurrentDetailProduct: (state, { payload }: PayloadAction<IProductItem>) => {
+      state.currentDetailProduct = payload;
     },
   },
 });
