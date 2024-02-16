@@ -3,10 +3,12 @@
 import { ArrowsUpDownIcon, HomeIcon } from '@heroicons/react/24/outline';
 import FiltersBlock from '@src/components/FiltersBlock';
 import ProductsList, { IProductItem } from '@src/components/ProductsList';
+import { Search } from '@src/components/Search';
 import { db } from '@src/firebaseConfig';
 import { Link } from '@src/navigation';
 import Dropdown from '@src/ui/Dropdown';
 import Input from '@src/ui/Input';
+import algoliasearch from 'algoliasearch';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
@@ -16,6 +18,9 @@ const sortingOptions = [
   { title: 'Від дешевших до дорогих', method: 'asc' },
   { title: 'Від дорогих до дешевших', method: 'desc' },
 ];
+
+const client = algoliasearch('Q2QOIT41TW', '85a4843a67348da0ea7172f8738466ac');
+const index = client.initIndex('product_search');
 
 const Laptops = () => {
   const [laptops, setLaptops] = useState<IProductItem[]>([]);
@@ -29,10 +34,24 @@ const Laptops = () => {
     callback();
   }, 1500);
 
+  // const filterProduct = laptops.filter((item) => {
+  //   const isDateMatch = selectedDate === 'All' || resident.registrationDate === selectedDate;
+  //   const isStatusMatch = selectedStatus === 'All' || resident.status.title === selectedStatus;
+  //   const isPlotMatch = selectedPlot === 'All' || resident.plot === selectedPlot;
+
+  //   return isDateMatch && isStatusMatch && isPlotMatch;
+  // });
+
   const handleSearchProduct = (e: any) => {
     setSearchProduct(e.target.value);
 
-    debouncedCallback(() => fetchLaptops(e.target.value));
+    debouncedCallback(() => fetchSearchProduct(e.target.value));
+  };
+
+  const fetchSearchProduct = (value: string) => {
+    index.search(value).then(({ hits }) => {
+      console.log(hits);
+    });
   };
 
   const handleCheckboxChange = (value: string) => {
@@ -106,11 +125,8 @@ const Laptops = () => {
 
         <div className='flex flex-col gap-5'>
           <div className='flex items-center gap-5 justify-between'>
-            <Input
-              value={searchProduct}
-              onChange={handleSearchProduct}
-              placeholder='Введіть назву'
-            />
+            {/* <Search /> */}
+            <Input value={searchProduct} onChange={handleSearchProduct} />
 
             <Dropdown
               className='inline-flex shadow-lg'

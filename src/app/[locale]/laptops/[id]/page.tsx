@@ -6,7 +6,7 @@ import Image from 'next/image';
 import React, { ReactNode, useEffect, useState } from 'react';
 import cx from 'clsx';
 import Button from '@src/ui/Button';
-import { CheckIcon, HeartIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, HeartIcon, ShoppingCartIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
@@ -76,15 +76,15 @@ interface IProductDetail {
     refresh_rate: string;
     additional_features: string;
   };
-  camera: {
-    front_camera: {
+  camera?: {
+    front_camera?: {
       definition: string;
       'resolution_(h_x_w)': string;
       additional_features: string;
     };
   };
   inside: {
-    cpu: {
+    cpu?: {
       number_of_cores: string;
       brand: string;
       model: string;
@@ -94,54 +94,54 @@ interface IProductDetail {
       'configurable_tdp_(thermal_design_power)_up': string;
       'configurable_tdp_(thermal_design_power)_up_frequency': string;
     };
-    ram: {
+    ram?: {
       capacity: string;
       maximum_capacity: string;
       type: string;
       clock_speed: string;
       form_factor: string;
     };
-    gpu: {
+    gpu?: {
       integrated_card_model: string;
       additional_features: string;
     };
-    storage: {
+    storage?: {
       total_capacity: string;
     };
-    ssd: {
+    ssd?: {
       capacity: string;
       total_ssd_capacity: string;
       number_of_ssds: string;
       storage_type: string;
       ssd_interface: string;
     };
-    battery: {
+    battery?: {
       'capacity_(mah)': string;
       life: string;
       number_of_cells: string;
       type: string;
     };
-    power: {
+    power?: {
       power: string;
     };
-    wireless: {
+    wireless?: {
       wifi_standards: string;
       bluetooth_version: string;
       additional_features: string;
     };
-    wired: {
+    wired?: {
       ethernet_speed: string;
       additional_features: string;
     };
-    audio: {
+    audio?: {
       number_of_speakers: string;
       additional_features: string;
     };
-    software: {
+    software?: {
       operating_system_version: string;
       operating_system_bit_version: string;
     };
-    ports: {
+    ports?: {
       'number_of_usb_3,2_gen_1_type_a_ports': string;
       number_of_hdmi_ports: string;
       'number_of_usb_2,0_ports': string;
@@ -161,51 +161,53 @@ interface IProductDetail {
 
 const data: IProductDetail = {
   product: {
-    dedupe: 'Acer Extensa 15 EX215-54-51WY NX.EGJET.03C',
+    dedupe: 'Lenovo ThinkPad T T14s 21F6001BUS 21F6001BUS',
     is_translated: true,
-    alias: 'EX215-54-51WY',
-    part_number: 'NX.EGJET.03C',
-    brand: 'Acer',
-    family: 'Extensa',
-    series: '15',
-    version: 'NX.EGJET.03C',
-    model: 'Acer Extensa 15 EX215-54-51WY',
+    alias: 'T14s',
+    part_number: '21F6001BUS',
+    brand: 'Lenovo',
+    family: 'ThinkPad',
+    series: 'T',
+    version: '21F6001BUS',
+    model: 'Lenovo ThinkPad T T14s 21F6001BUS',
     category: 'Laptops',
-    'ean/upc_code': '4711121250378',
-    id: '6597e4197badaa68d28cf8e8',
+    'ean/upc_code': '0196804854076, 196804854076',
+    id: '652675347cc299b687df723e',
   },
   date: {
-    released: '2022-09-04',
+    released: '2023-03-31',
   },
   image: {
     thumbnail:
-      'https://i.techspecs.io/product-images-thumbnail/laptops/df6b1c79-1c78-4c8f-81a5-429911a3196b.jpeg',
+      'https://i.techspecs.io/product-images-thumbnail/laptops/955efb42-8f6d-465b-a26e-b71358855ac5.jpeg',
     large:
-      'https://i.techspecs.io/product-images-large/laptops/2a1198f1-e70b-4cf9-87c9-16255045f3e1.jpeg',
+      'https://i.techspecs.io/product-images-large/laptops/94f1249a-656f-47b4-b397-c532caa0bfa1.jpeg',
   },
   key_aspects: {
-    release_date: '2022-09-04',
-    ram: '8 GB',
-    storage: '256 GB',
-    processor: 'i5-1135G7',
+    release_date: '2023-03-31',
+    ram: '16 GB',
+    storage: '512 GB',
+    processor: 'i7-1355U',
     integrated_graphics_card: 'Intel Iris Xe Graphics',
-    battery: '36 Wh',
+    battery: '57 Wh',
   },
   design: {
     body: {
       type: 'Laptop',
       style: 'Clamshell',
-      colors: 'Black',
-      'width_(longer_side)': '363.4 mm',
-      weight: '1.7 kg',
-      'height_(shorter_side)': '238.4 mm',
-      thickness: '19.9 mm',
+      colors: 'Grey',
+      finish: 'Aluminium',
+      'width_(longer_side)': '317.5 mm',
+      weight: '1.48 kg',
+      'height_(shorter_side)': '226.9 mm',
+      thickness: '16.9 mm',
     },
     keyboard: {
-      additional_features: 'Numeric Keypad',
+      language: 'English',
+      additional_features: 'Backlight, Numeric Keypad, Spill Resistant Keyboard',
     },
     touchpad: {
-      pointing_device: 'Touchpad',
+      pointing_device: 'ThinkPad UltraNav',
     },
     security: {
       lock_slot_type: 'Kensington',
@@ -214,103 +216,140 @@ const data: IProductDetail = {
   },
   display: {
     type: 'IPS',
-    definition: 'Full HD',
-    diagonal: '15.6 inch',
-    'resolution_(h_x_w)': '1920 x 1080 pixels',
-    aspect_ratio: '16:9',
-    refresh_rate: '60 Hz',
-    additional_features: 'LED Backlight',
+    definition: 'WUXGA',
+    diagonal: '14 inch',
+    'resolution_(h_x_w)': '1920 x 1200 pixels',
+    aspect_ratio: '16:10',
+    brightness: '300 cd/m²',
+    contrast_ratio: '600:1',
+    additional_features: 'LED Backlight, Anti Glare',
+    color_gamut: '45%',
+    rgb_color_space: 'NTSC',
   },
   camera: {
     front_camera: {
-      definition: 'HD',
-      'resolution_(h_x_w)': '1280 x 720 pixels',
-      additional_features: 'Camera Module',
+      definition: 'Full HD',
+      'resolution_(h_x_w)': '1920 x 1080 pixels',
+      privacy: 'Privacy shutter',
+      additional_features: 'Camera Module, Privacy Shutter',
     },
   },
   inside: {
     cpu: {
-      number_of_cores: '4',
+      number_of_cores: '10',
+      max_turbo_speed: '5 GHz',
       brand: 'Intel',
-      model: 'i5-1135G7',
-      generation: '11th gen Intel Core i5',
-      family: 'Intel Core i5',
-      cache: '8 MB',
-      'configurable_tdp_(thermal_design_power)_up': '28 W',
-      'configurable_tdp_(thermal_design_power)_up_frequency': '2.4 GHz',
+      model: 'i7-1355U',
+      generation: '13th gen Intel Core i7',
+      family: 'Intel Core i7',
+      motherboard_chipset: 'Intel SoC',
+      cache: '12 MB',
     },
     ram: {
-      capacity: '8 GB',
-      maximum_capacity: '8 GB',
-      type: 'DDR4-SDRAM',
-      clock_speed: '2666 MHz',
+      capacity: '16 GB',
+      maximum_capacity: '16 GB',
+      type: 'LPDDR5x-SDRAM',
+      clock_speed: '4800 MHz',
       form_factor: 'On-board',
+      channel: 'Dual-channel',
     },
     gpu: {
       integrated_card_model: 'Intel Iris Xe Graphics',
+      integrated_card_family: 'Intel Iris Xe Graphics',
       additional_features: 'Integrated Graphics Card',
     },
     storage: {
-      total_capacity: '256 GB',
+      total_capacity: '512 GB',
     },
     ssd: {
-      capacity: '256 GB',
-      total_ssd_capacity: '256 GB',
+      capacity: '512 GB',
+      total_ssd_capacity: '512 GB',
       number_of_ssds: '1',
       storage_type: 'SSD',
-      ssd_interface: 'PCI Express',
+      ssd_interface: 'PCI Express 4.0',
+      ssd_form_factor: 'M.2',
     },
     battery: {
-      'capacity_(mah)': '36 Wh',
-      life: '8 h',
-      number_of_cells: '2',
-      type: 'Lithium-Ion (Li-Ion)',
+      'capacity_(mah)': '57 Wh',
+      type: 'Lithium Polymer (LiPo)',
+      additional_features: 'Fast Charging',
     },
     power: {
-      power: '45 W',
+      power: '65 W',
+      voltage: '100 - 240 V',
+      frequency: '50/60 Hz',
     },
     wireless: {
-      wifi_standards: '802.11a, 802.11b, 802.11g, Wi-Fi 4 (802.11n), Wi-Fi 5 (802.11ac)',
-      bluetooth_version: '5.0',
-      additional_features: 'Bluetooth Module',
-    },
-    wired: {
-      ethernet_speed: '10, 100, 1000 Mbit/s',
-      additional_features: 'Ethernet Card',
+      wifi_standards:
+        '802.11a, Wi-Fi 5 (802.11ac), 802.11b, Wi-Fi 6 (802.11ax), 802.11g, Wi-Fi 4 (802.11n), Wi-Fi 6E (802.11ax)',
+      wifi_adapter: 'Intel Wi-Fi 6E AX211',
+      bluetooth_version: '5.1',
+      type_of_antenna: '2x2',
+      additional_features: 'Bluetooth Module, Not installed',
     },
     audio: {
       number_of_speakers: '2',
+      speaker_power: '2 W',
+      sound_system: 'Dolby Audio',
+      number_of_microphones: '2',
+      chip: 'Realtek ALC3287',
       additional_features: 'Headphone Microphone Combo Jack, Microphone',
+    },
+    security: {
+      'tpm_(trusted_platform_module)_version': '2.0',
+      password_protection: 'Present',
+      additional_features: 'Trusted Platform Module (TPM)',
     },
     software: {
       operating_system_version: 'Windows 11 Pro',
-      operating_system_bit_version: '64-bit',
+      operating_system_language: 'English',
+      type_of_password_protection: 'Power on, SSD, Supervisor',
     },
     ports: {
       'number_of_usb_3,2_gen_1_type_a_ports': '2',
+      number_of_thunderbolt_4_ports: '2',
       number_of_hdmi_ports: '1',
-      'number_of_usb_2,0_ports': '1',
-      'number_of_ethernet_lan_(rj-45)_ports': '1',
-      charging: 'DC-in jack',
+      'usb_(universal_serial_bus)_sleep_and_charge_ports': '1',
+      additional_features:
+        'Sleep and Charge, USB Power Delivery, USB Type C DisplayPort Alternate Mode',
+    },
+    sensors: {
+      sensors: 'Fingerprint Reader',
     },
   },
   no: {
     touchscreen: 'Touchscreen',
+    numeric_keypad: 'Numeric Keypad',
+    card_reader: 'Card Reader',
+    ethernet_card: 'Ethernet',
     dedicated_card: 'Dedicated Graphics Card',
+    'nfc_(near_field_communication)': 'NFC (Near Field Communication)',
+    smart_card_reader: 'Smart Card Reader',
   },
   No: {
     Touchscreen: 'Touchscreen',
     Dedicated_Card: 'Dedicated Graphics Card',
+    Card_Reader: 'Card Reader',
+    'NFC_(Near_Field_Communication)': 'NFC (Near Field Communication)',
+    Ethernet_Card: 'Ethernet',
+    Numeric_Keypad: 'Numeric Keypad',
+    Smart_Card_Reader: 'Smart Card Reader',
   },
 };
 
-const InfoBlock = ({ title, info }: { title: string; info: string }) => {
+const InfoBlock = ({ title, info }: { title: string; info: string | null | undefined }) => {
   return (
-    <div className='flex items-end justify-between'>
-      {title}
-      <div className='border-b-2 border-dashed flex-1'></div>
-      {info}
-    </div>
+    <>
+      {info ? (
+        <div className='flex items-start justify-between'>
+          <div className='flex-1 flex items-end'>
+            {title}
+            <div className='flex-1 border-b-2 border-dashed'></div>
+          </div>
+          <div className='max-w-md text-right'>{info}</div>
+        </div>
+      ) : null}
+    </>
   );
 };
 
@@ -336,23 +375,23 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
         <CharacteristicsItem
           title='Екран'
           info={[
-            <InfoBlock title='Діагональ екрану' info={product?.display.diagonal} />,
+            <InfoBlock title='Діагональ екрану' info={product?.display?.diagonal} />,
             <InfoBlock
               title='Роздільна здатність екрану'
-              info={`${product?.display['resolution_(h_x_w)']} ${product?.display.definition}`}
+              info={`${product?.display['resolution_(h_x_w)']} ${product?.display?.definition}`}
             />,
-            <InfoBlock title='Частота оновлення екрану' info={product?.display.refresh_rate} />,
-            <InfoBlock title='Тип матриці' info={product?.display.type} />,
+            <InfoBlock title='Частота оновлення екрану' info={product?.display?.refresh_rate} />,
+            <InfoBlock title='Тип матриці' info={product?.display?.type} />,
           ]}
         />
 
         <CharacteristicsItem
           title='Корпус'
           info={[
-            <InfoBlock title='Ширина' info={product.design.body['width_(longer_side)']} />,
-            <InfoBlock title='Висота' info={product.design.body['height_(shorter_side)']} />,
-            <InfoBlock title='Товщина' info={product.design.body.thickness} />,
-            <InfoBlock title='Вага' info={product.design.body.weight} />,
+            <InfoBlock title='Ширина' info={product?.design?.body?.['width_(longer_side)']} />,
+            <InfoBlock title='Висота' info={product?.design?.body?.['height_(shorter_side)']} />,
+            <InfoBlock title='Товщина' info={product?.design?.body?.thickness} />,
+            <InfoBlock title='Вага' info={product?.design?.body?.weight} />,
           ]}
         />
 
@@ -361,11 +400,11 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
           info={[
             <InfoBlock
               title='Особливості'
-              info={product.camera.front_camera.additional_features}
+              info={product?.camera?.front_camera?.additional_features}
             />,
             <InfoBlock
               title='Роздільна здатність'
-              info={`${product.camera.front_camera.definition} ${product.camera.front_camera['resolution_(h_x_w)']}`}
+              info={`${product?.camera?.front_camera?.definition} ${product?.camera?.front_camera?.['resolution_(h_x_w)']}`}
             />,
           ]}
         />
@@ -373,8 +412,8 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
         <CharacteristicsItem
           title='Відеокарта'
           info={[
-            <InfoBlock title='Модель' info={product.inside.gpu.integrated_card_model} />,
-            <InfoBlock title='Особливості' info={product?.inside.gpu.additional_features} />,
+            <InfoBlock title='Модель' info={product?.inside?.gpu?.integrated_card_model} />,
+            <InfoBlock title='Особливості' info={product?.inside?.gpu?.additional_features} />,
           ]}
         />
 
@@ -383,21 +422,21 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
           info={[
             <InfoBlock
               title='Процесор'
-              info={`${product?.inside.cpu.family} ${product.inside.cpu.model}`}
+              info={`${product?.inside?.cpu?.family} ${product?.inside?.cpu?.model}`}
             />,
-            <InfoBlock title='Покоління' info={product.inside.cpu.generation} />,
-            <InfoBlock title='Кількість ядер' info={product.inside.cpu.number_of_cores} />,
+            <InfoBlock title='Покоління' info={product?.inside?.cpu?.generation} />,
+            <InfoBlock title='Кількість ядер' info={product?.inside?.cpu?.number_of_cores} />,
           ]}
         />
 
         <CharacteristicsItem
           title="Оперативна пам'ять"
           info={[
-            <InfoBlock title="Обсяг оперативної пам'яті" info={product.inside.ram.capacity} />,
-            <InfoBlock title="Тип оперативної пам'яті" info={product.inside.ram.type} />,
+            <InfoBlock title="Обсяг оперативної пам'яті" info={product?.inside?.ram?.capacity} />,
+            <InfoBlock title="Тип оперативної пам'яті" info={product?.inside?.ram?.type} />,
             <InfoBlock
               title="Характеристики оперативної пам'яті"
-              info={product.inside.ram.clock_speed}
+              info={product?.inside?.ram?.clock_speed}
             />,
           ]}
         />
@@ -405,9 +444,15 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
         <CharacteristicsItem
           title='Жорсткий диск'
           info={[
-            <InfoBlock title='Тип накопичувача' info={product.inside.ssd.storage_type} />,
-            <InfoBlock title='Кількість накопичувачів' info={product.inside.ssd.number_of_ssds} />,
-            <InfoBlock title="Об'єм накопичувача" info={product.inside.ssd.total_ssd_capacity} />,
+            <InfoBlock title='Тип накопичувача' info={product?.inside?.ssd?.storage_type} />,
+            <InfoBlock
+              title='Кількість накопичувачів'
+              info={product?.inside?.ssd?.number_of_ssds}
+            />,
+            <InfoBlock
+              title="Об'єм накопичувача"
+              info={product?.inside?.ssd?.total_ssd_capacity}
+            />,
           ]}
         />
 
@@ -416,11 +461,11 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
           info={[
             <InfoBlock
               title='Кількість динаміків'
-              info={product.inside.audio.number_of_speakers}
+              info={product?.inside?.audio?.number_of_speakers}
             />,
             <InfoBlock
               title='Додаткові характеристики'
-              info={product.inside.audio.number_of_speakers}
+              info={product?.inside?.audio?.number_of_speakers}
             />,
           ]}
         />
@@ -428,9 +473,9 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
         <CharacteristicsItem
           title='Батарея'
           info={[
-            <InfoBlock title='Тип батареї' info={product.inside.battery.type} />,
-            <InfoBlock title='Ємність' info={product.inside.battery['capacity_(mah)']} />,
-            <InfoBlock title='Час роботи' info={product.inside.battery.life} />,
+            <InfoBlock title='Тип батареї' info={product?.inside?.battery?.type} />,
+            <InfoBlock title='Ємність' info={product.inside?.battery?.['capacity_(mah)']} />,
+            <InfoBlock title='Час роботи' info={product.inside?.battery?.life} />,
           ]}
         />
 
@@ -439,11 +484,11 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
           info={[
             <InfoBlock
               title='Операційна система'
-              info={product.inside.software.operating_system_version}
+              info={product.inside?.software?.operating_system_version}
             />,
             <InfoBlock
               title='Версія розрядності'
-              info={product.inside.software.operating_system_bit_version}
+              info={product.inside?.software?.operating_system_bit_version}
             />,
           ]}
         />
@@ -453,14 +498,14 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
           info={[
             <InfoBlock
               title='Блютуз'
-              info={`${product.inside.wireless.additional_features} ${product.inside.wireless.bluetooth_version}`}
+              info={`${product.inside?.wireless?.additional_features} ${product.inside?.wireless?.bluetooth_version}`}
             />,
             <InfoBlock
               title='WiFi'
-              info={product.inside.wireless.wifi_standards.split(',').join(', ')}
+              info={product.inside?.wireless?.wifi_standards?.split(',')?.join(', ')}
             />,
-            <InfoBlock title='Ehernet' info={product.inside.wired.additional_features} />,
-            <InfoBlock title='Ehernet швидкість' info={product.inside.wired.ethernet_speed} />,
+            <InfoBlock title='Ehernet' info={product.inside?.wired?.additional_features} />,
+            <InfoBlock title='Ehernet швидкість' info={product.inside?.wired?.ethernet_speed} />,
           ]}
         />
       </div>
@@ -476,14 +521,15 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
   const { userHistory, currentDetailProduct, currentProductToCart } = useAppSelector(
     (state) => state.products,
   );
-  const itemCart = useAppSelector(selectCartItemById(product.product.id));
+  const itemCart = useAppSelector(selectCartItemById(currentDetailProduct.product.id));
 
   useEffect(() => {
     if (userHistory?.wishlist) {
       const inWIshList = userHistory?.wishlist.some(
-        (item) => product.product.id === item.product.id,
+        (item) => item.product.id === currentDetailProduct?.product.id,
       );
       setInWishlist(inWIshList);
+      console.log(inWIshList, 'inWishlist');
     }
   }, [userHistory]);
 
@@ -503,6 +549,12 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
     } as IProductCartItem;
 
     handleAddProductToCart(item);
+  };
+
+  const removeFromCart = async () => {
+    if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
+      dispatch(productsActions.removeFromCart(currentDetailProduct?.product.id));
+    }
   };
 
   return (
@@ -545,51 +597,51 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
               <div>Жорсткий диск: {product.key_aspects.storage} </div>
             </div>
           </div>
-          {!!itemCart ? (
-            <Button
-              primary
-              className='w-full bg-green-600 hover:bg-green-700 rounded-md border border-transparent px-5 py-2.5 text-sm font-medium text-white'>
-              <div className='w-full text-center flex items-center justify-center gap-2'>
-                <CheckIcon className='w-6 h-6' />
-                In the cart
-              </div>
-            </Button>
-          ) : (
-            <div className='w-full flex items-center gap-2'>
+          <div className='w-full flex items-center gap-2'>
+            {!!itemCart ? (
+              <Button className='w-full' onClick={removeFromCart} large danger>
+                <div className='w-full text-center flex items-center justify-center gap-2'>
+                  <TrashIcon className='w-6 h-6' />
+                  <div>Видалити з корзини</div>
+                </div>
+              </Button>
+            ) : (
               <Button className='w-full' primary onClick={addToCart} large>
                 <div className='w-full text-center flex items-center justify-center gap-2'>
                   <ShoppingCartIcon className='w-6 h-6' />
                   Add to cart
                 </div>
               </Button>
+            )}
 
-              {inWishlist ? (
-                <Button
-                  className='w-full bg-green-600 hover:bg-green-700 text-white'
-                  onClick={addToCart}
-                  large
-                  primary>
-                  <div className='flex items-center justify-center gap-1'>
-                    <HeartIcon className='w-6 h-6' />
-                    <div>В обраному</div>
-                  </div>
-                </Button>
-              ) : (
-                <Button
-                  className='w-full'
-                  secondary
-                  onClick={() =>
-                    handleAddToWishList(currentDetailProduct, userHistory, user, dispatch)
-                  }
-                  large>
-                  <div className='w-full text-center flex items-center justify-center gap-2'>
-                    <HeartIcon className='w-6 h-6' />
-                    Add to wishlist
-                  </div>
-                </Button>
-              )}
-            </div>
-          )}
+            {inWishlist ? (
+              <Button
+                className='w-full bg-green-600 hover:bg-green-700 text-white'
+                onClick={() =>
+                  handleAddToWishList(currentDetailProduct, userHistory, user, dispatch)
+                }
+                large
+                primary>
+                <div className='flex items-center justify-center gap-1'>
+                  <HeartIcon className='w-6 h-6' />
+                  <div>В обраному</div>
+                </div>
+              </Button>
+            ) : (
+              <Button
+                className='w-full'
+                secondary
+                onClick={() =>
+                  handleAddToWishList(currentDetailProduct, userHistory, user, dispatch)
+                }
+                large>
+                <div className='w-full text-center flex items-center justify-center gap-2'>
+                  <HeartIcon className='w-6 h-6' />
+                  Add to wishlist
+                </div>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -631,9 +683,9 @@ const LaptopDetail: React.FC = ({ params }) => {
 
       const response = await axios.request(options);
 
-      console.log(response.data);
+      console.log(response.data.data.items[0]);
 
-      // setProductDetail();
+      setProduct(response.data.data.items[0]);
     } catch (error) {
       console.error('Error fetching product:', error);
     }

@@ -12,6 +12,8 @@ import { authActions } from '@redux/reducers/auth';
 import { addUserHistory, getUserHistory } from '@src/api/user';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
 import { doc, getDoc } from 'firebase/firestore';
+import { SearchBox } from 'react-instantsearch';
+import { Search } from '@src/components/Search';
 
 export default function Home() {
   const t = useTranslations();
