@@ -6,21 +6,27 @@ import ProductsList, { IProductItem } from '@src/components/ProductsList';
 import { Search } from '@src/components/Search';
 import { db } from '@src/firebaseConfig';
 import { Link } from '@src/navigation';
+import Button from '@src/ui/Button';
 import Dropdown from '@src/ui/Dropdown';
 import Input from '@src/ui/Input';
-import algoliasearch from 'algoliasearch';
+import { fetchSmarhphonesToFireBase } from '@src/utils/fetchProductToFirebase';
+import algoliasearch, { SearchIndex } from 'algoliasearch';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { set } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
+const client = algoliasearch('Q2QOIT41TW', '09737b1233e8e42a12c90f0a08a08dd6');
+const index = client.initIndex('product_search');
+const descPriceIndex = client.initIndex('product_search_price_desc');
+const ascPriceIndex = client.initIndex('product_search_price_asc');
+
 const brandOptions = ['MSI', 'Lenovo', 'Acer'];
 const sortingOptions = [
-  { title: 'Від дешевших до дорогих', method: 'asc' },
-  { title: 'Від дорогих до дешевших', method: 'desc' },
+  { title: 'Популярні', method: 'desc', index: index },
+  { title: 'Від дешевших до дорогих', method: 'asc', index: ascPriceIndex },
+  { title: 'Від дорогих до дешевших', method: 'desc', index: descPriceIndex },
 ];
-
-const client = algoliasearch('Q2QOIT41TW', '85a4843a67348da0ea7172f8738466ac');
-const index = client.initIndex('product_search');
 
 const Laptops = () => {
   const [laptops, setLaptops] = useState<IProductItem[]>([]);
@@ -34,24 +40,36 @@ const Laptops = () => {
     callback();
   }, 1500);
 
-  // const filterProduct = laptops.filter((item) => {
-  //   const isDateMatch = selectedDate === 'All' || resident.registrationDate === selectedDate;
-  //   const isStatusMatch = selectedStatus === 'All' || resident.status.title === selectedStatus;
-  //   const isPlotMatch = selectedPlot === 'All' || resident.plot === selectedPlot;
+  const fetchProducts = (customIndex: SearchIndex, value: string) => {
+    console.log('fetchProducts', customIndex, value);
 
-  //   return isDateMatch && isStatusMatch && isPlotMatch;
-  // });
+    let filterBrand = '';
+    let filterPrice = `product.price:${priceFrom} TO ${priceTo}`;
 
-  const handleSearchProduct = (e: any) => {
-    setSearchProduct(e.target.value);
+    if (selectedBrands.length > 0) {
+      filterBrand = selectedBrands.map((option) => `product.brand:${option}`).join(' OR ');
+    }
 
-    debouncedCallback(() => fetchSearchProduct(e.target.value));
+    const filters = filterBrand ? `${filterPrice} AND ${filterBrand}` : filterPrice;
+
+    customIndex.search(value, { filters: filters }).then(({ hits }) => {
+      setLaptops(hits);
+    });
   };
 
-  const fetchSearchProduct = (value: string) => {
-    index.search(value).then(({ hits }) => {
-      console.log(hits);
-    });
+  const handleFetch = () => {
+    fetchProducts(sortingValue.index, searchProduct);
+  };
+
+  const handleSearchProduct = (e: any) => {
+    setSelectedBrands([]);
+    setSearchProduct(e.target.value);
+
+    debouncedCallback(() => fetchProducts(sortingValue.index, searchProduct));
+  };
+
+  const handleSorting = async (sort: any) => {
+    setSortingValue(sort);
   };
 
   const handleCheckboxChange = (value: string) => {
@@ -59,45 +77,42 @@ const Laptops = () => {
       setSelectedBrands(selectedBrands.filter((item) => item !== value));
     } else {
       setSelectedBrands([...selectedBrands, value]);
+      setSearchProduct('');
     }
   };
 
-  const fetchLaptops = async (searchValue?: string) => {
-    try {
-      let q;
+  // const fetchLaptops = async () => {
+  //   try {
+  //     let q;
 
-      if (selectedBrands.length === 0) {
-        q = query(
-          collection(db, 'laptops'),
-          where('product.price', '>=', priceFrom),
-          where('product.price', '<=', priceTo),
-          orderBy('product.price', sortingValue.method),
-        );
-      } else {
-        q = query(
-          collection(db, 'laptops'),
-          where('product.price', '>=', priceFrom),
-          where('product.price', '<=', priceTo),
-          where('product.brand', 'in', selectedBrands),
-          orderBy('product.price', sortingValue.method),
-        );
-      }
+  //     if (selectedBrands.length === 0) {
+  //       q = query(
+  //         collection(db, 'laptops'),
+  //         where('product.price', '>=', priceFrom),
+  //         where('product.price', '<=', priceTo),
+  //       );
+  //     } else {
+  //       q = query(
+  //         collection(db, 'laptops'),
+  //         where('product.price', '>=', priceFrom),
+  //         where('product.price', '<=', priceTo),
+  //         where('product.brand', 'in', selectedBrands),
+  //       );
+  //     }
 
-      const querySnapshot = await getDocs(q);
+  //     const querySnapshot = await getDocs(q);
 
-      const dataArray = querySnapshot.docs.map((doc) => doc.data());
+  //     const dataArray = querySnapshot.docs.map((doc) => doc.data());
 
-      console.log(dataArray);
-
-      setLaptops(dataArray as IProductItem[]);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
+  //     setLaptops(dataArray as IProductItem[]);
+  //   } catch (error) {
+  //     console.error('Error fetching products:', error);
+  //   }
+  // };
 
   useEffect(() => {
-    fetchLaptops();
-  }, [selectedBrands, sortingValue]);
+    handleFetch();
+  }, [sortingValue, selectedBrands]);
 
   return (
     <div className='p-5 flex items-start gap-5'>
@@ -106,7 +121,7 @@ const Laptops = () => {
         setPriceFrom={setPriceFrom}
         priceTo={priceTo}
         setPriceTo={setPriceTo}
-        onClickPrice={fetchLaptops}
+        onClickPrice={handleFetch}
         selectedBrand={selectedBrands}
         setSelectedBrand={handleCheckboxChange}
         brandOptions={brandOptions}
@@ -139,7 +154,7 @@ const Laptops = () => {
               items={sortingOptions}
               keyExtractor={(item) => item.title}
               labelExtractor={(item) => item.title}
-              onSelect={(item) => setSortingValue(item)}
+              onSelect={(item) => handleSorting(item)}
             />
           </div>
 

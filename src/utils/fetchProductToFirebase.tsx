@@ -3,7 +3,7 @@ import { doc, setDoc } from 'firebase/firestore';
 
 export const fetchSmarhphonesToFireBase = async (products: any, type: string) => {
   try {
-    products[type].forEach(async (product: any) => {
+    products.forEach(async (product: any) => {
       await setDoc(doc(db, type, product.product.id), {
         ...product,
       });
