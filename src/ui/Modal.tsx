@@ -20,7 +20,7 @@ interface IModal {
   isOpened: boolean;
   onClose: () => void;
   closeText?: string;
-  size?: 'regular' | 'large';
+  size?: 'regular' | 'large' | 'medium';
   isBeta?: boolean;
   isLoading?: boolean;
   overflowVisible?: boolean;
@@ -72,6 +72,7 @@ const Modal = ({
               'inline-block align-bottom bg-white dark:bg-slate-900 rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:px-5 sm:py-4',
               {
                 'sm:max-w-lg sm:w-full': size === 'regular',
+                'sm:max-w-2xl sm:w-full': size === 'medium',
                 'max-w-5xl w-full': size === 'large',
                 'overflow-visible': overflowVisible,
                 'overflow-hidden': !overflowVisible,

@@ -7,33 +7,26 @@ import cx from 'clsx';
 // Define the prop types for the component
 interface IButton
   extends React.DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
-  // (string): The text to be displayed in the button.
   text?: string;
-  // (node): The content to be displayed in the button.
   children?: JSX.Element | string;
   primary?: boolean;
   secondary?: boolean;
   danger?: boolean;
-  // (function): The function to be called when the button is clicked.
   onClick?: () => void;
   white?: boolean;
   small?: boolean;
   regular?: boolean;
   large?: boolean;
   giant?: boolean;
-  // (string): The type of button to be rendered.
   type?: 'button' | 'submit' | 'reset';
-  // (string): Additional CSS classes to be applied to the button.
   className?: string;
-  // (boolean): Whether the button is in a loading state.
   loading?: boolean;
   semiSmall?: boolean;
   semiDanger?: boolean;
-  // (boolean): Whether the button is in a focus state.
   focus?: boolean;
   noBorder?: boolean;
-  // (boolean): Whether the button is disabled.
   disabled?: boolean;
+  gray?: boolean;
 }
 
 const Button = ({
@@ -55,6 +48,7 @@ const Button = ({
   semiDanger,
   noBorder,
   focus,
+  gray,
   disabled,
   ...props
 }: IButton): JSX.Element => (
@@ -76,6 +70,7 @@ const Button = ({
           semiDanger,
         'focus:border-none hover:bg-colorThird border-none text-colorMain dark:text-white focus:ring-0 focus:ring-offset-0':
           noBorder,
+        'text-gray-700 bg-gray-600 hover:bg-gray-600': gray,
         'px-2.5 py-1.5 text-xs': small,
         'px-2.5 py-1.5 text-sm': semiSmall,
         'px-4 py-2 text-sm': large,

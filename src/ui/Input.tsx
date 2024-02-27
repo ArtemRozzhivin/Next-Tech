@@ -3,8 +3,11 @@ import cx from 'clsx';
 import _isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface IInput {
+  icon?: React.ReactNode;
+  clearIcon?: boolean;
   label?: string | JSX.Element;
   hint?: string | JSX.Element;
   placeholder?: string;
@@ -18,11 +21,14 @@ interface IInput {
   disabled?: boolean;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onClear?: () => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 const Input = ({
   label,
+  icon,
+  clearIcon,
   hint,
   placeholder,
   type,
@@ -35,10 +41,15 @@ const Input = ({
   disabled,
   onKeyDown,
   onFocus,
+  onClear,
   onBlur,
 }: IInput): JSX.Element => {
   const identifier = id || name || type;
   const isError = !_isEmpty(error);
+
+  const handleClear = () => {
+    onClear();
+  };
 
   return (
     <div className={className}>
@@ -54,6 +65,7 @@ const Input = ({
         className={cx('relative', {
           'mt-1': label,
         })}>
+        <div className='absolute top-1/2 left-3 -translate-y-1/2'>{icon && icon}</div>
         <input
           type={type}
           value={value}
@@ -64,16 +76,23 @@ const Input = ({
           onFocus={onFocus}
           onBlur={onBlur}
           className={cx(
-            'p-2 shadow-sm border-2 text-darksecond border-colorMain hover:border-colorSecond rounded-md focus:border-colorSecond block w-full sm:text-sm',
+            'p-3 shadow-sm border-2 text-darksecond border-colorMain hover:border-colorSecond rounded-md focus:border-colorSecond block w-full sm:text-sm',
             {
               'border-red-300 text-red-900 placeholder-red-300': isError,
               'cursor-text': disabled,
+              'pl-10': icon,
             },
           )}
           placeholder={placeholder}
           aria-describedby={`${identifier}-optional`}
           disabled={disabled}
         />
+        {value && (
+          <button onClick={handleClear} className='absolute top-1/2 right-3 -translate-y-1/2'>
+            {clearIcon && <XMarkIcon className='w-5 h-5' />}
+          </button>
+        )}
+
         {isError && (
           <div className='absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none'>
             <ExclamationCircleIcon className='h-5 w-5 text-red-500' aria-hidden />
