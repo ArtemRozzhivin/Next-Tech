@@ -14,6 +14,8 @@ interface IProductOrderingItem {
 const OrderedProductItem = ({ purchase, email }: IProductOrderingItem) => {
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
+  console.log('purchase', purchase);
+
   const transformDeliveryMethod = (methodId: string) => {
     switch (methodId) {
       case 'courier-nova-poshta':
@@ -49,23 +51,25 @@ const OrderedProductItem = ({ purchase, email }: IProductOrderingItem) => {
             <div className='flex justify-start'>
               <OrderedInfoBlock
                 title='Спосіб доставки'
-                text={purchase.info.method}
+                text={purchase.info.method.id}
                 textExtractor={(text) => transformDeliveryMethod(text)}
               />
             </div>
 
             <div className='flex items-center gap-10'>
-              <OrderedInfoBlock title='Місто' text={purchase.info.city.Present} />
+              {purchase.info.city?.Present && (
+                <OrderedInfoBlock title='Місто' text={purchase.info.city?.Present} />
+              )}
 
               <OrderedInfoBlock
                 title='Адреса'
-                text={purchase.info.address.Description}
+                text={purchase.info.address?.Description}
                 textExtractor={() => {
-                  if (purchase.info.method === 'to-nova-poshta-office') {
-                    return <div>{purchase.info.address.Description}</div>;
+                  if (purchase.info.method.type === 'courier') {
+                    return <div>{purchase.info.address.Present}</div>;
                   }
 
-                  return <div>{purchase.info.address.Present}</div>;
+                  return <div>{purchase.info.address.Description}</div>;
                 }}
               />
             </div>

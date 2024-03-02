@@ -154,7 +154,6 @@ interface IOrderingSearchCityModal {
   allCities: ICity[];
   isSearchCityOpen: boolean;
   setIsSearchCityOpen: (value: boolean) => void;
-  searchCity: string;
   handleCityClick: (value: ICity) => void;
   handleCityInput: (value: string) => void;
   handleCityClear: () => void;
@@ -164,14 +163,14 @@ const OrderingSearchCityModal = ({
   allCities,
   isSearchCityOpen,
   setIsSearchCityOpen,
-  searchCity,
   handleCityClick,
   handleCityInput,
   handleCityClear,
 }: IOrderingSearchCityModal) => {
   const { setValue, getValues, getFieldState, control } = useFormContext();
-  const { error } = getFieldState('city');
+  const { fetchCitiesError } = useAppSelector((state) => state.errors);
   const city = getValues('city');
+  const { error } = getFieldState('city');
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -203,6 +202,11 @@ const OrderingSearchCityModal = ({
             <ChevronDownIcon className='w-7 h-7' />
           </div>
         </button>
+        {fetchCitiesError && (
+          <p className='mt-2 text-sm text-red-600' id='email-error'>
+            {fetchCitiesError}
+          </p>
+        )}
         {error && (
           <p className='mt-2 text-sm text-red-600' id='email-error'>
             {error.message}
@@ -234,19 +238,19 @@ const OrderingSearchCityModal = ({
           />
 
           <div className='max-h-80 overflow-auto flex flex-col gap-2 my-3'>
-            {allCities.length === 0 && !searchCity ? (
+            {allCities.length === 0 && !city ? (
               <PagePlaceholder
                 title='You have not entered a city name yet'
                 description='Please enter a city name '
                 icon={<FaceSmileIcon className='text-colorMain w-20 h-20' />}
               />
-            ) : allCities.length === 0 && searchCity && error ? (
+            ) : allCities.length === 0 && city && fetchCitiesError ? (
               <PagePlaceholder
-                title={error}
+                title={fetchCitiesError}
                 description='Please enter a city name '
                 icon={<FaceFrownIcon className='text-colorMain w-20 h-20' />}
               />
-            ) : allCities.length === 0 && searchCity ? (
+            ) : allCities.length === 0 && city && !fetchCitiesError ? (
               <div className='flex justify-center items-center'>
                 <Loader />
               </div>
@@ -270,7 +274,6 @@ interface IOrderingSearchAdressModal {
   allAdresses: IAdress[];
   isSearchAdressOpen: boolean;
   setIsSearchAdressOpen: (value: boolean) => void;
-  searchAdress: string;
   handleAdressInput: (e: ChangeEvent<HTMLInputElement>) => void;
   handleAdressClick: (value: IAdress) => void;
   handleAdressClear: () => void;
@@ -280,14 +283,14 @@ const OrderingSearchAdressModal = ({
   allAdresses,
   isSearchAdressOpen,
   setIsSearchAdressOpen,
-  searchAdress,
   handleAdressInput,
   handleAdressClick,
   handleAdressClear,
 }: IOrderingSearchAdressModal) => {
   const { setValue, getValues, getFieldState, control } = useFormContext();
-  const { error } = getFieldState('adress');
+  const { fetchAdressesError } = useAppSelector((state) => state.errors);
   const adress = getValues('adress');
+  const { error } = getFieldState('adress');
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -300,8 +303,6 @@ const OrderingSearchAdressModal = ({
   const handleClickOnAdress = (adress: IAdress) => {
     handleAdressClick(adress);
     setValue('adress', adress.Present);
-
-    console.log(adress, 'ADRESSObj');
   };
 
   const handleClickClear = () => {
@@ -321,6 +322,11 @@ const OrderingSearchAdressModal = ({
             <ChevronDownIcon className='w-7 h-7' />
           </div>
         </button>
+        {fetchAdressesError && (
+          <p className='mt-2 text-sm text-red-600' id='email-error'>
+            {fetchAdressesError}
+          </p>
+        )}
         {error && (
           <p className='mt-2 text-sm text-red-600' id='email-error'>
             {error.message}
@@ -351,31 +357,29 @@ const OrderingSearchAdressModal = ({
           />
 
           <div className='max-h-80 overflow-auto flex flex-col gap-2 my-3'>
-            {allAdresses.length === 0 && !searchAdress ? (
+            {allAdresses.length === 0 && !adress ? (
               <PagePlaceholder
                 title='You have not entered a adress yet'
-                description='Please enter a adress '
+                description='Please enter a adress name '
                 icon={<FaceSmileIcon className='text-colorMain w-20 h-20' />}
               />
-            ) : allAdresses.length === 0 && searchAdress ? (
-              // <div>
-              //   <PagePlaceholder
-              //     title='This address was not found in this city'
-              //     description='Try entering a different name'
-              //   />
-              // </div>
+            ) : allAdresses.length === 0 && adress && fetchAdressesError ? (
+              <PagePlaceholder
+                title={fetchAdressesError}
+                description='Please enter a city name '
+                icon={<FaceFrownIcon className='text-colorMain w-20 h-20' />}
+              />
+            ) : allAdresses.length === 0 && adress && !fetchAdressesError ? (
               <div className='flex justify-center items-center'>
                 <Loader />
               </div>
             ) : (
-              <div>
-                <div className='flex flex-col gap-2'>
-                  {allAdresses.map((item) => (
-                    <Button onClick={() => handleClickOnAdress(item)} giant noBorder>
-                      {item.Present}
-                    </Button>
-                  ))}
-                </div>
+              <div className='flex flex-col gap-2'>
+                {allAdresses.map((item) => (
+                  <Button onClick={() => handleClickOnAdress(item)} giant noBorder>
+                    {item.Present}
+                  </Button>
+                ))}
               </div>
             )}
           </div>
@@ -389,7 +393,6 @@ interface IOrderingSearchAdressModal {
   allOfficeAdresses: IOfficeAdress[];
   isSearchOfficeAdressOpen: boolean;
   setIsSearchOfficeAdressOpen: (value: boolean) => void;
-  searchOfficeAdress: string;
   handleOfficeAdressInput: (e: ChangeEvent<HTMLInputElement>) => void;
   handleOfficeAdressClick: (value: IOfficeAdress) => void;
   handleOfficeAdressClear: () => void;
@@ -399,14 +402,14 @@ const OrderingSearchOfficeAddressModal = ({
   allOfficeAdresses,
   isSearchOfficeAdressOpen,
   setIsSearchOfficeAdressOpen,
-  searchOfficeAdress,
   handleOfficeAdressInput,
   handleOfficeAdressClick,
   handleOfficeAdressClear,
 }: IOrderingSearchAdressModal) => {
   const { setValue, getValues, getFieldState, control } = useFormContext();
-  const { error } = getFieldState('officeAdress');
   const officeAdress = getValues('officeAdress');
+  const { fetchOfficesError } = useAppSelector((state) => state.errors);
+  const { error } = getFieldState('officeAdress');
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -444,6 +447,11 @@ const OrderingSearchOfficeAddressModal = ({
             <ChevronDownIcon className='w-7 h-7' />
           </div>
         </button>
+        {fetchOfficesError && (
+          <p className='mt-2 text-sm text-red-600' id='email-error'>
+            {fetchOfficesError}
+          </p>
+        )}
         {error && (
           <p className='mt-2 text-sm text-red-600' id='email-error'>
             {error.message}
@@ -474,28 +482,29 @@ const OrderingSearchOfficeAddressModal = ({
           />
 
           <div className='max-h-80 overflow-auto flex flex-col gap-2 my-3'>
-            {allOfficeAdresses.length === 0 && !searchOfficeAdress ? (
+            {allOfficeAdresses.length === 0 && !officeAdress ? (
               <PagePlaceholder
                 title='You have not entered a adress yet'
-                description='Please enter a adress '
+                description='Please enter a adress name '
                 icon={<FaceSmileIcon className='text-colorMain w-20 h-20' />}
               />
-            ) : allOfficeAdresses.length === 0 && searchOfficeAdress ? (
-              <div>
-                <PagePlaceholder
-                  title='This address was not found in this city'
-                  description='Try entering a different name'
-                />
+            ) : allOfficeAdresses.length === 0 && officeAdress && fetchOfficesError ? (
+              <PagePlaceholder
+                title={fetchOfficesError}
+                description='Please enter a city name '
+                icon={<FaceFrownIcon className='text-colorMain w-20 h-20' />}
+              />
+            ) : allOfficeAdresses.length === 0 && officeAdress && !fetchOfficesError ? (
+              <div className='flex justify-center items-center'>
+                <Loader />
               </div>
             ) : (
-              <div>
-                <div className='flex flex-col gap-2'>
-                  {allOfficeAdresses.map((item: IOfficeAdress) => (
-                    <Button onClick={() => handleClickOnOfficeAdress(item)} giant noBorder>
-                      {item.Description}
-                    </Button>
-                  ))}
-                </div>
+              <div className='flex flex-col gap-2'>
+                {allOfficeAdresses.map((item: IOfficeAdress) => (
+                  <Button onClick={() => handleClickOnOfficeAdress(item)} giant noBorder>
+                    {item.Description}
+                  </Button>
+                ))}
               </div>
             )}
           </div>
@@ -631,7 +640,6 @@ export const Ordering = () => {
   );
 
   const [isSearchCityOpen, setIsSearchCityOpen] = React.useState<boolean>(false);
-  const [searchCity, setSearchCity] = React.useState<string>('');
   const [allCities, setAllCities] = React.useState<ICity[]>([]);
   const [city, setCity] = React.useState<ICity | null>(null);
 
@@ -668,7 +676,6 @@ export const Ordering = () => {
   const fetchCities = async (value: string) => {
     try {
       dispatch(errorsActions.clearErrors());
-      console.log();
 
       const { data } = await axios.post('https://api.novaposhta.ua/v2.0/json/', {
         apiKey: 'd2525e4f0272ebd8bcf60e2b8d77820e',
@@ -682,6 +689,7 @@ export const Ordering = () => {
       });
 
       if (!data.success) throw new Error(data.errors[0]);
+      if (data.success && data.data[0].Addresses.length === 0) throw new Error('Cities not found');
 
       console.log(data, 'DATA');
 
@@ -692,33 +700,66 @@ export const Ordering = () => {
     }
   };
 
-  const fetchAdress = async (value: string) => {
-    const response = await axios.post('https://api.novaposhta.ua/v2.0/json/', {
-      apiKey: 'd2525e4f0272ebd8bcf60e2b8d77820e',
-      modelName: 'Address',
-      calledMethod: 'searchSettlementStreets',
-      methodProperties: {
-        StreetName: value,
-        SettlementRef: city.Ref,
-      },
-    });
+  console.log(errors, 'ERRORS');
 
-    setAllAdresses(response.data.data[0].Addresses);
+  const fetchAdress = async (value: string) => {
+    try {
+      dispatch(errorsActions.clearErrors());
+
+      const { data } = await axios.post('https://api.novaposhta.ua/v2.0/json/', {
+        apiKey: 'd2525e4f0272ebd8bcf60e2b8d77820e',
+        modelName: 'Address',
+        calledMethod: 'searchSettlementStreets',
+        methodProperties: {
+          StreetName: value,
+          SettlementRef: city.Ref,
+        },
+      });
+
+      if (!data.success) throw new Error(data.errors[0]);
+      if (data.success && data.data[0].Addresses.length === 0)
+        throw new Error('Adresses not found');
+
+      console.log(data, 'DATA');
+
+      setAllAdresses(data.data[0].Addresses);
+    } catch (error) {
+      console.log(error.message, 'ERROR');
+      dispatch(errorsActions.failedFetchAdressesError(error));
+    }
   };
 
   const fetchOffieceNumber = async (value: string) => {
-    const response = await axios.post('https://api.novaposhta.ua/v2.0/json/', {
-      apiKey: 'd2525e4f0272ebd8bcf60e2b8d77820e',
-      modelName: 'Address',
-      calledMethod: 'getWarehouses',
-      methodProperties: {
-        CityRef: city?.DeliveryCity,
-        FindByString: value,
-      },
-    });
+    try {
+      dispatch(errorsActions.clearErrors());
 
-    setAllOfficeAddress(response.data.data);
+      const { data } = await axios.post('https://api.novaposhta.ua/v2.0/json/', {
+        apiKey: 'd2525e4f0272ebd8bcf60e2b8d77820e',
+        modelName: 'Address',
+        calledMethod: 'getWarehouses',
+        methodProperties: {
+          CityRef: city?.DeliveryCity,
+          FindByString: value,
+        },
+      });
+
+      console.log(data, 'DATA');
+
+      if (!data.success) throw new Error(data.errors[0]);
+      if (data.success && data.data.length === 0) {
+        setAllOfficeAddress(data.data);
+        throw new Error('Adresses not found');
+      }
+
+      setAllOfficeAddress(data.data);
+      // setAllOfficeAddress(data.data[0].Addresses);
+    } catch (error) {
+      console.log(error.message, 'ERROR');
+      dispatch(errorsActions.failedFetchOfficesError(error));
+    }
   };
+
+  console.log(allOfficeAddress, 'allOfficeAddress');
 
   const debouncedCallback = useDebouncedCallback((callback) => {
     callback();
@@ -740,8 +781,6 @@ export const Ordering = () => {
   };
 
   const handleAdressInput = (e: any) => {
-    setSearchAdress(e.target.value);
-
     debouncedCallback(() => fetchAdress(e.target.value));
   };
 
@@ -750,20 +789,16 @@ export const Ordering = () => {
   };
 
   const handleOfficeAdressInput = (e: any) => {
-    setSearchOfficeAddress(e.target.value);
-
     debouncedCallback(() => fetchOffieceNumber(e.target.value));
   };
 
   const handleAdressClick = (value: IAdress) => {
     setIsSearchAdressOpen(false);
     setAddress(value);
-    setSearchAdress(value.Present);
   };
 
   const handleOfficeAdressClick = (value: IOfficeAdress) => {
     setOfficeAddress(value);
-    setSearchOfficeAddress(value.Description);
     setIsSearchOfficeAddressOpen(false);
   };
 
@@ -782,8 +817,6 @@ export const Ordering = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log(data, 'DATA');
-
     if (Object.keys(errors).length !== 0) {
       return;
     }
@@ -870,7 +903,6 @@ export const Ordering = () => {
                     setIsSearchCityOpen={setIsSearchCityOpen}
                     handleCityInput={handleCityInput}
                     allCities={allCities}
-                    searchCity={searchCity}
                     handleCityClick={handleCityClick}
                     handleCityClear={handleCityClear}
                   />
@@ -911,13 +943,12 @@ export const Ordering = () => {
                         <div>
                           <>
                             <OrderingSearchAdressModal
-                              allAdresses={allAdresses}
                               isSearchAdressOpen={isSearchAdressOpen}
+                              setIsSearchAdressOpen={setIsSearchAdressOpen}
+                              allAdresses={allAdresses}
                               handleAdressClick={handleAdressClick}
                               handleAdressClear={handleAdressClear}
                               handleAdressInput={handleAdressInput}
-                              searchAdress={searchAdress}
-                              setIsSearchAdressOpen={setIsSearchAdressOpen}
                             />
                           </>
                         </div>
