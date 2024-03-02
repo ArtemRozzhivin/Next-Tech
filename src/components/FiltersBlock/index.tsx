@@ -9,6 +9,7 @@ import Checkbox from '@src/ui/Checkbox';
 interface IFiltersBlock {
   priceFrom: number;
   setPriceFrom: (value: number) => void;
+  onResetPrice: () => void;
   priceTo: number;
   setPriceTo: (value: number) => void;
   onClickPrice: () => void;
@@ -41,6 +42,7 @@ const plans = [
 const FiltersBlock = ({
   priceFrom,
   setPriceFrom,
+  onResetPrice,
   priceTo,
   setPriceTo,
   onClickPrice,
@@ -48,22 +50,9 @@ const FiltersBlock = ({
   selectedBrand,
   setSelectedBrand,
 }: IFiltersBlock) => {
-  const [selected, setSelected] = useState<any[]>([plans[0]]);
-  const [shouldSendRequest, setShouldSendRequest] = useState(false);
-
   const handleResetPrice = () => {
-    setPriceFrom(0);
-    setPriceTo(70000);
-
-    setShouldSendRequest(true);
+    onResetPrice();
   };
-
-  useEffect(() => {
-    if (shouldSendRequest) {
-      onClickPrice();
-      setShouldSendRequest(false);
-    }
-  }, [shouldSendRequest]);
 
   return (
     <div className='w-1/2 flex flex-col gap-3'>

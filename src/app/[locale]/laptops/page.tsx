@@ -1,8 +1,13 @@
 'use client';
 
-import { ArrowsUpDownIcon, HomeIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowsUpDownIcon,
+  HomeIcon,
+  MagnifyingGlassCircleIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
 import FiltersBlock from '@src/components/FiltersBlock';
-import ProductsList, { IProductItem } from '@src/components/ProductsList';
+import ProductsList from '@src/components/ProductsList';
 import { Search } from '@src/components/Search';
 import { db } from '@src/firebaseConfig';
 import { Link } from '@src/navigation';
@@ -13,8 +18,14 @@ import { fetchSmarhphonesToFireBase } from '@src/utils/fetchProductToFirebase';
 import algoliasearch, { SearchIndex } from 'algoliasearch';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { set } from 'lodash';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
+import largeTile from '@assets/largeTile.svg';
+import smallTile from '@assets/smallTile.svg';
+import cx from 'clsx';
+import ProductFilterItem from '@src/components/ProductFilterItem';
+import { IProductItem } from '@src/redux/models';
 
 const client = algoliasearch('Q2QOIT41TW', '09737b1233e8e42a12c90f0a08a08dd6');
 const index = client.initIndex('product_search');
@@ -32,17 +43,17 @@ const Laptops = () => {
   const [laptops, setLaptops] = useState<IProductItem[]>([]);
   const [priceFrom, setPriceFrom] = useState<number>(0);
   const [priceTo, setPriceTo] = useState<number>(70000);
+  const [acceptedPrice, setAcceptedPrice] = useState<{ from: number; to: number } | null>(null);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [searchProduct, setSearchProduct] = useState<string>('');
   const [sortingValue, setSortingValue] = useState(sortingOptions[0]);
+  const [gridLayout, setGridLayout] = useState<string>('large');
 
   const debouncedCallback = useDebouncedCallback((callback) => {
     callback();
   }, 1500);
 
   const fetchProducts = (customIndex: SearchIndex, value: string) => {
-    console.log('fetchProducts', customIndex, value);
-
     let filterBrand = '';
     let filterPrice = `product.price:${priceFrom} TO ${priceTo}`;
 
@@ -51,6 +62,7 @@ const Laptops = () => {
     }
 
     const filters = filterBrand ? `${filterPrice} AND ${filterBrand}` : filterPrice;
+    console.log(filters, 'filters');
 
     customIndex.search(value, { filters: filters }).then(({ hits }) => {
       setLaptops(hits);
@@ -58,14 +70,28 @@ const Laptops = () => {
   };
 
   const handleFetch = () => {
+    if (searchProduct !== '') return;
     fetchProducts(sortingValue.index, searchProduct);
   };
 
+  const handleClickPrice = () => {
+    handleFetch();
+    setAcceptedPrice({ from: priceFrom, to: priceTo });
+  };
+
+  const handleResetPrice = () => {
+    setAcceptedPrice(null);
+    setPriceFrom(0);
+    setPriceTo(70000);
+  };
+
   const handleSearchProduct = (e: any) => {
-    setSelectedBrands([]);
     setSearchProduct(e.target.value);
 
-    debouncedCallback(() => fetchProducts(sortingValue.index, searchProduct));
+    debouncedCallback(() => {
+      setSelectedBrands([]);
+      fetchProducts(sortingValue.index, searchProduct);
+    });
   };
 
   const handleSorting = async (sort: any) => {
@@ -81,47 +107,28 @@ const Laptops = () => {
     }
   };
 
-  // const fetchLaptops = async () => {
-  //   try {
-  //     let q;
+  const handleClearSearchProduct = () => {
+    setSearchProduct('');
+    fetchProducts(sortingValue.index, '');
+  };
 
-  //     if (selectedBrands.length === 0) {
-  //       q = query(
-  //         collection(db, 'laptops'),
-  //         where('product.price', '>=', priceFrom),
-  //         where('product.price', '<=', priceTo),
-  //       );
-  //     } else {
-  //       q = query(
-  //         collection(db, 'laptops'),
-  //         where('product.price', '>=', priceFrom),
-  //         where('product.price', '<=', priceTo),
-  //         where('product.brand', 'in', selectedBrands),
-  //       );
-  //     }
-
-  //     const querySnapshot = await getDocs(q);
-
-  //     const dataArray = querySnapshot.docs.map((doc) => doc.data());
-
-  //     setLaptops(dataArray as IProductItem[]);
-  //   } catch (error) {
-  //     console.error('Error fetching products:', error);
-  //   }
-  // };
+  const handleGridLayout = (value: string) => {
+    setGridLayout(value);
+  };
 
   useEffect(() => {
     handleFetch();
-  }, [sortingValue, selectedBrands]);
+  }, [sortingValue, selectedBrands, acceptedPrice]);
 
   return (
     <div className='p-5 flex items-start gap-5'>
       <FiltersBlock
         priceFrom={priceFrom}
         setPriceFrom={setPriceFrom}
+        onResetPrice={handleResetPrice}
         priceTo={priceTo}
         setPriceTo={setPriceTo}
-        onClickPrice={handleFetch}
+        onClickPrice={handleClickPrice}
         selectedBrand={selectedBrands}
         setSelectedBrand={handleCheckboxChange}
         brandOptions={brandOptions}
@@ -140,25 +147,74 @@ const Laptops = () => {
 
         <div className='flex flex-col gap-5'>
           <div className='flex items-center gap-5 justify-between'>
-            {/* <Search /> */}
-            <Input value={searchProduct} onChange={handleSearchProduct} />
-
-            <Dropdown
-              className='inline-flex shadow-lg'
-              title={
-                <div className='flex items-center gap-1'>
-                  {sortingValue.title}
-                  <ArrowsUpDownIcon className='w-6 h-6' />
-                </div>
-              }
-              items={sortingOptions}
-              keyExtractor={(item) => item.title}
-              labelExtractor={(item) => item.title}
-              onSelect={(item) => handleSorting(item)}
+            <Input
+              icon={<MagnifyingGlassIcon className='w-6 h-6 text-colorMain' />}
+              clearIcon
+              onClear={handleClearSearchProduct}
+              label='Пошук товарів'
+              placeholder='Введіть назву товару'
+              value={searchProduct}
+              onChange={handleSearchProduct}
+              className='shadow-lg w-1/2'
             />
+
+            <div className='flex items-center gap-3'>
+              <Dropdown
+                className='inline-flex shadow-lg'
+                title={
+                  <div className='flex items-center gap-1'>
+                    {sortingValue.title}
+                    <ArrowsUpDownIcon className='w-6 h-6' />
+                  </div>
+                }
+                items={sortingOptions}
+                keyExtractor={(item) => item.title}
+                labelExtractor={(item) => item.title}
+                onSelect={(item) => handleSorting(item)}
+              />
+
+              <div className='flex items-center gap-2 border border-gray-400 shadow-lg p-1 rounded-md'>
+                <button
+                  onClick={() => handleGridLayout('large')}
+                  className={cx(
+                    'hover:bg-slate-100 hover:shadow-md transition-all rounded-md p-1',
+                    gridLayout === 'large' && 'bg-white shadow-xl',
+                  )}>
+                  <Image width={32} height={32} src={largeTile} alt='filter' className='w-6 h-6' />
+                </button>
+                <button
+                  onClick={() => handleGridLayout('small')}
+                  className={cx(
+                    'hover:bg-slate-100 hover:shadow-md transition-all rounded-md p-1',
+                    gridLayout === 'small' && 'bg-white shadow-lg',
+                  )}>
+                  <Image width={32} height={32} src={smallTile} alt='filter' className='w-6 h-6' />
+                </button>
+              </div>
+            </div>
           </div>
 
-          <ProductsList items={laptops} />
+          <div className='flex items-center gap-2'>
+            {acceptedPrice !== null && (
+              <ProductFilterItem
+                title='Ціна'
+                value={`${acceptedPrice.from} - ${acceptedPrice.to} грн`}
+                onClick={handleResetPrice}
+              />
+            )}
+            <div className='flex items-center gap-2'>
+              {selectedBrands.length > 0 &&
+                selectedBrands.map((item) => (
+                  <ProductFilterItem
+                    key={item}
+                    value={item}
+                    onClick={() => handleCheckboxChange(item)}
+                  />
+                ))}
+            </div>
+          </div>
+
+          <ProductsList gridLayout={gridLayout} items={laptops} />
         </div>
       </div>
     </div>

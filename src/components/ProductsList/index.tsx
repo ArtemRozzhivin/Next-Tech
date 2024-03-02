@@ -20,12 +20,14 @@ import { getUserHistory } from '@src/api/user';
 import AddedProductModal from '../AddedProductModal';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { handleAddToWishList } from '@src/api/products';
+import cx from 'clsx';
 
 interface ICardList {
   items?: IProductItem[];
+  gridLayout?: string;
 }
 
-const ProductsList = ({ items }: ICardList) => {
+const ProductsList = ({ items, gridLayout }: ICardList) => {
   const t = useTranslations('');
   const dispatch = useAppDispatch();
   const { userHistory, currentProductToCart } = useAppSelector((state) => state.products);
@@ -42,7 +44,11 @@ const ProductsList = ({ items }: ICardList) => {
   return (
     <>
       <div className=''>
-        <div className='grid grid-flow-row grid-cols-4 gap-3'>
+        <div
+          className={cx('grid grid-flow-row gap-3', {
+            'grid-cols-4': gridLayout === 'large',
+            'grid-cols-5': gridLayout === 'small',
+          })}>
           {!!items ? (
             items.map((item) => (
               <ProductCard
