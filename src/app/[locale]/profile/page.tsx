@@ -16,7 +16,8 @@ const Profile = () => {
   console.log();
 
   return (
-    <div>
+    <div className='flex flex-col gap-4'>
+      <h3 className='text-2xl font-semibold'>Особиста інформація</h3>
       <div>
         <div>
           <Image
@@ -28,24 +29,26 @@ const Profile = () => {
           />
         </div>
       </div>
-      <div>
-        <div className='flex flex-col gap-2 justify-center'>
-          <div className='text-gray-600'>Відображуване ім'я</div>
-          <div>{auth.currentUser?.displayName}</div>
+      <div className='flex flex-col gap-3'>
+        <div className='flex flex-col gap-2'>
+          <div className='flex flex-col gap-1 justify-center'>
+            <div className='text-gray-600'>Відображуване ім'я</div>
+            <div>{auth.currentUser?.displayName}</div>
+          </div>
+          <div className='flex flex-col gap-1 justify-center'>
+            <div className='text-gray-600'>Електронна пошта</div>
+            <div>{auth.currentUser?.email}</div>
+          </div>
         </div>
-        <div className='flex flex-col gap-2 justify-center'>
-          <div className='text-gray-600'>Електронна пошта</div>
-          <div>{auth.currentUser?.email}</div>
-        </div>
-      </div>
-      <div>
-        <div className='flex flex-col gap-2 justify-center'>
-          <div className='text-gray-600'>Створено</div>
-          <div>{auth.currentUser?.metadata.creationTime}</div>
-        </div>
-        <div className='flex flex-col gap-2 justify-center'>
-          <div className='text-gray-600'>Остання авторизація</div>
-          <div>{auth.currentUser?.metadata.lastSignInTime}</div>
+        <div className='flex flex-col gap-2'>
+          <div className='flex flex-col gap-1 justify-center'>
+            <div className='text-gray-600'>Створено</div>
+            <div>{auth.currentUser?.metadata.creationTime}</div>
+          </div>
+          <div className='flex flex-col gap-1 justify-center'>
+            <div className='text-gray-600'>Остання авторизація</div>
+            <div>{auth.currentUser?.metadata.lastSignInTime}</div>
+          </div>
         </div>
       </div>
     </div>

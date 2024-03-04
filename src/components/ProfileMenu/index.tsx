@@ -16,7 +16,7 @@ const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () =>
   return (
     <Menu as='div' className='relative ml-3'>
       <div>
-        <Menu.Button className='flex justify-center items-center gap-2 font-semibold leading-6 text-base text-slate-800 hover:text-slate-700 dark:text-slate-200 dark:hover:text-white'>
+        <Menu.Button className='flex justify-center items-center gap-2 font-semibold leading-6 text-base text-lightmain hover:brightness-110 transition-all dark:text-slate-200 dark:hover:text-white'>
           {user.photoURL && (
             <Image
               className='rounded-full'

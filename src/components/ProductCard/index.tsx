@@ -13,6 +13,7 @@ import { productsActions } from '@src/redux/reducers/Products/products';
 import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
 import HeartSolidIcon from '@src/assets/heart.svg';
 import { Link } from '@src/navigation';
+import cx from 'clsx';
 
 interface IProductCard {
   item: IProductItem;
@@ -52,14 +53,14 @@ const ProductCard = ({ addProductToCart, addToWishList, item }: IProductCard) =>
   };
 
   return (
-    <div className='group border-gray-100/30 flex w-full flex-col self-center overflow-hidden rounded-lg border bg-darkmain shadow-2xl'>
+    <div className='h-full group border-gray-100/30 flex w-full flex-col self-center overflow-hidden rounded-lg border bg-lightmain shadow-sm hover:border-gray-300 hover:shadow-2xl transition-all'>
       <div className='relative p-2 bg-white'>
         <Link
           onClick={handleCurrentDetailProduct}
           href={`/laptops/${item.product.id}`}
           className='relative m-3 flex h-60 rounded-md'>
           <Image
-            className='h-full w-full object-contain'
+            className='group-hover:scale-110 h-full w-full object-contain transition-all'
             fill
             src={image.large && image.large}
             alt='product'
@@ -68,51 +69,52 @@ const ProductCard = ({ addProductToCart, addToWishList, item }: IProductCard) =>
 
         <div className='absolute right-3 top-3'>
           <button
-            className='px-[4px] py-[3px] border border-colorMain rounded-full bg-white hover:bg-colorThird transition-all duration-300'
+            className={cx(
+              'px-[4px] py-[3px] border border-gray-300 rounded-full hover:brightness-90 transition-all duration-300',
+              inWishlist ? 'bg-colorMain border-white' : 'bg-white',
+            )}
             onClick={() => addToWishList(item)}>
             {!inWishlist ? (
-              <HeartIcon className='text-colorMain w-7 h-7' />
+              <HeartIcon className='text-gray-400 w-7 h-7' />
             ) : (
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 24 24'
-                fill='currentColor'
-                className='w-7 h-7 text-colorMain'>
-                <path d='m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z' />
-              </svg>
+              <HeartIcon className='text-white w-7 h-7' />
             )}
           </button>
         </div>
       </div>
-      <div className='mt-4 px-5 pb-5'>
-        <a href='#'>
-          <h5 className='text-xl tracking-tight text-lightmain'>{product.model}</h5>
-        </a>
-        <div className='mt-2 mb-5 flex items-center justify-between'>
-          <p>
-            <span className='text-xl font-semibold text-lightmain'>{product.price} ₴</span>
-          </p>
+      <div className='flex-1 flex flex-col mt-4 px-5 pb-5'>
+        <div>
+          <a href='#'>
+            <h5 className='text-xl tracking-tight text-darkmain'>{product.model}</h5>
+          </a>
+          <div className='mt-2 mb-5 flex items-center justify-between'>
+            <p>
+              <span className='text-xl font-semibold text-darkmain'>{product.price} ₴</span>
+            </p>
+          </div>
         </div>
-        {!!itemCart ? (
-          <Button
-            primary
-            className='w-full bg-green-600 hover:bg-green-700 rounded-md border border-transparent px-5 py-2.5 text-sm font-medium text-white'>
-            <div className='w-full text-center flex items-center justify-center gap-2'>
-              <CheckIcon className='w-6 h-6' />
-              In the cart
-            </div>
-          </Button>
-        ) : (
-          <Button
-            primary
-            onClick={addToCart}
-            className='w-full rounded-md border border-transparent bg-colorMain px-5 py-2.5 text-sm font-medium text-white'>
-            <div className='w-full text-center flex items-center justify-center gap-2'>
-              <ShoppingCartIcon className='w-6 h-6' />
-              Add to cart
-            </div>
-          </Button>
-        )}
+        <div className='flex-1 flex items-end'>
+          {!!itemCart ? (
+            <Button
+              primary
+              className='w-full bg-green-600 hover:bg-green-700 rounded-md border border-transparent px-5 py-2.5 text-sm font-medium text-white'>
+              <div className='w-full text-center flex items-center justify-center gap-2'>
+                <CheckIcon className='w-6 h-6' />
+                In the cart
+              </div>
+            </Button>
+          ) : (
+            <Button
+              primary
+              onClick={addToCart}
+              className='w-full rounded-md border border-transparent bg-colorMain px-5 py-2.5 text-sm font-medium text-white'>
+              <div className='w-full text-center flex items-center justify-center gap-2'>
+                <ShoppingCartIcon className='w-6 h-6' />
+                Add to cart
+              </div>
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

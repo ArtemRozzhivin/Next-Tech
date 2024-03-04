@@ -13,7 +13,7 @@ const PagePlaceholder = ({ icon, title, description, btn }: IPagePlaceholder) =>
     <div className='flex flex-col justify-center items-center gap-1 text-center'>
       {icon ? icon : <FaceFrownIcon className='text-colorMain w-20 h-20' />}
       <div className='flex flex-col justify-center items-center gap-[2px]'>
-        <h4 className='text-xl'>{title}</h4>
+        <h4 className='text-2xl font-semibold'>{title}</h4>
         {description && <p className='text-lg'>{description}</p>}
       </div>
 

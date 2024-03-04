@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
   const locale = useLocale();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
-  const cartProductCount = useAppSelector((state) => state.products.cartProductsCount);
+  const cartTotalCount = useAppSelector((state) => state.products.cartTotalCount);
   const [language, setLanguage] = React.useState<Ilanguages>(languages[0]);
 
   const logoutHandler = async () => {
@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
   };
 
   return (
-    <div className='bg-lightmain text-darkmain flex justify-between items-center py-5'>
+    <div className='bg-darkmain text-lightmain flex justify-between items-center py-3'>
       <div onClick={() => {}} className='mx-1 md:hidden lg:mx-4'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -111,10 +111,10 @@ const Header: React.FC<HeaderProps> = ({}) => {
           <Link className='flex items-center gap-1' href='/cart'>
             <Button noBorder giant>
               <div className='relative'>
-                <ShoppingCartIcon className='h-8 w-8 text-colorSecond' />
-                {!!cartProductCount && (
+                <ShoppingCartIcon className='h-8 w-8 text-lightmain' />
+                {!!cartTotalCount && (
                   <div className='absolute -top-[7px] -right-1 bg-colorMain rounded-full text-white text-xs py-[1px] px-[5px]'>
-                    {cartProductCount}
+                    {cartTotalCount}
                   </div>
                 )}
               </div>
@@ -130,7 +130,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
             <div>
               <Link href='/signin'>
                 <Button noBorder giant>
-                  <UserIcon className='h-8 w-8 text-colorSecond' />
+                  <UserIcon className='h-8 w-8 text-lightmain' />
                 </Button>
               </Link>
             </div>

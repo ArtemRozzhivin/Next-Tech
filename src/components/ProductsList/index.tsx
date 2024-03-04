@@ -27,7 +27,7 @@ interface ICardList {
   gridLayout?: string;
 }
 
-const ProductsList = ({ items, gridLayout }: ICardList) => {
+const ProductsList = ({ items, gridLayout = 'large' }: ICardList) => {
   const t = useTranslations('');
   const dispatch = useAppDispatch();
   const { userHistory, currentProductToCart } = useAppSelector((state) => state.products);
@@ -37,6 +37,7 @@ const ProductsList = ({ items, gridLayout }: ICardList) => {
 
   const handleAddProductToCart = (product: IProductCartItem) => {
     dispatch(productsActions.addToCart(product));
+    dispatch(productsActions.addProductToOrdering(product));
     dispatch(productsActions.setCurrentProductToCart(product));
     setShowModal(true);
   };
@@ -45,7 +46,7 @@ const ProductsList = ({ items, gridLayout }: ICardList) => {
     <>
       <div className=''>
         <div
-          className={cx('grid grid-flow-row gap-3', {
+          className={cx('grid grid-flow-row gap-1', {
             'grid-cols-4': gridLayout === 'large',
             'grid-cols-5': gridLayout === 'small',
           })}>

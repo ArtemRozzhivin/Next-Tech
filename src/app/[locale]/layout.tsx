@@ -31,12 +31,14 @@ export default function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={cx(inter.className, 'bg-lightsecond')}>
+      <body className={cx(inter.className, 'bg-white h-screen')}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <StoreProvider>
-            <Header />
-            {children}
-            <Footer />
+            <div className='h-full flex flex-col'>
+              <Header />
+              <div className='flex-1'>{children}</div>
+              <Footer />
+            </div>
           </StoreProvider>
         </NextIntlClientProvider>
       </body>

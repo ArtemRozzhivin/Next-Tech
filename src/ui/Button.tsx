@@ -66,9 +66,9 @@ const Button = ({
         'text-gray-700 bg-lightsecond hover:bg-lightmain border-transparent': white,
         'text-gray-50 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 border-transparent':
           danger,
-        'text-red-500 hover:text-red-600 border-red-600 dark:text-red-300 dark:hover:text-red-400 dark:border-red-500 border-1':
+        'text-red-500 border-red-600 hover:bg-red-600 hover:text-white dark:text-red-300 dark:hover:text-red-400 dark:border-red-500 border-1':
           semiDanger,
-        'focus:border-none hover:bg-colorThird border-none text-colorMain dark:text-white focus:ring-0 focus:ring-offset-0':
+        'focus:border-none hover:bg-stone-400 border-none text-colorMain dark:text-white focus:ring-0 focus:ring-offset-0':
           noBorder,
         'text-gray-700 bg-gray-600 hover:bg-gray-600': gray,
         'px-2.5 py-1.5 text-xs': small,

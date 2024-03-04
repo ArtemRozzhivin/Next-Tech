@@ -14,7 +14,10 @@ import { Link } from '@src/navigation';
 import Button from '@src/ui/Button';
 import Dropdown from '@src/ui/Dropdown';
 import Input from '@src/ui/Input';
-import { fetchSmarhphonesToFireBase } from '@src/utils/fetchProductToFirebase';
+import {
+  fetchSmarhphonesToFireBase,
+  fetchproductToFireBase,
+} from '@src/utils/fetchProductToFirebase';
 import algoliasearch, { SearchIndex } from 'algoliasearch';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { set } from 'lodash';
@@ -121,32 +124,33 @@ const Laptops = () => {
   }, [sortingValue, selectedBrands, acceptedPrice]);
 
   return (
-    <div className='p-5 flex items-start gap-5'>
-      <FiltersBlock
-        priceFrom={priceFrom}
-        setPriceFrom={setPriceFrom}
-        onResetPrice={handleResetPrice}
-        priceTo={priceTo}
-        setPriceTo={setPriceTo}
-        onClickPrice={handleClickPrice}
-        selectedBrand={selectedBrands}
-        setSelectedBrand={handleCheckboxChange}
-        brandOptions={brandOptions}
-      />
-      <div className='flex flex-col gap-10'>
-        <div>
-          <div className='flex justify-start items-center gap-1'>
-            <Link href='/' className='flex justify-center items-center gap-1 hover:text-colorMain'>
-              <HomeIcon className='w-[18px] h-[18px]' /> Home
-            </Link>
-            <span>/</span>
-            <span>Laptops</span>
-          </div>
-          <h2 className='text-3xl'>Laptops</h2>
+    <div className='p-5 flex flex-col gap-5'>
+      <div>
+        <div className='flex justify-start items-center gap-1'>
+          <Link href='/' className='flex justify-center items-center gap-1 hover:text-colorMain'>
+            <HomeIcon className='w-[18px] h-[18px]' /> Home
+          </Link>
+          <span>/</span>
+          <span>Laptops</span>
         </div>
+        <h2 className='text-3xl'>Laptops</h2>
+      </div>
 
-        <div className='flex flex-col gap-5'>
-          <div className='flex items-center gap-5 justify-between'>
+      <div className='flex items-start gap-5'>
+        <FiltersBlock
+          priceFrom={priceFrom}
+          setPriceFrom={setPriceFrom}
+          onResetPrice={handleResetPrice}
+          priceTo={priceTo}
+          setPriceTo={setPriceTo}
+          onClickPrice={handleClickPrice}
+          selectedBrand={selectedBrands}
+          setSelectedBrand={handleCheckboxChange}
+          brandOptions={brandOptions}
+        />
+
+        <div className='flex flex-col gap-1'>
+          <div className='bg-white p-3 rounded-md flex items-end gap-5 justify-between'>
             <Input
               icon={<MagnifyingGlassIcon className='w-6 h-6 text-colorMain' />}
               clearIcon
@@ -173,7 +177,7 @@ const Laptops = () => {
                 onSelect={(item) => handleSorting(item)}
               />
 
-              <div className='flex items-center gap-2 border border-gray-400 shadow-lg p-1 rounded-md'>
+              <div className='flex items-center gap-2 border border-gray-300 shadow-lg p-1 rounded-md'>
                 <button
                   onClick={() => handleGridLayout('large')}
                   className={cx(
@@ -194,7 +198,7 @@ const Laptops = () => {
             </div>
           </div>
 
-          <div className='flex items-center gap-2'>
+          <div className='py-2 flex items-center gap-2'>
             {acceptedPrice !== null && (
               <ProductFilterItem
                 title='Ціна'

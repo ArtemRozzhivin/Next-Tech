@@ -26,7 +26,7 @@ const config: Config = {
       },
       colors: {
         lightmain: '#E2E8F0',
-        lightsecond: '#CBD5E1',
+        lightsecond: '#d0dbe3',
         darkmain: '#1E293B',
         darksecond: '#0F172A',
         colorMain: '#3b82f6',

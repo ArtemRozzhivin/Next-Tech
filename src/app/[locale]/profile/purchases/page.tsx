@@ -11,7 +11,7 @@ const Purchases = () => {
   const user = useAppSelector((state) => state.auth.user);
 
   return (
-    <div className='flex flex-col gap-5'>
+    <div className='p-2 flex flex-col gap-5'>
       <h2 className='text-3xl font-semibold'>Мої замовлення</h2>
       {!!userHistory?.purchases?.length ? (
         <div className='flex flex-col gap-5'>

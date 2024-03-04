@@ -5,7 +5,6 @@ import { User } from 'firebase/auth';
 import { IOrderedItem, IProductCartItem, IProductItem } from '../../models';
 
 const calculateTotalCount = (cartProducts: IProductCartItem[]) => {
-  console.log(cartProducts.reduce((total, cartItem) => total + cartItem.count, 0));
   return cartProducts.reduce((total, cartItem) => total + cartItem.count, 0);
 };
 
@@ -27,21 +26,23 @@ interface IProductsState {
   userHistory: IUserHistory | null;
   cartProducts: IProductCartItem[];
   currentDetailProduct: IProductItem | null;
-  orderedProducts: IOrderedItem[];
   currentProductToCart: IProductCartItem | null;
-  cartProductsCount: number;
-  cartProductsTotalPrice: number;
+  productToOrdering: IProductCartItem[];
+  productsCountToOrdering: number;
+  productsPriceToOrdering: number;
+  cartTotalCount: number;
 }
 
 const initialState: IProductsState = {
   products: [],
   cartProducts: [],
-  orderedProducts: [],
+  productToOrdering: [],
   currentDetailProduct: null,
   userHistory: null,
   currentProductToCart: null,
-  cartProductsCount: 0,
-  cartProductsTotalPrice: 0,
+  productsCountToOrdering: 0,
+  productsPriceToOrdering: 0,
+  cartTotalCount: 0,
 };
 
 const productsSlice = createSlice({
@@ -60,32 +61,76 @@ const productsSlice = createSlice({
       state.currentProductToCart = payload;
     },
 
+    setProductsToCart: (state, { payload }: PayloadAction<IProductCartItem[]>) => {
+      state.cartProducts = payload;
+      state.cartTotalCount = calculateTotalCount(state.cartProducts);
+    },
+
     addToCart: (state, { payload }: PayloadAction<IProductCartItem>) => {
       state.cartProducts = [...state.cartProducts, payload];
-      state.cartProductsCount = calculateTotalCount(state.cartProducts);
-      state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
+      state.cartTotalCount = calculateTotalCount(state.cartProducts);
+    },
+
+    setProductToOrdering: (state, { payload }: PayloadAction<IProductCartItem[]>) => {
+      state.productToOrdering = payload;
+      state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
+      state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
+    },
+
+    addProductToOrdering: (state, { payload }: PayloadAction<IProductCartItem>) => {
+      state.productToOrdering = [...state.productToOrdering, payload];
+      state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
+      state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
+    },
+
+    removeFromProductToOrdering: (state, { payload }: PayloadAction<string>) => {
+      const productToOrdering = _filter(
+        state.productToOrdering,
+        (item) => item.product.id !== payload,
+      );
+      state.productToOrdering = productToOrdering;
+      state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
+      state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
     },
 
     plusProductCart: (state, { payload }: PayloadAction<string>) => {
       const existingCartItem = state.cartProducts.find((item) => item.product.id === payload);
+      const existingProductToOrdering = state.productToOrdering.find(
+        (item) => item.product.id === payload,
+      );
+
+      if (existingProductToOrdering) {
+        existingProductToOrdering.count += 1;
+        state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
+        state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
+      }
 
       if (existingCartItem) {
         existingCartItem.count += 1;
+        state.cartTotalCount = calculateTotalCount(state.cartProducts);
       }
 
       state.currentProductToCart = {
         ...state.currentProductToCart,
         count: ++state.currentProductToCart.count,
       };
-      state.cartProductsCount = calculateTotalCount(state.cartProducts);
-      state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
     },
 
     minusProductCart: (state, { payload }: PayloadAction<string>) => {
       const existingCartItem = state.cartProducts.find((item) => item.product.id === payload);
+      const existingProductToOrdering = state.productToOrdering.find(
+        (item) => item.product.id === payload,
+      );
+
+      if (existingProductToOrdering && existingCartItem.count > 1) {
+        existingProductToOrdering.count -= 1;
+        state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
+        state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
+      }
 
       if (existingCartItem && existingCartItem.count > 1) {
         existingCartItem.count -= 1;
+        state.cartTotalCount = calculateTotalCount(state.cartProducts);
       } else if (existingCartItem && existingCartItem.count === 1) {
         return state;
       }
@@ -94,29 +139,38 @@ const productsSlice = createSlice({
         ...state.currentProductToCart,
         count: --state.currentProductToCart.count,
       };
-      state.cartProductsCount = calculateTotalCount(state.cartProducts);
-      state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
     },
 
     clearCart: (state) => {
       state.cartProducts = [];
-      state.cartProductsCount = 0;
-      state.cartProductsTotalPrice = 0;
+      state.productToOrdering = [];
+      state.productsCountToOrdering = 0;
+      state.productsPriceToOrdering = 0;
+      state.cartTotalCount = 0;
     },
 
     removeFromCart: (state, { payload }: PayloadAction<string>) => {
       const cartProducts = _filter(state.cartProducts, (item) => item.product.id !== payload);
       state.cartProducts = cartProducts;
-      state.cartProductsCount = calculateTotalCount(state.cartProducts);
-      state.cartProductsTotalPrice = calculateTotalPrice(state.cartProducts);
-    },
+      state.cartTotalCount = calculateTotalCount(state.cartProducts);
 
-    setOrderedProducts: (state, { payload }: PayloadAction<IOrderedItem[]>) => {
-      state.orderedProducts = payload;
+      const produtsToOrdering = _filter(
+        state.productToOrdering,
+        (item) => item.product.id !== payload,
+      );
+      state.productToOrdering = produtsToOrdering;
+      state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
+      state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
     },
 
     setCurrentDetailProduct: (state, { payload }: PayloadAction<IProductItem>) => {
       state.currentDetailProduct = payload;
+    },
+
+    clearProductsToOrdering: (state) => {
+      state.productToOrdering = [];
+      state.productsCountToOrdering = 0;
+      state.productsPriceToOrdering = 0;
     },
   },
 });

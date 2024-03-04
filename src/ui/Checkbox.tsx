@@ -12,6 +12,7 @@ interface ICheckbox {
   checked?: boolean;
   hintClassName?: string;
   disabled?: boolean;
+  large?: boolean;
 }
 
 const Checkbox = ({
@@ -24,6 +25,7 @@ const Checkbox = ({
   checked,
   hintClassName,
   disabled,
+  large,
 }: ICheckbox): JSX.Element => {
   const identifier = id || name;
 
@@ -46,8 +48,8 @@ const Checkbox = ({
           checked={checked}
           onChange={onChange}
           className={cx(
-            'focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 dark:border-slate-800 dark:bg-slate-700 dark:checked:bg-indigo-600 rounded cursor-pointer',
-            { '!cursor-not-allowed': disabled, 'opacity-50': disabled },
+            'focus:ring-indigo-500 h-4 w-4 text-colorMain border-gray-300 dark:border-slate-800 dark:bg-slate-700 dark:checked:bg-indigo-600 rounded-md cursor-pointer',
+            { '!cursor-not-allowed opacity-50': disabled, 'h-7 w-7': large },
           )}
         />
       </div>

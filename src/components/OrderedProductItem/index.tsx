@@ -32,7 +32,7 @@ const OrderedProductItem = ({ purchase, email }: IProductOrderingItem) => {
   return (
     <button
       onClick={() => setIsInfoOpen((prevState) => !prevState)}
-      className='rounded-md shadow-xl p-5 bg-lightmain'>
+      className='border border-gray-300 rounded-md shadow-sm hover:shadow-xl group p-5 bg-white transition-all'>
       <div className='flex justify-end'>
         {isInfoOpen ? (
           <div className='flex items-center gap-1'>

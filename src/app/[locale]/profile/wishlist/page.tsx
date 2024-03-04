@@ -10,8 +10,8 @@ const Wishlist = () => {
   const userHistory = useAppSelector((state) => state.products.userHistory);
 
   return (
-    <div>
-      <h2>Ваш список бажань</h2>
+    <div className='flex flex-col gap-5'>
+      <h2 className='font-semibold text-2xl'>Ваш список бажань</h2>
       {!!userHistory?.wishlist?.length ? (
         <ProductsList items={userHistory?.wishlist} />
       ) : (

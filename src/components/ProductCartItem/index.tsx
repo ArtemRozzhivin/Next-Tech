@@ -3,11 +3,15 @@ import React from 'react';
 import Image from 'next/image';
 import Button from '@src/ui/Button';
 import { HeartIcon, TrashIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { useAppDispatch } from '@src/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { productsActions } from '@src/redux/reducers/Products/products';
+import Checkbox from '@src/ui/Checkbox';
+import { selectProductToOrdering } from '@src/redux/reducers/Products/selectors';
 
 const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
   const dispatch = useAppDispatch();
+  const isChecked = useAppSelector(selectProductToOrdering(product.id));
+  console.log(isChecked, 'isChecked');
 
   const handlePlusProduct = () => {
     dispatch(productsActions.plusProductCart(product.id));
@@ -20,13 +24,22 @@ const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
   const removeFromCart = async () => {
     if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
       dispatch(productsActions.removeFromCart(product.id));
+      dispatch(productsActions.removeFromProductToOrdering(product.id));
+    }
+  };
+
+  const removeFromProductsToOrdering = async () => {
+    if (isChecked) {
+      dispatch(productsActions.removeFromProductToOrdering(product.id));
+    } else {
+      dispatch(productsActions.addProductToOrdering({ product, image, count }));
     }
   };
 
   return (
-    <div className='rounded-md w-full bg-lightmain p-5'>
+    <div className='rounded-md w-full bg-white border border-gray-300 p-5'>
       <div className='flex items-center gap-3'>
-        <div>Checkbox</div>
+        <Checkbox large onChange={removeFromProductsToOrdering} checked={isChecked} />
         <div className='bg-white p-3'>
           <Image
             className='h-full w-full object-contain'
@@ -54,7 +67,7 @@ const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
                   <div>В обране</div>
                 </div>
               </Button>
-              <Button onClick={removeFromCart} secondary>
+              <Button onClick={removeFromCart} semiDanger>
                 <div className='flex items-center justify-center gap-1'>
                   <TrashIcon className='w-5 h-5' />
                   <div>Видалити</div>

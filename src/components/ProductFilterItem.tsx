@@ -11,7 +11,7 @@ const ProductFilterItem = ({ title, value, onClick }: IProductFilterItem) => {
   return (
     <button
       onClick={onClick}
-      className='rounded-md inline-flex items-center gap-2 p-2 border border-gray-400 hover:bg-red-400 hover:border-red-500 group transition-all'>
+      className='rounded-md inline-flex items-center gap-2 p-2 border border-gray-300 hover:bg-red-400 hover:border-red-500 group transition-all'>
       <div className='group-hover:text-white transition-all'>
         {title && <span>{title}:</span>} {value}
       </div>

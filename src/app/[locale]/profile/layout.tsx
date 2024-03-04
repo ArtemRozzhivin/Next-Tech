@@ -31,13 +31,14 @@ const ProfileLayout = ({ children }: IProfileLayout) => {
   };
 
   return (
-    <div className='flex items-start gap-10'>
-      <ProfileNavbar
-        displayName={auth.currentUser?.displayName}
-        email={auth.currentUser?.email}
-        onMenuItem={(item: IMenuItem) => handleClickMenuItem(item)}
-      />
-      <div className='inline-block min-h-full w-[2px] self-stretch bg-neutral-200 rounded-full opacity-100 dark:opacity-50'></div>
+    <div className='h-full flex items-stretch'>
+      <div className='border-r border-gray-300'>
+        <ProfileNavbar
+          displayName={auth.currentUser?.displayName}
+          email={auth.currentUser?.email}
+          onMenuItem={(item: IMenuItem) => handleClickMenuItem(item)}
+        />
+      </div>
       <div className='p-5 flex-1'>{children}</div>
     </div>
   );

@@ -629,9 +629,8 @@ const defaultValues: IFormData = {
 };
 
 export const Ordering = () => {
-  const { cartProducts, cartProductsCount, cartProductsTotalPrice } = useAppSelector(
-    (state) => state.products,
-  );
+  const { cartProducts, productToOrdering, productsCountToOrdering, productsPriceToOrdering } =
+    useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const user = useAppSelector((state) => state.auth.user);
@@ -811,9 +810,14 @@ export const Ordering = () => {
   };
 
   const clearCart = () => {
-    if (window.confirm('Ви впевнені, що хочете очистити кошик?')) {
-      dispatch(productsActions.clearCart());
-    }
+    console.log('clearCart');
+    const newCartProducts = cartProducts.filter(
+      (item1) => !productToOrdering.some((item2) => item1.product.id === item2.product.id),
+    );
+
+    console.log(newCartProducts, 'newCartProducts');
+    dispatch(productsActions.setProductsToCart(newCartProducts));
+    dispatch(productsActions.clearProductsToOrdering());
   };
 
   const onSubmit = async (data) => {
@@ -823,7 +827,7 @@ export const Ordering = () => {
 
     if (user) {
       try {
-        const orderedProducts = cartProducts.map((item) => {
+        const orderedProducts = productToOrdering.map((item) => {
           return {
             ...item,
             info: {
@@ -843,11 +847,13 @@ export const Ordering = () => {
         await updateDoc(productRef, {
           purchases: arrayUnion(...orderedProducts),
         });
+
+        // delete in orderedProducts and in cart
+        clearCart();
       } catch (error) {
         console.log(error);
       }
     }
-    dispatch(productsActions.clearCart());
 
     getUserHistory(user).then((userHistory) => {
       if (userHistory) dispatch(productsActions.setUserHistory(userHistory as IUserHistory));
@@ -862,7 +868,7 @@ export const Ordering = () => {
             <div className='flex flex-col gap-5'>
               <div className='text-2xl font-semibold'>1. Товари</div>
               <div className='flex flex-col gap-3 justify-center items-center'>
-                {cartProducts.map((item) => (
+                {productToOrdering.map((item) => (
                   <div className='rounded-md w-full bg-lightmain p-5'>
                     <ProductOrderingItem key={item.product.version} {...item} />
                   </div>
@@ -916,14 +922,14 @@ export const Ordering = () => {
                     id='courier-nova-poshta'
                     className={cx(
                       'p-5 rounded-md border border-colorMain flex flex-col gap-5',
-                      !city && 'border-gray-400',
+                      !city && 'border-gray-300',
                     )}>
                     <div className='flex items-center gap-3'>
                       <div
                         className={cx(
                           'w-5 h-5 rounded-full border border-colorMain',
                           currentDelivery?.id === 'courier-nova-poshta' && 'bg-colorMain',
-                          !city && 'border-gray-400',
+                          !city && 'border-gray-300',
                         )}></div>
                       <div className='flex items-center gap-3'>
                         <div>Кур'єр Нова пошта </div>
@@ -967,14 +973,14 @@ export const Ordering = () => {
                     id='courier-comfy'
                     className={cx(
                       'p-5 rounded-md border border-colorMain flex flex-col gap-5',
-                      !city && 'border-gray-400',
+                      !city && 'border-gray-300',
                     )}>
                     <div className='flex items-center gap-3'>
                       <div
                         className={cx(
                           'w-5 h-5 rounded-full border border-colorMain',
                           currentDelivery?.id === 'courier-comfy' && 'bg-colorMain',
-                          !city && 'border-gray-400',
+                          !city && 'border-gray-300',
                         )}></div>
                       <div className='flex items-center gap-3'>
                         <div>Кур'єр COMFY </div>
@@ -1019,14 +1025,14 @@ export const Ordering = () => {
                     id='to-nova-poshta-office'
                     className={cx(
                       'p-5 rounded-md border border-colorMain flex flex-col gap-5',
-                      !city && 'border-gray-400',
+                      !city && 'border-gray-300',
                     )}>
                     <div className='flex items-center gap-3'>
                       <div
                         className={cx(
                           'w-5 h-5 rounded-full border border-colorMain',
                           currentDelivery?.id === 'to-nova-poshta-office' && 'bg-colorMain',
-                          !city && 'border-gray-400',
+                          !city && 'border-gray-300',
                         )}></div>
                       <div className='flex items-center gap-3'>
                         <div>До відділення Нової пошти</div>
@@ -1067,8 +1073,8 @@ export const Ordering = () => {
           <div className='rounded-md flex flex-col gap-10 bg-lightmain p-5'>
             <div className='flex flex-col gap-3'>
               <div className='text-2xl flex items-center gap-32 justify-between'>
-                <div>{cartProductsCount} товарів:</div>
-                <div className='font-semibold'>{cartProductsTotalPrice} ₴</div>
+                <div>{productsCountToOrdering} товарів:</div>
+                <div className='font-semibold'>{productsPriceToOrdering} ₴</div>
               </div>
               <div className='text-2xl flex items-center gap-32 justify-between'>
                 <div>Знижка:</div>
@@ -1081,7 +1087,7 @@ export const Ordering = () => {
             <div className='flex flex-col gap-10'>
               <div className='flex items-center gap-32 justify-between'>
                 <div className='text-3xl'>До сплати: </div>
-                <div className='font-semibold text-3xl'>{cartProductsTotalPrice} ₴</div>
+                <div className='font-semibold text-3xl'>{productsPriceToOrdering} ₴</div>
               </div>
               {/* <Link href={routes.ordering}> */}
               <Button

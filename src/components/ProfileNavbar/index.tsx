@@ -50,19 +50,21 @@ const ProfileNavbar = ({ displayName, email, onMenuItem }: IProfileNavbar) => {
   };
 
   return (
-    <div className='p-5 flex flex-col gap-10'>
-      {displayName && email && (
-        <Link href={routes.profile} className='group flex items-center gap-2'>
-          <div>
-            <UserIcon className='w-11 h-11 text-colorMain' />
-          </div>
-          <div className='flex flex-col justify-center'>
-            <div className='text-2xl group-hover:text-colorMain'>{displayName}</div>
-            <div className='text-gray-600'>{email}</div>
-          </div>
-        </Link>
-      )}
-      <ul className='flex flex-col justify-center gap-3'>
+    <div className='h-full flex flex-col'>
+      <div className='border-b border-gray-300 p-5'>
+        {displayName && email && (
+          <Link href={routes.profile} className='group flex items-center gap-2'>
+            <div>
+              <UserIcon className='w-11 h-11 text-colorMain' />
+            </div>
+            <div className='flex flex-col justify-center'>
+              <div className='text-2xl group-hover:text-colorMain'>{displayName}</div>
+              <div className='text-gray-600'>{email}</div>
+            </div>
+          </Link>
+        )}
+      </div>
+      <ul className='flex flex-col justify-center gap-3 p-5'>
         {navbarMenu.map((item) => (
           <li className='hover:text-colorMain transition-all' key={item.title}>
             <button

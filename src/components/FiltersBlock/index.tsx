@@ -55,17 +55,21 @@ const FiltersBlock = ({
   };
 
   return (
-    <div className='w-1/2 flex flex-col gap-3'>
-      <Disclosure>
+    <div className='w-1/2 flex flex-col bg-white rounded-md p-2'>
+      <Disclosure defaultOpen>
         {({ open }) => (
-          <>
-            <Disclosure.Button className='flex w-full justify-between rounded-lg bg-colorThird px-4 py-2 text-left text-sm font-medium text-colorMain hover:brightness-95'>
+          <div className='bg-white border-y border-gray-300 border-b-0 px-4 py-5 flex flex-col gap-5'>
+            <Disclosure.Button className='flex items-center w-full justify-between text-left text-sm font-medium hover:brightness-75'>
               <span>Ціна</span>
-              <ChevronUpIcon
-                className={`${
-                  open ? 'rotate-180 transform transition-all' : 'rotate-0 transform transition-all'
-                } h-5 w-5 text-colorMain`}
-              />
+              <div className='border border-gray-300 rounded-full p-1'>
+                <ChevronUpIcon
+                  className={`${
+                    open
+                      ? 'rotate-180 transform transition-all'
+                      : 'rotate-0 transform transition-all'
+                  } h-5 w-5 text-gray-400`}
+                />
+              </div>
             </Disclosure.Button>
             <Disclosure.Panel className='flex flex-col gap-3 text-sm text-gray-500'>
               <div className='flex items-center gap-2'>
@@ -85,33 +89,38 @@ const FiltersBlock = ({
 
               {priceFrom !== 0 || priceTo !== 70000 ? (
                 <div className='flex items-center gap-2 w-full'>
-                  <Button onClick={onClickPrice} primary>
+                  <Button className='w-full' onClick={onClickPrice} large primary>
                     Застосувати
                   </Button>
-                  <Button onClick={handleResetPrice} danger>
+                  <Button className='w-full' onClick={handleResetPrice} large danger>
                     Скинути
                   </Button>
                 </div>
               ) : (
-                <Button onClick={onClickPrice} primary>
+                <Button onClick={onClickPrice} large primary>
                   Застосувати
                 </Button>
               )}
             </Disclosure.Panel>
-          </>
+          </div>
         )}
       </Disclosure>
 
-      <Disclosure>
+      <Disclosure defaultOpen>
         {({ open }) => (
-          <>
-            <Disclosure.Button className='flex w-full justify-between rounded-lg bg-colorThird px-4 py-2 text-left text-sm font-medium text-colorMain hover:brightness-95'>
-              <span>Бренд</span>
-              <ChevronUpIcon
-                className={`${
-                  open ? 'rotate-180 transform transition-all' : 'rotate-0 transform transition-all'
-                } h-5 w-5 text-colorMain`}
-              />
+          <div className='bg-white border-y border-gray-300 px-4 py-5 flex flex-col gap-5'>
+            <Disclosure.Button className='flex items-center w-full justify-between text-left text-sm font-medium hover:brightness-75'>
+              <div>Бренд</div>
+
+              <div className='border border-gray-300 rounded-full p-1'>
+                <ChevronUpIcon
+                  className={`${
+                    open
+                      ? 'rotate-180 transform transition-all'
+                      : 'rotate-0 transform transition-all'
+                  } h-5 w-5 text-gray-400`}
+                />
+              </div>
             </Disclosure.Button>
             <Disclosure.Panel className='flex flex-col gap-2 text-sm text-gray-500'>
               {brandOptions.map((brand) => (
@@ -124,7 +133,7 @@ const FiltersBlock = ({
                 />
               ))}
             </Disclosure.Panel>
-          </>
+          </div>
         )}
       </Disclosure>
     </div>
