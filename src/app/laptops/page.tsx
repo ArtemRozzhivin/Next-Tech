@@ -10,7 +10,6 @@ import FiltersBlock from '@src/components/FiltersBlock';
 import ProductsList from '@src/components/ProductsList';
 import { Search } from '@src/components/Search';
 import { db } from '@src/firebaseConfig';
-import { Link } from '@src/navigation';
 import Button from '@src/ui/Button';
 import Dropdown from '@src/ui/Dropdown';
 import Input from '@src/ui/Input';
@@ -29,6 +28,7 @@ import smallTile from '@assets/smallTile.svg';
 import cx from 'clsx';
 import ProductFilterItem from '@src/components/ProductFilterItem';
 import { IProductItem } from '@src/redux/models';
+import Link from 'next/link';
 
 const client = algoliasearch('Q2QOIT41TW', '09737b1233e8e42a12c90f0a08a08dd6');
 const index = client.initIndex('product_search');

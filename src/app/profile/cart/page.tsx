@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { ArrowLeftIcon, ArrowLongLeftIcon, TrashIcon } from '@heroicons/react/24/outline';
 import ProductCartItem from '@src/components/ProductCartItem';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
-import { Link, useRouter } from '@src/navigation';
 import Button from '@src/ui/Button';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
 import { arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
@@ -12,6 +11,8 @@ import { db } from '@src/firebaseConfig';
 import { getUserHistory } from '@src/api/user';
 import routes from '@src/routes';
 import PagePlaceholder from '@src/components/PagePlaceholder';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export const Cart = () => {
   const {

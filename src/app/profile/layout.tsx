@@ -8,8 +8,8 @@ import {
 } from '@heroicons/react/24/outline';
 import ProfileNavbar from '@src/components/ProfileNavbar';
 import { auth } from '@src/firebaseConfig';
-import { useRouter } from '@src/navigation';
 import { useAppSelector } from '@src/redux/hooks';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 interface IMenuItem {

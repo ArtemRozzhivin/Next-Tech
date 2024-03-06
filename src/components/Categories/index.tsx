@@ -1,8 +1,8 @@
 'use client';
 
 import Button from '@src/ui/Button';
+import { useRouter } from 'next/navigation';
 import React from 'react';
-import { useRouter } from '@src/navigation';
 
 const Categories = () => {
   const router = useRouter();

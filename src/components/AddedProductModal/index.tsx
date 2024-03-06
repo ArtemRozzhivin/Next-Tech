@@ -1,13 +1,13 @@
 'use client';
 
 import { HeartIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { Link } from '@src/navigation';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
 import { productsActions } from '@src/redux/reducers/Products/products';
 import Button from '@src/ui/Button';
 import Modal from '@src/ui/Modal';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 

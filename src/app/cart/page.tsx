@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { ArrowLeftIcon, ArrowLongLeftIcon, TrashIcon } from '@heroicons/react/24/outline';
 import ProductCartItem from '@src/components/ProductCartItem';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
-import { Link, useRouter } from '@src/navigation';
 import Button from '@src/ui/Button';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
 import { arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
@@ -14,6 +13,8 @@ import routes from '@src/routes';
 import PagePlaceholder from '@src/components/PagePlaceholder';
 import { toast } from 'react-toastify';
 import Modal from '@src/ui/Modal';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export const Cart = () => {
   const {
@@ -109,7 +110,6 @@ export const Cart = () => {
                     Щоб продовжити виберіть принаймні один товар
                   </div>
                 )}
-                {/* <Link href={routes.ordering}> */}
                 <Button
                   gray={productToOrdering.length === 0}
                   disabled={productToOrdering.length === 0}
@@ -119,7 +119,6 @@ export const Cart = () => {
                   onClick={handleToOrdering}>
                   Оформлення
                 </Button>
-                {/* </Link> */}
               </div>
             </div>
           </div>

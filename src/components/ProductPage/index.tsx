@@ -1,5 +1,5 @@
 import { HomeIcon } from '@heroicons/react/24/outline';
-import { Link } from '@src/navigation';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 

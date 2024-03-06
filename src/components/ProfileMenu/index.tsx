@@ -2,13 +2,12 @@
 
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { Link } from '@src/navigation';
 import { Fragment } from 'react';
 import cx from 'clsx';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import routes from '@src/routes';
 import { User } from 'firebase/auth';
+import Link from 'next/link';
 
 const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () => void }) => {
   return (

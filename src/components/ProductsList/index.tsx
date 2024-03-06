@@ -6,14 +6,12 @@ import PagePlaceholder from '../PagePlaceholder';
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
 import Modal from '@src/ui/Modal';
-import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import ProductCartItem from '../ProductCartItem';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
 import Button from '@src/ui/Button';
 import Image from 'next/image';
 import { HeartIcon, TrashIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { Link } from '@src/navigation';
 import { arrayRemove, arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@src/firebaseConfig';
 import { getUserHistory } from '@src/api/user';
@@ -23,6 +21,7 @@ import { handleAddToWishList } from '@src/api/products';
 import cx from 'clsx';
 import { toast } from 'react-toastify';
 import routes from '@src/routes';
+import Link from 'next/link';
 
 interface ICardList {
   items?: IProductItem[];
@@ -30,7 +29,6 @@ interface ICardList {
 }
 
 const ProductsList = ({ items, gridLayout = 'large' }: ICardList) => {
-  const t = useTranslations('');
   const dispatch = useAppDispatch();
   const { userHistory, currentProductToCart } = useAppSelector((state) => state.products);
   const user = useAppSelector((state) => state.auth.user);

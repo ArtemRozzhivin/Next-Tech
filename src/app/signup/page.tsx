@@ -7,12 +7,8 @@ import _keys from 'lodash/keys';
 import _omit from 'lodash/omit';
 import _isEmpty from 'lodash/isEmpty';
 
-// import GoogleAuth from 'components/GoogleAuth'
-// import { withAuthentication, auth } from 'hoc/protected'
 import routes from '@src/routes';
 import Input from '@ui/Input';
-// import Checkbox from 'ui/Checkbox'
-// import Tooltip from 'ui/Tooltip'
 import Button from '@ui/Button';
 import {
   isValidEmail,
@@ -20,10 +16,10 @@ import {
   MIN_PASSWORD_CHARS,
   MAX_PASSWORD_CHARS,
 } from '@src/utils/validator';
-import { useTranslations } from 'next-intl';
-import { Link, useRouter } from '@src/navigation';
 import { signup } from '@src/firebaseConfig';
 import GoogleAuth from '@src/components/GoogleAuth';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface ISignupForm {
   email: string;
@@ -32,7 +28,6 @@ interface ISignupForm {
 }
 
 const Signup = (): JSX.Element => {
-  const t = useTranslations();
   const router = useRouter();
   const [form, setForm] = useState<ISignupForm>({
     email: '',
@@ -58,19 +53,19 @@ const Signup = (): JSX.Element => {
     };
 
     if (!isValidEmail(form.email)) {
-      allErrors.email = t('auth.common.badEmailError');
+      allErrors.email = 'auth.common.badEmailError';
     }
 
     if (!isValidPassword(form.password)) {
-      allErrors.password = t('auth.common.xCharsError', { amount: MIN_PASSWORD_CHARS });
+      allErrors.password = 'auth.common.xCharsError';
     }
 
     if (form.password !== form.repeat || form.repeat === '') {
-      allErrors.repeat = t('auth.common.noMatchError');
+      allErrors.repeat = 'auth.common.noMatchError';
     }
 
     if (_size(form.password) > 50) {
-      allErrors.password = t('auth.common.passwordTooLong', { amount: MAX_PASSWORD_CHARS });
+      allErrors.password = 'auth.common.passwordTooLong';
     }
 
     const valid = _isEmpty(_keys(allErrors));
@@ -122,7 +117,7 @@ const Signup = (): JSX.Element => {
         <div className='flex min-h-full flex-1 flex-col justify-center py-6 sm:px-6 lg:px-8'>
           <div className='sm:mx-auto sm:w-full sm:max-w-md'>
             <p className='text-center text-2xl text-gray-900 dark:text-gray-50'>
-              {t('auth.signup.title')}
+              {'auth.signup.title'}
             </p>
           </div>
           <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]'>
@@ -132,7 +127,7 @@ const Signup = (): JSX.Element => {
                   name='email'
                   id='email'
                   type='email'
-                  label={t('auth.common.email')}
+                  label={'auth.common.email'}
                   value={form.email}
                   onChange={handleInput}
                   error={beenSubmitted ? errors.email : ''}
@@ -141,8 +136,8 @@ const Signup = (): JSX.Element => {
                   name='password'
                   id='password'
                   type='password'
-                  label={t('auth.common.password')}
-                  hint={t('auth.common.hint', { amount: MIN_PASSWORD_CHARS })}
+                  label={'auth.common.password'}
+                  hint={'auth.common.hint'}
                   value={form.password}
                   onChange={handleInput}
                   error={beenSubmitted ? errors.password : ''}
@@ -151,7 +146,7 @@ const Signup = (): JSX.Element => {
                   name='repeat'
                   id='repeat'
                   type='password'
-                  label={t('auth.common.repeat')}
+                  label={'auth.common.repeat'}
                   value={form.repeat}
                   onChange={handleInput}
                   error={beenSubmitted ? errors.repeat : ''}
@@ -162,7 +157,7 @@ const Signup = (): JSX.Element => {
                   loading={isLoading}
                   primary
                   giant>
-                  {t('auth.signup.button')}
+                  {'auth.signup.button'}
                 </Button>
               </form>
 
@@ -173,7 +168,7 @@ const Signup = (): JSX.Element => {
                   </div>
                   <div className='relative flex justify-center text-sm font-medium leading-6'>
                     <span className='bg-white dark:bg-slate-800/20 px-6 text-gray-900 dark:text-gray-50'>
-                      {t('auth.common.orContinueWith')}
+                      {'auth.common.orContinueWith'}
                     </span>
                   </div>
                 </div>
@@ -184,12 +179,12 @@ const Signup = (): JSX.Element => {
             </div>
 
             <p className='mt-10 text-center text-sm text-gray-500 dark:text-gray-200'>
-              <span>{t('auth.signup.alreadyAMember')} </span>
+              <span>{'auth.signup.alreadyAMember'} </span>
               <Link
                 href={routes.signin}
                 className='font-semibold leading-6 text-colorMain hover:text-colorSecond'
-                aria-label={t('titles.signin')}>
-                {t('auth.common.signinInstead')}
+                aria-label={'titles.signin'}>
+                {'auth.common.signinInstead'}
               </Link>
             </p>
           </div>

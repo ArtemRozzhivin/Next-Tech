@@ -3,8 +3,6 @@
 import React from 'react';
 import cx from 'clsx';
 
-import { useTranslations } from 'next-intl';
-
 import Button from '@ui/Button';
 import GoogleGSVG from '@ui/icons/GoogleGSVG';
 import { loginWithGoogle } from '@src/firebaseConfig';
@@ -26,7 +24,6 @@ interface IGoogleAuth {
 }
 
 const GoogleAuth: React.FC<IGoogleAuth> = ({ className }) => {
-  const t = useTranslations();
   const router = useRouter();
 
   const redirectToMainPage = (user: string) => {
@@ -50,7 +47,7 @@ const GoogleAuth: React.FC<IGoogleAuth> = ({ className }) => {
       regular>
       <>
         <GoogleGSVG className='w-5 h-5 mr-2' />
-        {t('auth.common.google')}
+        {'auth.common.google'}
       </>
     </Button>
   );

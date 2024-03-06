@@ -12,8 +12,8 @@ import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { productsActions } from '@src/redux/reducers/Products/products';
 import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
 import HeartSolidIcon from '@src/assets/heart.svg';
-import { Link } from '@src/navigation';
 import cx from 'clsx';
+import Link from 'next/link';
 
 interface IProductCard {
   item: IProductItem;

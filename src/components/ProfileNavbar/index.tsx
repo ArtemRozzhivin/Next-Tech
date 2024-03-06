@@ -6,9 +6,9 @@ import {
   ShoppingCartIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
-import { Link } from '@src/navigation';
 import routes from '@src/routes';
 import cx from 'clsx';
+import Link from 'next/link';
 import React, { useState } from 'react';
 
 interface IMenuItem {

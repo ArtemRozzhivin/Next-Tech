@@ -25,7 +25,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import routes from '@src/routes';
 import Modal from '@src/ui/Modal';
-import { Link } from '@src/navigation';
+import Link from 'next/link';
 
 interface IProductDetail {
   product: {

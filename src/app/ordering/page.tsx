@@ -2,7 +2,6 @@
 
 import React, { ChangeEvent, Fragment } from 'react';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
-import { Link, useRouter } from '@src/navigation';
 import Button from '@src/ui/Button';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -41,6 +40,7 @@ import { db } from '@src/firebaseConfig';
 import { getUserHistory } from '@src/api/user';
 import { set } from 'lodash';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 interface ICity {
   AddressDeliveryAllowed: boolean;
