@@ -136,18 +136,20 @@ const Laptops = () => {
         <h2 className='text-3xl'>Laptops</h2>
       </div>
 
-      <div className='flex items-start gap-5'>
-        <FiltersBlock
-          priceFrom={priceFrom}
-          setPriceFrom={setPriceFrom}
-          onResetPrice={handleResetPrice}
-          priceTo={priceTo}
-          setPriceTo={setPriceTo}
-          onClickPrice={handleClickPrice}
-          selectedBrand={selectedBrands}
-          setSelectedBrand={handleCheckboxChange}
-          brandOptions={brandOptions}
-        />
+      <div className='h-full flex items-start gap-5'>
+        <div className='w-1/2 sticky top-[100px] left-0'>
+          <FiltersBlock
+            priceFrom={priceFrom}
+            setPriceFrom={setPriceFrom}
+            onResetPrice={handleResetPrice}
+            priceTo={priceTo}
+            setPriceTo={setPriceTo}
+            onClickPrice={handleClickPrice}
+            selectedBrand={selectedBrands}
+            setSelectedBrand={handleCheckboxChange}
+            brandOptions={brandOptions}
+          />
+        </div>
 
         <div className='flex flex-col gap-1'>
           <div className='bg-white p-3 rounded-md flex items-end gap-5 justify-between'>
@@ -182,7 +184,7 @@ const Laptops = () => {
                   onClick={() => handleGridLayout('large')}
                   className={cx(
                     'hover:bg-slate-100 hover:shadow-md transition-all rounded-md p-1',
-                    gridLayout === 'large' && 'bg-white shadow-xl',
+                    gridLayout === 'large' && 'bg-lightmain shadow-xl',
                   )}>
                   <Image width={32} height={32} src={largeTile} alt='filter' className='w-6 h-6' />
                 </button>
@@ -190,7 +192,7 @@ const Laptops = () => {
                   onClick={() => handleGridLayout('small')}
                   className={cx(
                     'hover:bg-slate-100 hover:shadow-md transition-all rounded-md p-1',
-                    gridLayout === 'small' && 'bg-white shadow-lg',
+                    gridLayout === 'small' && 'bg-lightmain shadow-lg',
                   )}>
                   <Image width={32} height={32} src={smallTile} alt='filter' className='w-6 h-6' />
                 </button>

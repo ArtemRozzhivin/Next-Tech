@@ -55,7 +55,7 @@ const FiltersBlock = ({
   };
 
   return (
-    <div className='w-1/2 flex flex-col bg-white rounded-md p-2'>
+    <div className='flex flex-col bg-white rounded-md p-2'>
       <Disclosure defaultOpen>
         {({ open }) => (
           <div className='bg-white border-y border-gray-300 border-b-0 px-4 py-5 flex flex-col gap-5'>

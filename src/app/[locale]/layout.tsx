@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import './globals.css';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import StoreProvider from './StoreProvider';
+import { ToastContainer, toast } from 'react-toastify';
 import cx from 'clsx';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -34,8 +35,13 @@ export default function RootLayout({
       <body className={cx(inter.className, 'bg-white h-screen')}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <StoreProvider>
+            <ToastContainer />
             <div className='h-full flex flex-col'>
-              <Header />
+              <div className='mb-20'>
+                <div className='w-full fixed left-0 top-0 z-50'>
+                  <Header />
+                </div>
+              </div>
               <div className='flex-1'>{children}</div>
               <Footer />
             </div>

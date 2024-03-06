@@ -11,8 +11,6 @@ import routes from '@src/routes';
 import { User } from 'firebase/auth';
 
 const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () => void }) => {
-  const t = useTranslations();
-
   return (
     <Menu as='div' className='relative ml-3'>
       <div>
@@ -26,7 +24,7 @@ const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () =>
               alt='avatar'
             />
           )}
-          <span>{t('common.account')}</span>
+          <span>{user.displayName}</span>
           <ChevronDownIcon className='h-4 w-4 ml-1 stroke-2' aria-hidden='true' />
         </Menu.Button>
       </div>
@@ -43,7 +41,7 @@ const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () =>
             <Menu.Item>
               <p className='truncate py-2 px-4' role='none'>
                 <span className='block text-xs text-gray-500 dark:text-gray-300' role='none'>
-                  {t('header.signedInAs')}
+                  Ви ввійшли як
                 </span>
                 <span
                   className='mt-0.5 text-sm font-semibold text-gray-700 dark:text-gray-50'
@@ -62,7 +60,7 @@ const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () =>
                   className={cx('block px-4 py-2 text-sm text-gray-700 dark:text-gray-50', {
                     'bg-gray-100 dark:bg-slate-800': active,
                   })}>
-                  {t('Список бажань')}
+                  Список бажань
                 </Link>
               )}
             </Menu.Item>
@@ -73,7 +71,7 @@ const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () =>
                   className={cx('block px-4 py-2 text-sm text-gray-700 dark:text-gray-50', {
                     'bg-gray-100 dark:bg-slate-800': active,
                   })}>
-                  {t('Мої замовлення')}
+                  Мої замовлення
                 </Link>
               )}
             </Menu.Item>
@@ -86,18 +84,18 @@ const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () =>
                 className={cx('block px-4 py-2 text-sm text-gray-700 dark:text-gray-50', {
                   'bg-gray-100 dark:bg-slate-800': active,
                 })}>
-                {t('common.accountSettings')}
+                Особистий кабінет
               </Link>
             )}
           </Menu.Item>
           <Menu.Item>
             {({ active }) => (
               <p
-                className={cx('cursor-pointer px-4 py-2 text-sm text-gray-700 dark:text-gray-50', {
+                className={cx('cursor-pointer px-4 py-2 text-sm text-red-700 dark:text-gray-50', {
                   'bg-gray-100 dark:bg-slate-800': active,
                 })}
                 onClick={logoutHandler}>
-                {t('common.logout')}
+                Вийти
               </p>
             )}
           </Menu.Item>

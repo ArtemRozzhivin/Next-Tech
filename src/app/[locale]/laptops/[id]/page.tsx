@@ -6,7 +6,13 @@ import Image from 'next/image';
 import React, { ReactNode, useEffect, useState } from 'react';
 import cx from 'clsx';
 import Button from '@src/ui/Button';
-import { CheckIcon, HeartIcon, ShoppingCartIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowLeftIcon,
+  CheckIcon,
+  HeartIcon,
+  ShoppingCartIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
@@ -15,6 +21,7 @@ import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@src/firebaseConfig';
 import { handleAddToWishList } from '@src/api/products';
 import AddedProductModal from '@src/components/AddedProductModal';
+import { useRouter } from 'next/navigation';
 
 interface IProductDetail {
   product: {
@@ -558,104 +565,106 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
   };
 
   return (
-    <div className='flex flex-wrap -mx-4'>
-      <div className='w-full mb-8 md:w-1/2 md:mb-0'>
-        <div className='sticky top-0 z-10 overflow-hidden '>
-          <div className='relative mb-6 lg:mb-10 lg:h-2/4'>
-            <Image
-              width={500}
-              height={500}
-              src={product?.image.large}
-              alt='product'
-              className='object-cover w-full lg:h-full'
-            />
-          </div>
-        </div>
-      </div>
-      <div className='w-full px-4 md:w-1/2'>
-        <div className='lg:pl-20'>
-          <div className='mb-8'>
-            <h2 className='max-w-xl mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl'>
-              {product?.product.model}
-            </h2>
-            <p className='inline-block mb-6 text-4xl font-bold text-gray-700 dark:text-gray-400'>
-              <span>{currentDetailProduct?.product.price}₴</span>
-            </p>
-            <div>
-              <div>Номер: {product?.product.id}</div>
-              <div>Категорія: {product?.product.category}</div>
-              <div>Бренд: {product?.product.brand}</div>
-              <div>Сім'я: {product?.product.family}</div>
-              <div>Серія: {product?.product.series}</div>
-              <div>Версія: {product?.product.alias}</div>
-
-              <div>Дата випуску: {product.key_aspects.release_date}</div>
-              <div>Батарея: {product.key_aspects.battery}</div>
-              <div>Процесор: {product.key_aspects.processor}</div>
-              <div>Відеокарта: {product.key_aspects.integrated_graphics_card}</div>
-              <div>Оперативна пам'ять: {product.key_aspects.ram} </div>
-              <div>Жорсткий диск: {product.key_aspects.storage} </div>
+    <>
+      <div className='flex flex-wrap -mx-4'>
+        <div className='w-full mb-8 md:w-1/2 md:mb-0'>
+          <div className='sticky top-0 z-10 overflow-hidden '>
+            <div className='relative mb-6 lg:mb-10 lg:h-2/4'>
+              <Image
+                width={500}
+                height={500}
+                src={product?.image.large}
+                alt='product'
+                className='object-cover w-full lg:h-full'
+              />
             </div>
           </div>
-          <div className='w-full flex items-center gap-2'>
-            {!!itemCart ? (
-              <Button className='w-full' onClick={removeFromCart} large danger>
-                <div className='w-full text-center flex items-center justify-center gap-2'>
-                  <TrashIcon className='w-6 h-6' />
-                  <div>Видалити з корзини</div>
-                </div>
-              </Button>
-            ) : (
-              <Button className='w-full' primary onClick={addToCart} large>
-                <div className='w-full text-center flex items-center justify-center gap-2'>
-                  <ShoppingCartIcon className='w-6 h-6' />
-                  Add to cart
-                </div>
-              </Button>
-            )}
+        </div>
+        <div className='w-full px-4 md:w-1/2'>
+          <div className='lg:pl-20'>
+            <div className='mb-8'>
+              <h2 className='max-w-xl mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl'>
+                {product?.product.model}
+              </h2>
+              <p className='inline-block mb-6 text-4xl font-bold text-gray-700 dark:text-gray-400'>
+                <span>{currentDetailProduct?.product.price}₴</span>
+              </p>
+              <div>
+                <div>Номер: {product?.product.id}</div>
+                <div>Категорія: {product?.product.category}</div>
+                <div>Бренд: {product?.product.brand}</div>
+                <div>Сім'я: {product?.product.family}</div>
+                <div>Серія: {product?.product.series}</div>
+                <div>Версія: {product?.product.alias}</div>
 
-            {inWishlist ? (
-              <Button
-                className='w-full bg-green-600 hover:bg-green-700 text-white'
-                onClick={() =>
-                  handleAddToWishList(currentDetailProduct, userHistory, user, dispatch)
-                }
-                large
-                primary>
-                <div className='flex items-center justify-center gap-1'>
-                  <HeartIcon className='w-6 h-6' />
-                  <div>В обраному</div>
-                </div>
-              </Button>
-            ) : (
-              <Button
-                className='w-full'
-                secondary
-                onClick={() =>
-                  handleAddToWishList(currentDetailProduct, userHistory, user, dispatch)
-                }
-                large>
-                <div className='w-full text-center flex items-center justify-center gap-2'>
-                  <HeartIcon className='w-6 h-6' />
-                  Add to wishlist
-                </div>
-              </Button>
-            )}
+                <div>Дата випуску: {product.key_aspects.release_date}</div>
+                <div>Батарея: {product.key_aspects.battery}</div>
+                <div>Процесор: {product.key_aspects.processor}</div>
+                <div>Відеокарта: {product.key_aspects.integrated_graphics_card}</div>
+                <div>Оперативна пам'ять: {product.key_aspects.ram} </div>
+                <div>Жорсткий диск: {product.key_aspects.storage} </div>
+              </div>
+            </div>
+            <div className='w-full flex items-center gap-2'>
+              {!!itemCart ? (
+                <Button className='w-full' onClick={removeFromCart} large danger>
+                  <div className='w-full text-center flex items-center justify-center gap-2'>
+                    <TrashIcon className='w-6 h-6' />
+                    <div>Видалити з корзини</div>
+                  </div>
+                </Button>
+              ) : (
+                <Button className='w-full' primary onClick={addToCart} large>
+                  <div className='w-full text-center flex items-center justify-center gap-2'>
+                    <ShoppingCartIcon className='w-6 h-6' />
+                    Add to cart
+                  </div>
+                </Button>
+              )}
+
+              {inWishlist ? (
+                <Button
+                  className='w-full bg-green-600 hover:bg-green-700 text-white'
+                  onClick={() =>
+                    handleAddToWishList(currentDetailProduct, userHistory, user, dispatch)
+                  }
+                  large
+                  primary>
+                  <div className='flex items-center justify-center gap-1'>
+                    <HeartIcon className='w-6 h-6' />
+                    <div>В обраному</div>
+                  </div>
+                </Button>
+              ) : (
+                <Button
+                  className='w-full'
+                  secondary
+                  onClick={() =>
+                    handleAddToWishList(currentDetailProduct, userHistory, user, dispatch)
+                  }
+                  large>
+                  <div className='w-full text-center flex items-center justify-center gap-2'>
+                    <HeartIcon className='w-6 h-6' />
+                    Add to wishlist
+                  </div>
+                </Button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {currentProductToCart && (
-        <AddedProductModal
-          handleAddToWishList={(product: IProductItem) =>
-            handleAddToWishList(product, userHistory, user, dispatch)
-          }
-          item={currentProductToCart}
-          isOpen={isShowModal}
-          setOpenModal={setShowModal}
-        />
-      )}
-    </div>
+        {currentProductToCart && (
+          <AddedProductModal
+            handleAddToWishList={(product: IProductItem) =>
+              handleAddToWishList(product, userHistory, user, dispatch)
+            }
+            item={currentProductToCart}
+            isOpen={isShowModal}
+            setOpenModal={setShowModal}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
@@ -690,6 +699,11 @@ const LaptopDetail: React.FC = ({ params }) => {
       console.error('Error fetching product:', error);
     }
   };
+  const router = useRouter();
+
+  const redirectToPreviousPage = () => {
+    router.back();
+  };
 
   useEffect(() => {
     // fetchProductDetail();
@@ -698,7 +712,14 @@ const LaptopDetail: React.FC = ({ params }) => {
   console.log(product);
 
   return (
-    <section className='overflow-hidden p-10 bg-white'>
+    <section className='overflow-hidden p-10 flex flex-col gap-5 bg-white'>
+      <button
+        onClick={redirectToPreviousPage}
+        className='flex items-center gap-2 hover:text-colorMain'>
+        <ArrowLeftIcon className='w-6 h-6' />
+        <h2 className='text-xl font-semibold'>Назад</h2>
+      </button>
+
       <div className=''>
         <Tab.Group>
           <Tab.List className='w-full flex rounded-xl bg-blue-900/20 p-1'>

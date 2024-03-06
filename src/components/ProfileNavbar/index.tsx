@@ -55,11 +55,11 @@ const ProfileNavbar = ({ displayName, email, onMenuItem }: IProfileNavbar) => {
         {displayName && email && (
           <Link href={routes.profile} className='group flex items-center gap-2'>
             <div>
-              <UserIcon className='w-11 h-11 text-colorMain' />
+              <UserIcon className='w-11 h-11 text-gray-700 group-hover:text-colorMain' />
             </div>
             <div className='flex flex-col justify-center'>
               <div className='text-2xl group-hover:text-colorMain'>{displayName}</div>
-              <div className='text-gray-600'>{email}</div>
+              <div className='text-gray-600 group-hover:text-colorMain'>{email}</div>
             </div>
           </Link>
         )}

@@ -17,7 +17,7 @@ const Profile = () => {
 
   return (
     <div className='flex flex-col gap-4'>
-      <h3 className='text-2xl font-semibold'>Особиста інформація</h3>
+      <h3 className='text-3xl font-semibold'>Особиста інформація</h3>
       <div>
         <div>
           <Image
