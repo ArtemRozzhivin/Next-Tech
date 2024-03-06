@@ -8,7 +8,7 @@ import { NextIntlClientProvider, useMessages } from 'next-intl';
 import StoreProvider from './StoreProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import cx from 'clsx';
-
+import 'react-toastify/dist/ReactToastify.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -35,7 +35,18 @@ export default function RootLayout({
       <body className={cx(inter.className, 'bg-white h-screen')}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <StoreProvider>
-            <ToastContainer />
+            <ToastContainer
+              position='bottom-right'
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme='light'
+            />
             <div className='h-full flex flex-col'>
               <div className='mb-20'>
                 <div className='w-full fixed left-0 top-0 z-50'>

@@ -12,6 +12,8 @@ import { db } from '@src/firebaseConfig';
 import { getUserHistory } from '@src/api/user';
 import routes from '@src/routes';
 import PagePlaceholder from '@src/components/PagePlaceholder';
+import { toast } from 'react-toastify';
+import Modal from '@src/ui/Modal';
 
 export const Cart = () => {
   const {
@@ -24,6 +26,7 @@ export const Cart = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const user = useAppSelector((state) => state.auth.user);
+  const [mustAuthModal, setMustAuthModal] = React.useState(false);
 
   const redirectToPreviousPage = () => {
     router.back();
@@ -32,6 +35,15 @@ export const Cart = () => {
   const clearCart = () => {
     if (window.confirm('Ви впевнені, що хочете очистити кошик?')) {
       dispatch(productsActions.clearCart());
+      toast.info('Кошик очищено');
+    }
+  };
+
+  const handleToOrdering = () => {
+    if (user) {
+      router.push(routes.ordering);
+    } else {
+      setMustAuthModal(true);
     }
   };
 
@@ -97,21 +109,45 @@ export const Cart = () => {
                     Щоб продовжити виберіть принаймні один товар
                   </div>
                 )}
-                <Link href={routes.ordering}>
-                  <Button
-                    gray={productToOrdering.length === 0}
-                    disabled={productToOrdering.length === 0}
-                    giant
-                    primary
-                    className='w-full text-center flex justify-center'>
-                    Оформлення
-                  </Button>
-                </Link>
+                {/* <Link href={routes.ordering}> */}
+                <Button
+                  gray={productToOrdering.length === 0}
+                  disabled={productToOrdering.length === 0}
+                  giant
+                  primary
+                  className='w-full text-center flex justify-center'
+                  onClick={handleToOrdering}>
+                  Оформлення
+                </Button>
+                {/* </Link> */}
               </div>
             </div>
           </div>
         </div>
       )}
+      <Modal
+        onClose={() => setMustAuthModal(false)}
+        title={'Обліковий запис'}
+        type='warning'
+        isOpened={mustAuthModal}>
+        <div className='flex flex-col items-center gap-2'>
+          <div className='text-lg'>Увійдіть до свого облікового запису для продовження</div>
+          <Link href={routes.signin}>
+            <Button giant primary>
+              Уввійти
+            </Button>
+          </Link>
+        </div>
+
+        <p className='mt-10 text-center text-sm text-gray-500 dark:text-gray-200'>
+          <span>Все ще не зареєстровані на сайті? </span>
+          <Link
+            href={routes.signup}
+            className='font-semibold leading-6 text-colorMain hover:text-colorSecond'>
+            Зареєструватись
+          </Link>
+        </p>
+      </Modal>
     </>
   );
 };

@@ -9,6 +9,7 @@ import Button from '@src/ui/Button';
 import Modal from '@src/ui/Modal';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const AddedProductModal = ({
   handleAddToWishList,
@@ -47,6 +48,7 @@ const AddedProductModal = ({
     if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
       dispatch(productsActions.removeFromCart(product.id));
       setOpenModal(false);
+      toast.info('Товар видалено з кошика');
     }
   };
 

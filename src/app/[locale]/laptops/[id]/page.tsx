@@ -22,6 +22,10 @@ import { db } from '@src/firebaseConfig';
 import { handleAddToWishList } from '@src/api/products';
 import AddedProductModal from '@src/components/AddedProductModal';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import routes from '@src/routes';
+import Modal from '@src/ui/Modal';
+import { Link } from '@src/navigation';
 
 interface IProductDetail {
   product: {
@@ -528,6 +532,8 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
   const { userHistory, currentDetailProduct, currentProductToCart } = useAppSelector(
     (state) => state.products,
   );
+  const [mustAuthModal, setMustAuthModal] = React.useState(false);
+  const router = useRouter();
   const itemCart = useAppSelector(selectCartItemById(currentDetailProduct.product.id));
 
   useEffect(() => {
@@ -540,12 +546,11 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
     }
   }, [userHistory]);
 
-  console.log(currentDetailProduct);
-
   const handleAddProductToCart = (product: IProductCartItem) => {
     dispatch(productsActions.addToCart(product));
     dispatch(productsActions.setCurrentProductToCart(product));
     setShowModal(true);
+    toast.success('Товар додано до кошику');
   };
 
   const addToCart = async () => {
@@ -561,6 +566,15 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
   const removeFromCart = async () => {
     if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
       dispatch(productsActions.removeFromCart(currentDetailProduct?.product.id));
+      toast.info('Товар видалено з кошика');
+    }
+  };
+
+  const handleAddProductToWishlist = (product: IProductItem) => {
+    if (user) {
+      handleAddToWishList(product, userHistory, user, dispatch);
+    } else {
+      setMustAuthModal(true);
     }
   };
 
@@ -616,8 +630,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
               ) : (
                 <Button className='w-full' primary onClick={addToCart} large>
                   <div className='w-full text-center flex items-center justify-center gap-2'>
-                    <ShoppingCartIcon className='w-6 h-6' />
-                    Add to cart
+                    <ShoppingCartIcon className='w-6 h-6' />В кошик
                   </div>
                 </Button>
               )}
@@ -625,9 +638,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
               {inWishlist ? (
                 <Button
                   className='w-full bg-green-600 hover:bg-green-700 text-white'
-                  onClick={() =>
-                    handleAddToWishList(currentDetailProduct, userHistory, user, dispatch)
-                  }
+                  onClick={() => handleAddProductToWishlist(currentDetailProduct)}
                   large
                   primary>
                   <div className='flex items-center justify-center gap-1'>
@@ -639,13 +650,11 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
                 <Button
                   className='w-full'
                   secondary
-                  onClick={() =>
-                    handleAddToWishList(currentDetailProduct, userHistory, user, dispatch)
-                  }
+                  onClick={() => handleAddProductToWishlist(currentDetailProduct)}
                   large>
                   <div className='w-full text-center flex items-center justify-center gap-2'>
                     <HeartIcon className='w-6 h-6' />
-                    Add to wishlist
+                    До обраного
                   </div>
                 </Button>
               )}
@@ -655,15 +664,42 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
 
         {currentProductToCart && (
           <AddedProductModal
-            handleAddToWishList={(product: IProductItem) =>
-              handleAddToWishList(product, userHistory, user, dispatch)
-            }
+            handleAddToWishList={(product: IProductItem) => {
+              if (user) {
+                handleAddToWishList(product, userHistory, user, dispatch);
+              } else {
+                toast.error('Будь ласка, увійдіть до свого облікового запису для продовження');
+              }
+            }}
             item={currentProductToCart}
             isOpen={isShowModal}
             setOpenModal={setShowModal}
           />
         )}
       </div>
+      <Modal
+        onClose={() => setMustAuthModal(false)}
+        title={'Обліковий запис'}
+        type='warning'
+        isOpened={mustAuthModal}>
+        <div className='flex flex-col items-center gap-2'>
+          <div className='text-lg'>Увійдіть до свого облікового запису для продовження</div>
+          <Link href={routes.signin}>
+            <Button giant primary>
+              Уввійти
+            </Button>
+          </Link>
+        </div>
+
+        <p className='mt-10 text-center text-sm text-gray-500 dark:text-gray-200'>
+          <span>Все ще не зареєстровані на сайті? </span>
+          <Link
+            href={routes.signup}
+            className='font-semibold leading-6 text-colorMain hover:text-colorSecond'>
+            Зареєструватись
+          </Link>
+        </p>
+      </Modal>
     </>
   );
 };

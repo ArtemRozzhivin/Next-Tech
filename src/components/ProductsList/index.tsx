@@ -21,6 +21,8 @@ import AddedProductModal from '../AddedProductModal';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { handleAddToWishList } from '@src/api/products';
 import cx from 'clsx';
+import { toast } from 'react-toastify';
+import routes from '@src/routes';
 
 interface ICardList {
   items?: IProductItem[];
@@ -34,12 +36,22 @@ const ProductsList = ({ items, gridLayout = 'large' }: ICardList) => {
   const user = useAppSelector((state) => state.auth.user);
 
   const [isShowModal, setShowModal] = useState(false);
+  const [mustAuthModal, setMustAuthModal] = React.useState(false);
 
   const handleAddProductToCart = (product: IProductCartItem) => {
     dispatch(productsActions.addToCart(product));
     dispatch(productsActions.addProductToOrdering(product));
     dispatch(productsActions.setCurrentProductToCart(product));
     setShowModal(true);
+    toast.success('Товар додано до кошику');
+  };
+
+  const handleAddProductToWishlist = (product: IProductItem) => {
+    if (user) {
+      handleAddToWishList(product, userHistory, user, dispatch);
+    } else {
+      setMustAuthModal(true);
+    }
   };
 
   return (
@@ -55,9 +67,7 @@ const ProductsList = ({ items, gridLayout = 'large' }: ICardList) => {
               <ProductCard
                 key={item.product.model}
                 item={item}
-                addToWishList={(product: IProductItem) =>
-                  handleAddToWishList(product, userHistory, user, dispatch)
-                }
+                addToWishList={(product: IProductItem) => handleAddProductToWishlist(product)}
                 addProductToCart={handleAddProductToCart}
               />
             ))
@@ -73,14 +83,41 @@ const ProductsList = ({ items, gridLayout = 'large' }: ICardList) => {
 
       {currentProductToCart && (
         <AddedProductModal
-          handleAddToWishList={(product: IProductItem) =>
-            handleAddToWishList(product, userHistory, user, dispatch)
-          }
+          handleAddToWishList={(product: IProductItem) => {
+            if (user) {
+              handleAddToWishList(product, userHistory, user, dispatch);
+            } else {
+              toast.error('Будь ласка, увійдіть до свого облікового запису для продовження');
+            }
+          }}
           item={currentProductToCart}
           isOpen={isShowModal}
           setOpenModal={setShowModal}
         />
       )}
+      <Modal
+        onClose={() => setMustAuthModal(false)}
+        title={'Обліковий запис'}
+        type='warning'
+        isOpened={mustAuthModal}>
+        <div className='flex flex-col items-center gap-2'>
+          <div className='text-lg'>Увійдіть до свого облікового запису для продовження</div>
+          <Link href={routes.signin}>
+            <Button giant primary>
+              Уввійти
+            </Button>
+          </Link>
+        </div>
+
+        <p className='mt-10 text-center text-sm text-gray-500 dark:text-gray-200'>
+          <span>Все ще не зареєстровані на сайті? </span>
+          <Link
+            href={routes.signup}
+            className='font-semibold leading-6 text-colorMain hover:text-colorSecond'>
+            Зареєструватись
+          </Link>
+        </p>
+      </Modal>
     </>
   );
 };

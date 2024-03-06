@@ -23,6 +23,7 @@ interface IInput {
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onClear?: () => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  isOptional?: boolean;
 }
 
 const Input = ({
@@ -43,6 +44,7 @@ const Input = ({
   onFocus,
   onClear,
   onBlur,
+  isOptional,
 }: IInput): JSX.Element => {
   const identifier = id || name || type;
   const isError = !_isEmpty(error);
@@ -57,8 +59,8 @@ const Input = ({
         className={cx({
           'flex justify-between': label && hint,
         })}>
-        <label htmlFor={identifier} className='flex text-sm font-medium text-gray-700'>
-          {label}
+        <label htmlFor={identifier} className='flex gap-1 text-sm font-medium text-gray-700'>
+          {label} {isOptional && <span className='text-gray-400'>(опціонально)</span>}
         </label>
       </div>
       <div

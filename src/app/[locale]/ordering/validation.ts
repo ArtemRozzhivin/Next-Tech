@@ -6,42 +6,33 @@ export const validation = (cardType: string) => {
   let shcema = yup.object().shape({
     firstName: yup
       .string()
-      .required('First name is required')
-      .matches(
-        nameRegExp,
-        'First name should contain only letters, spaces, hyphens, and apostrophes',
-      ),
+      .required("Ім'я є обов'язковим")
+      .matches(nameRegExp, "Ім'я повинно містити тільки літери, пробіли, дефіси та апострофи"),
     lastName: yup
       .string()
-      .required('Last name is required')
-      .matches(
-        nameRegExp,
-        'Last name should contain only letters, spaces, hyphens, and apostrophes',
-      ),
+      .required("Прізвище є обов'язковим")
+      .matches(nameRegExp, 'Прізвище повинно містити тільки літери, пробіли, дефіси та апострофи'),
     patronymic: yup
       .string()
-      .required('Patronymic name is required')
+      .required("Ім'я по батькові обов'язкове")
       .matches(
         nameRegExp,
-        'Patronymic should contain only letters, spaces, hyphens, and apostrophes',
+        "Ім'я по батькові повинно містити тільки літери, пробіли, дефіси та апострофи",
       ),
-    phone: yup.string().required('Phone number is required'),
+    phone: yup.string().required('Номер телефону є обовязковим'),
     house:
       cardType === 'courier'
-        ? yup.string().required('House is required')
+        ? yup.string().required('Номер будинку є обовязковим')
         : yup.string().notRequired(),
-    flat:
-      cardType === 'courier'
-        ? yup.string().required('Flat is required')
-        : yup.string().notRequired(),
-    city: yup.string().required('City is required'),
+    flat: cardType === 'courier' ? yup.string().notRequired() : yup.string().notRequired(),
+    city: yup.string().required("Місто є обов'язковим"),
     adress:
       cardType === 'courier'
-        ? yup.string().required('Adress is required')
+        ? yup.string().required("Адреса є обов'язковою")
         : yup.string().notRequired(),
     officeAdress:
       cardType === 'office'
-        ? yup.string().required('Office adress is required')
+        ? yup.string().required("Адреса відділення є обов'язковою")
         : yup.string().notRequired(),
   });
 

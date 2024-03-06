@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { productsActions } from '@src/redux/reducers/Products/products';
 import Checkbox from '@src/ui/Checkbox';
 import { selectProductToOrdering } from '@src/redux/reducers/Products/selectors';
+import { toast } from 'react-toastify';
 
 const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
     if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
       dispatch(productsActions.removeFromCart(product.id));
       dispatch(productsActions.removeFromProductToOrdering(product.id));
+      toast.info('Товар видалено з кошика');
     }
   };
 

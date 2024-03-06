@@ -14,6 +14,7 @@ import { IUserHistory, productsActions } from '@src/redux/reducers/Products/prod
 import { doc, getDoc } from 'firebase/firestore';
 import { SearchBox } from 'react-instantsearch';
 import { Search } from '@src/components/Search';
+import { ToastContainer } from 'react-toastify';
 
 export default function Home() {
   const t = useTranslations();

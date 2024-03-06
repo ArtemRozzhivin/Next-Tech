@@ -39,6 +39,8 @@ import { validation } from './validation';
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@src/firebaseConfig';
 import { getUserHistory } from '@src/api/user';
+import { set } from 'lodash';
+import { toast } from 'react-toastify';
 
 interface ICity {
   AddressDeliveryAllowed: boolean;
@@ -611,6 +613,7 @@ const HouseInfoForm = () => {
             placeholder='Ваша квартира'
             onChange={(e) => field.onChange(e.target.value)}
             error={fieldState.error?.message}
+            isOptional
           />
         )}
       />
@@ -664,6 +667,7 @@ export const Ordering = () => {
   const [currentDelivery, setCurrentDelivery] = React.useState<{ id: string; type: string } | null>(
     null,
   );
+  const [isInfoRight, setIsInfoRight] = React.useState<boolean | null>(null);
 
   const [isSearchCityOpen, setIsSearchCityOpen] = React.useState<boolean>(false);
   const [allCities, setAllCities] = React.useState<ICity[]>([]);
@@ -874,9 +878,11 @@ export const Ordering = () => {
           purchases: arrayUnion(...orderedProducts),
         });
 
+        toast.success('Замовлення успішно оформлено');
         clearCart();
       } catch (error) {
         console.log(error);
+        toast.error('Невдалося оформити замовлення');
       }
     }
 
@@ -1108,14 +1114,22 @@ export const Ordering = () => {
                 <div className='text-3xl'>До сплати: </div>
                 <div className='font-semibold text-3xl'>{productsPriceToOrdering} ₴</div>
               </div>
-              <Button
-                type='submit'
-                primary
-                giant
-                gray={Object.keys(errors).length !== 0 || !methods.formState.isValid}
-                className='w-full text-center flex justify-center'>
-                Оформлення
-              </Button>
+              <div className='flex flex-col gap-2'>
+                {Object.keys(errors).length !== 0 && isInfoRight && (
+                  <div className='text-center text-sm font-semibold text-gray-600'>
+                    Заповніть всі поля правильно
+                  </div>
+                )}
+                <Button
+                  type='submit'
+                  primary
+                  onClick={() => setIsInfoRight(true)}
+                  giant
+                  gray={Object.keys(errors).length !== 0 || !methods.formState.isValid}
+                  className='w-full text-center flex justify-center'>
+                  Оформлення
+                </Button>
+              </div>
             </div>
           </div>
         </form>
