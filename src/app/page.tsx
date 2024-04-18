@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { authActions } from '@redux/reducers/auth';
 import { addUserHistory, getUserHistory } from '@src/api/user';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
+import { fetchproductToFireBase } from '@src/utils/fetchProductToFirebase';
 
 export default function Home() {
   const dispatch = useAppDispatch();

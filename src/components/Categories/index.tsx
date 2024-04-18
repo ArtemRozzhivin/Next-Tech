@@ -16,23 +16,6 @@ const Categories = () => {
       <Button onClick={() => redirectToCategory('laptops')} value={'laptops'} secondary giant>
         Laptops
       </Button>
-      <Button onClick={() => redirectToCategory('tablets')} value={'tablets'} secondary giant>
-        Tablets
-      </Button>
-      <Button
-        onClick={() => redirectToCategory('smartphones')}
-        value={'smartphones'}
-        secondary
-        giant>
-        Smartphones
-      </Button>
-      <Button
-        onClick={() => redirectToCategory('smartwatches')}
-        value={'smartwatches'}
-        secondary
-        giant>
-        Smartwatches
-      </Button>
     </div>
   );
 };

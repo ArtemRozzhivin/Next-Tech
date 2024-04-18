@@ -17,8 +17,6 @@ import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
 import { productsActions } from '@src/redux/reducers/Products/products';
-import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore';
-import { db } from '@src/firebaseConfig';
 import { handleAddToWishList } from '@src/api/products';
 import AddedProductModal from '@src/components/AddedProductModal';
 import { useRouter } from 'next/navigation';
@@ -485,8 +483,8 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
           title='Батарея'
           info={[
             <InfoBlock title='Тип батареї' info={product?.inside?.battery?.type} />,
-            <InfoBlock title='Ємність' info={product.inside?.battery?.['capacity_(mah)']} />,
-            <InfoBlock title='Час роботи' info={product.inside?.battery?.life} />,
+            <InfoBlock title='Ємність' info={product?.inside?.battery?.['capacity_(mah)']} />,
+            <InfoBlock title='Час роботи' info={product?.inside?.battery?.life} />,
           ]}
         />
 
@@ -495,11 +493,11 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
           info={[
             <InfoBlock
               title='Операційна система'
-              info={product.inside?.software?.operating_system_version}
+              info={product?.inside?.software?.operating_system_version}
             />,
             <InfoBlock
               title='Версія розрядності'
-              info={product.inside?.software?.operating_system_bit_version}
+              info={product?.inside?.software?.operating_system_bit_version}
             />,
           ]}
         />
@@ -509,14 +507,14 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
           info={[
             <InfoBlock
               title='Блютуз'
-              info={`${product.inside?.wireless?.additional_features} ${product.inside?.wireless?.bluetooth_version}`}
+              info={`${product?.inside?.wireless?.additional_features} ${product?.inside?.wireless?.bluetooth_version}`}
             />,
             <InfoBlock
               title='WiFi'
-              info={product.inside?.wireless?.wifi_standards?.split(',')?.join(', ')}
+              info={product?.inside?.wireless?.wifi_standards?.split(',')?.join(', ')}
             />,
-            <InfoBlock title='Ehernet' info={product.inside?.wired?.additional_features} />,
-            <InfoBlock title='Ehernet швидкість' info={product.inside?.wired?.ethernet_speed} />,
+            <InfoBlock title='Ehernet' info={product?.inside?.wired?.additional_features} />,
+            <InfoBlock title='Ehernet швидкість' info={product?.inside?.wired?.ethernet_speed} />,
           ]}
         />
       </div>
@@ -553,6 +551,9 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
     toast.success('Товар додано до кошику');
   };
 
+  console.log(product, 'product');
+  console.log(currentDetailProduct, 'currentDetailProduct');
+
   const addToCart = async () => {
     const item = {
       product: currentDetailProduct?.product,
@@ -587,7 +588,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
               <Image
                 width={500}
                 height={500}
-                src={product?.image.large}
+                src={currentDetailProduct?.image.large}
                 alt='product'
                 className='object-cover w-full lg:h-full'
               />
@@ -611,12 +612,12 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
                 <div>Серія: {product?.product.series}</div>
                 <div>Версія: {product?.product.alias}</div>
 
-                <div>Дата випуску: {product.key_aspects.release_date}</div>
-                <div>Батарея: {product.key_aspects.battery}</div>
-                <div>Процесор: {product.key_aspects.processor}</div>
-                <div>Відеокарта: {product.key_aspects.integrated_graphics_card}</div>
-                <div>Оперативна пам'ять: {product.key_aspects.ram} </div>
-                <div>Жорсткий диск: {product.key_aspects.storage} </div>
+                <div>Дата випуску: {product?.key_aspects.release_date}</div>
+                <div>Батарея: {product?.key_aspects.battery}</div>
+                <div>Процесор: {product?.key_aspects.processor}</div>
+                <div>Відеокарта: {product?.key_aspects.integrated_graphics_card}</div>
+                <div>Оперативна пам'ять: {product?.key_aspects.ram} </div>
+                <div>Жорсткий диск: {product?.key_aspects.storage} </div>
               </div>
             </div>
             <div className='w-full flex items-center gap-2'>
@@ -709,8 +710,14 @@ const tabs = [
   { id: 2, title: 'Характеристики' },
 ];
 
+const techspecsKey = process.env.NEXT_PUBLIC_TECHSPECSAPI_API_KEY;
+
 const LaptopDetail: React.FC = ({ params }) => {
-  const [product, setProduct] = React.useState<IProductDetail | null>(data);
+  const [product, setProduct] = React.useState<IProductDetail | null>(null);
+
+  console.log(product, 'productDetails');
+
+  console.log(techspecsKey, 'techspecsKey');
 
   const fetchProductDetail = async () => {
     try {
@@ -721,8 +728,7 @@ const LaptopDetail: React.FC = ({ params }) => {
         headers: {
           accept: 'application/json',
           'Accept-Encoding': 'gzip, deflate',
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImN1c19QNFdkVlRaSDBiMGt0QiIsIm1vZXNpZlByaWNpbmdJZCI6InByaWNlXzFNUXF5dkJESWxQbVVQcE1NNWc2RmVvbyIsImlhdCI6MTcwMDkyNTM1M30.DW0phvKsBPzP03y8PICvYQVzKC2OwW-k8dHNAz8NEgQ',
+          Authorization: techspecsKey,
         },
       };
 
@@ -742,7 +748,7 @@ const LaptopDetail: React.FC = ({ params }) => {
   };
 
   useEffect(() => {
-    // fetchProductDetail();
+    fetchProductDetail();
   }, []);
 
   console.log(product);
