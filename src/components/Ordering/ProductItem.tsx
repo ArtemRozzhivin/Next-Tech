@@ -1,20 +1,18 @@
 'use client';
 
 import { IOrderedItem } from '@src/redux/models';
-import ProductOrderingItem from '../ProductOrderingItem';
+import ProductOrderingItem from '../Product/OrderingItem';
 import { useState } from 'react';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import OrderedInfoBlock from '../OrderedInfoBlock';
+import OrderedInfoBlock from './InfoBlock';
 
 interface IProductOrderingItem {
   purchase: IOrderedItem;
   email: string;
 }
 
-const OrderedProductItem = ({ purchase, email }: IProductOrderingItem) => {
+const OrderingProductItem = ({ purchase, email }: IProductOrderingItem) => {
   const [isInfoOpen, setIsInfoOpen] = useState(false);
-
-  console.log('purchase', purchase);
 
   const transformDeliveryMethod = (methodId: string) => {
     switch (methodId) {
@@ -96,4 +94,4 @@ const OrderedProductItem = ({ purchase, email }: IProductOrderingItem) => {
   );
 };
 
-export default OrderedProductItem;
+export default OrderingProductItem;

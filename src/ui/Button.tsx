@@ -4,7 +4,6 @@
 import React, { ButtonHTMLAttributes, memo } from 'react';
 import cx from 'clsx';
 
-// Define the prop types for the component
 interface IButton
   extends React.DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   text?: string;
@@ -63,7 +62,7 @@ const Button = ({
         'shadow-sm text-lightmain bg-colorMain hover:bg-colorSecond border-transparent': primary,
         'text-colorMain bg-transparent hover:bg-colorMain hover:text-white border-colorMain':
           secondary,
-        'text-gray-700 bg-lightsecond hover:bg-lightmain border-transparent': white,
+        'text-gray-700 bg-lightmain hover:bg-lightmain border-transparent': white,
         'text-gray-50 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 border-transparent':
           danger,
         'text-red-500 border-red-600 hover:bg-red-600 hover:text-white dark:text-red-300 dark:hover:text-red-400 dark:border-red-500 border-1':

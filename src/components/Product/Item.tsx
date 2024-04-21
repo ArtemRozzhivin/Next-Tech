@@ -11,17 +11,16 @@ import { IProductCartItem, IProductItem } from '@src/redux/models';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { productsActions } from '@src/redux/reducers/Products/products';
 import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
-import HeartSolidIcon from '@src/assets/heart.svg';
 import cx from 'clsx';
 import Link from 'next/link';
 
-interface IProductCard {
+interface IProductItem {
   item: IProductItem;
   addToWishList: (product: IProductItem) => void;
   addProductToCart: (product: IProductCartItem) => void;
 }
 
-const ProductCard = ({ addProductToCart, addToWishList, item }: IProductCard) => {
+const ProductItem = ({ addProductToCart, addToWishList, item }: IProductItem) => {
   const [inWishlist, setInWishlist] = React.useState<boolean>(false);
   const dispatch = useAppDispatch();
   const userHistory = useAppSelector((state) => state.products.userHistory);
@@ -48,17 +47,10 @@ const ProductCard = ({ addProductToCart, addToWishList, item }: IProductCard) =>
     addProductToCart(item);
   };
 
-  const handleCurrentDetailProduct = () => {
-    dispatch(productsActions.setCurrentDetailProduct(item));
-  };
-
   return (
     <div className='h-full group border-gray-100/30 flex w-full flex-col self-center overflow-hidden rounded-lg border bg-lightmain shadow-sm hover:border-gray-300 hover:shadow-2xl transition-all'>
       <div className='relative p-2 bg-white'>
-        <Link
-          onClick={handleCurrentDetailProduct}
-          href={`/laptops/${item.product.id}`}
-          className='relative m-3 flex h-60 rounded-md'>
+        <Link href={`/laptops/${item.product.id}`} className='relative m-3 flex h-60 rounded-md'>
           <Image
             className='group-hover:scale-110 h-full w-full object-contain transition-all'
             fill
@@ -120,4 +112,4 @@ const ProductCard = ({ addProductToCart, addToWishList, item }: IProductCard) =>
   );
 };
 
-export default ProductCard;
+export default ProductItem;

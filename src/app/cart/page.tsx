@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { ArrowLeftIcon, ArrowLongLeftIcon, TrashIcon } from '@heroicons/react/24/outline';
-import ProductCartItem from '@src/components/ProductCartItem';
+import ProductCartItem from '@src/components/Product/CartItem';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import Button from '@src/ui/Button';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';

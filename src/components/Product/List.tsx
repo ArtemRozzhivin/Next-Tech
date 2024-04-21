@@ -1,13 +1,13 @@
 'use client';
 
-import ProductCard from '@src/components/ProductCard';
+import ProductCard from '@src/components/Product/Item';
 import React, { useState } from 'react';
 import PagePlaceholder from '../PagePlaceholder';
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
 import Modal from '@src/ui/Modal';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
-import ProductCartItem from '../ProductCartItem';
+import ProductCartItem from './CartItem';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
 import Button from '@src/ui/Button';
 import Image from 'next/image';
@@ -23,12 +23,12 @@ import { toast } from 'react-toastify';
 import routes from '@src/routes';
 import Link from 'next/link';
 
-interface ICardList {
+interface IProductList {
   items?: IProductItem[];
   gridLayout?: string;
 }
 
-const ProductsList = ({ items, gridLayout = 'large' }: ICardList) => {
+const ProductList = ({ items, gridLayout = 'large' }: IProductList) => {
   const dispatch = useAppDispatch();
   const { userHistory, currentProductToCart } = useAppSelector((state) => state.products);
   const user = useAppSelector((state) => state.auth.user);
@@ -54,7 +54,7 @@ const ProductsList = ({ items, gridLayout = 'large' }: ICardList) => {
 
   return (
     <>
-      <div className=''>
+      <div>
         <div
           className={cx('grid grid-flow-row gap-1', {
             'grid-cols-4': gridLayout === 'large',
@@ -120,4 +120,4 @@ const ProductsList = ({ items, gridLayout = 'large' }: ICardList) => {
   );
 };
 
-export default ProductsList;
+export default ProductList;

@@ -1,7 +1,7 @@
 'use client';
 
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
-import OrderedProductItem from '@src/components/OrderedProductItem';
+import OrderedProductItem from '@src/components/Ordering/ProductItem';
 import PagePlaceholder from '@src/components/PagePlaceholder';
 import { useAppSelector } from '@src/redux/hooks';
 import React, { use } from 'react';

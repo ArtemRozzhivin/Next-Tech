@@ -3,12 +3,12 @@
 import React, { useEffect } from 'react';
 import Button from '@src/ui/Button';
 import { HeartIcon, ShoppingCartIcon, ArrowRightIcon, UserIcon } from '@heroicons/react/24/outline';
-import Dropdown from '../../ui/Dropdown';
+import Dropdown from '../ui/Dropdown';
 import Flag from 'react-flagkit';
 import techLogo from '@assets/techLogo.png';
 import Image from 'next/image';
 import { auth } from '@src/firebaseConfig';
-import ProfileMenu from '../ProfileMenu';
+import ProfileMenu from './Profile/Menu';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { authActions } from '@src/redux/reducers/auth';

@@ -10,6 +10,7 @@ import { authActions } from '@redux/reducers/auth';
 import { addUserHistory, getUserHistory } from '@src/api/user';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
 import { fetchproductToFireBase } from '@src/utils/fetchProductToFirebase';
+import Laptops from './laptops/page';
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -29,7 +30,7 @@ export default function Home() {
 
   return (
     <main className='px-10'>
-      <Categories />
+      <Laptops />
     </main>
   );
 }

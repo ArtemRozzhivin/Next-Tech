@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import Button from '@src/ui/Button';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
 import { yupResolver } from '@hookform/resolvers/yup';
-import ProductOrderingItem from '@src/components/ProductOrderingItem';
+import ProductOrderingItem from '@src/components/Product/OrderingItem';
 import Input from '@src/ui/Input';
 import Image from 'next/image';
 import novaPoshta from '@src/assets/novaPoshta.svg';
@@ -204,7 +204,7 @@ const OrderingSearchCityModal = ({
         <button
           type='button'
           onClick={() => setIsSearchCityOpen(true)}
-          className='flex items-center justify-between text-left rounded-md bg-lightmain p-4 text-sm font-medium text-darkmain hover:bg-lightsecond'>
+          className='flex items-center justify-between text-left rounded-md bg-lightmain p-4 text-sm font-medium text-darkmain'>
           {city ? <div>{city}</div> : <div>Оберіть ваше місто</div>}
           <div>
             <ChevronDownIcon className='w-7 h-7' />
@@ -325,7 +325,7 @@ const OrderingSearchAdressModal = ({
         <button
           type='button'
           onClick={() => setIsSearchAdressOpen(true)}
-          className='flex items-center justify-between text-left rounded-md bg-lightmain p-4 text-sm font-medium text-darkmain hover:bg-lightsecond'>
+          className='flex items-center justify-between text-left rounded-md bg-lightmain p-4 text-sm font-medium text-darkmain'>
           {adress ? <div>{adress}</div> : <div>Оберіть ваше адресу</div>}
           <div>
             <ChevronDownIcon className='w-7 h-7' />
@@ -448,7 +448,7 @@ const OrderingSearchOfficeAddressModal = ({
         <button
           type='button'
           onClick={() => setIsSearchOfficeAdressOpen(true)}
-          className='flex items-center justify-between text-left rounded-md bg-lightmain p-4 text-sm font-medium text-darkmain hover:bg-lightsecond'>
+          className='flex items-center justify-between text-left rounded-md bg-lightmain p-4 text-sm font-medium text-darkmain'>
           {officeAdress ? (
             <div>{officeAdress}</div>
           ) : (

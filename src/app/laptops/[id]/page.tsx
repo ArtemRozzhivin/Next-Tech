@@ -6,13 +6,7 @@ import Image from 'next/image';
 import React, { ReactNode, useEffect, useState } from 'react';
 import cx from 'clsx';
 import Button from '@src/ui/Button';
-import {
-  ArrowLeftIcon,
-  CheckIcon,
-  HeartIcon,
-  ShoppingCartIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, HeartIcon, ShoppingCartIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
@@ -24,6 +18,8 @@ import { toast } from 'react-toastify';
 import routes from '@src/routes';
 import Modal from '@src/ui/Modal';
 import Link from 'next/link';
+import Loader from '@src/components/Loader';
+import algoliasearch from 'algoliasearch';
 
 interface IProductDetail {
   product: {
@@ -413,7 +409,7 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
             />,
             <InfoBlock
               title='Роздільна здатність'
-              info={`${product?.camera?.front_camera?.definition} ${product?.camera?.front_camera?.['resolution_(h_x_w)']}`}
+              info={`${product?.camera?.front_camera?.definition} ${product?.camera?.front_camera?.video_frame_rate}`}
             />,
           ]}
         />
@@ -531,16 +527,14 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
     (state) => state.products,
   );
   const [mustAuthModal, setMustAuthModal] = React.useState(false);
-  const router = useRouter();
-  const itemCart = useAppSelector(selectCartItemById(currentDetailProduct.product.id));
+  const itemCart = useAppSelector(selectCartItemById(currentDetailProduct?.product?.id));
 
   useEffect(() => {
     if (userHistory?.wishlist) {
       const inWIshList = userHistory?.wishlist.some(
-        (item) => item.product.id === currentDetailProduct?.product.id,
+        (item) => item.product.id === currentDetailProduct?.product?.id,
       );
       setInWishlist(inWIshList);
-      console.log(inWIshList, 'inWishlist');
     }
   }, [userHistory]);
 
@@ -550,9 +544,6 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
     setShowModal(true);
     toast.success('Товар додано до кошику');
   };
-
-  console.log(product, 'product');
-  console.log(currentDetailProduct, 'currentDetailProduct');
 
   const addToCart = async () => {
     const item = {
@@ -566,7 +557,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
 
   const removeFromCart = async () => {
     if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
-      dispatch(productsActions.removeFromCart(currentDetailProduct?.product.id));
+      dispatch(productsActions.removeFromCart(currentDetailProduct?.product?.id));
       toast.info('Товар видалено з кошика');
     }
   };
@@ -588,7 +579,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
               <Image
                 width={500}
                 height={500}
-                src={currentDetailProduct?.image.large}
+                src={currentDetailProduct?.image?.large}
                 alt='product'
                 className='object-cover w-full lg:h-full'
               />
@@ -602,7 +593,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
                 {product?.product.model}
               </h2>
               <p className='inline-block mb-6 text-4xl font-bold text-gray-700 dark:text-gray-400'>
-                <span>{currentDetailProduct?.product.price}₴</span>
+                <span>{currentDetailProduct?.product?.price}₴</span>
               </p>
               <div>
                 <div>Номер: {product?.product.id}</div>
@@ -711,13 +702,20 @@ const tabs = [
 ];
 
 const techspecsKey = process.env.NEXT_PUBLIC_TECHSPECSAPI_API_KEY;
+const client = algoliasearch('Q2QOIT41TW', '09737b1233e8e42a12c90f0a08a08dd6');
+const index = client.initIndex('product_search');
 
 const LaptopDetail: React.FC = ({ params }) => {
-  const [product, setProduct] = React.useState<IProductDetail | null>(null);
+  const dispatch = useAppDispatch();
+  const [productDetail, setProductDetail] = React.useState<IProductDetail | null>(null);
+  const [productDB, setProductDB] = React.useState<any | null>(null);
 
-  console.log(product, 'productDetails');
-
-  console.log(techspecsKey, 'techspecsKey');
+  const fetchProductDB = () => {
+    index.getObject(params.id).then((response) => {
+      dispatch(productsActions.setCurrentDetailProduct(response));
+      setProductDB(response);
+    });
+  };
 
   const fetchProductDetail = async () => {
     try {
@@ -734,9 +732,7 @@ const LaptopDetail: React.FC = ({ params }) => {
 
       const response = await axios.request(options);
 
-      console.log(response.data.data.items[0]);
-
-      setProduct(response.data.data.items[0]);
+      setProductDetail(response.data.data.items[0]);
     } catch (error) {
       console.error('Error fetching product:', error);
     }
@@ -744,14 +740,15 @@ const LaptopDetail: React.FC = ({ params }) => {
   const router = useRouter();
 
   const redirectToPreviousPage = () => {
+    dispatch(productsActions.setCurrentDetailProduct(null));
     router.back();
   };
 
   useEffect(() => {
+    fetchProductDB();
+
     fetchProductDetail();
   }, []);
-
-  console.log(product);
 
   return (
     <section className='overflow-hidden p-10 flex flex-col gap-5 bg-white'>
@@ -762,38 +759,42 @@ const LaptopDetail: React.FC = ({ params }) => {
         <h2 className='text-xl font-semibold'>Назад</h2>
       </button>
 
-      <div className=''>
-        <Tab.Group>
-          <Tab.List className='w-full flex rounded-xl bg-blue-900/20 p-1'>
-            {tabs.map((tab) => (
-              <Tab
-                key={tab.id}
-                className={({ selected }) =>
-                  cx(
-                    'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
-                    'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
-                    selected
-                      ? 'bg-white text-blue-700 shadow'
-                      : 'text-blue-100 hover:bg-white/[0.12] hover:text-white',
-                  )
-                }>
-                {tab.title}
-              </Tab>
-            ))}
-          </Tab.List>
-          <Tab.Panels className='mt-2'>
-            {tabs.map((tab) => (
-              <Tab.Panel key={tab.id} className={'rounded-xl bg-white py-7'}>
-                {tab.id === 1 ? (
-                  <MainBlock product={product} />
-                ) : (
-                  <CharacteristicsBlock product={product} />
-                )}
-              </Tab.Panel>
-            ))}
-          </Tab.Panels>
-        </Tab.Group>
-      </div>
+      {productDetail && productDB ? (
+        <div>
+          <Tab.Group>
+            <Tab.List className='w-full flex rounded-xl bg-blue-900/20 p-1'>
+              {tabs.map((tab) => (
+                <Tab
+                  key={tab.id}
+                  className={({ selected }) =>
+                    cx(
+                      'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
+                      'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                      selected
+                        ? 'bg-white text-blue-700 shadow'
+                        : 'text-blue-100 hover:bg-white/[0.12] hover:text-white',
+                    )
+                  }>
+                  {tab.title}
+                </Tab>
+              ))}
+            </Tab.List>
+            <Tab.Panels className='mt-2'>
+              {tabs.map((tab) => (
+                <Tab.Panel key={tab.id} className={'rounded-xl bg-white py-7'}>
+                  {tab.id === 1 ? (
+                    <MainBlock product={productDetail} />
+                  ) : (
+                    <CharacteristicsBlock product={productDetail} />
+                  )}
+                </Tab.Panel>
+              ))}
+            </Tab.Panels>
+          </Tab.Group>
+        </div>
+      ) : (
+        <Loader />
+      )}
     </section>
   );
 };

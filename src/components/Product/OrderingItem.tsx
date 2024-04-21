@@ -1,8 +1,6 @@
 import { IProductCartItem, IProductItem } from '@src/redux/models';
 import React from 'react';
 import Image from 'next/image';
-import Button from '@src/ui/Button';
-import { HeartIcon, TrashIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { useAppDispatch } from '@src/redux/hooks';
 import { productsActions } from '@src/redux/reducers/Products/products';
 

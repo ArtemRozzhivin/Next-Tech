@@ -6,7 +6,7 @@ import {
   ShoppingCartIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
-import ProfileNavbar from '@src/components/ProfileNavbar';
+import ProfileNavbar from '@src/components/Profile/Navbar';
 import { auth } from '@src/firebaseConfig';
 import { useAppSelector } from '@src/redux/hooks';
 import { useRouter } from 'next/navigation';

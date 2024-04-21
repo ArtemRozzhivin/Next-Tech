@@ -2,7 +2,7 @@
 
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
 import PagePlaceholder from '@src/components/PagePlaceholder';
-import ProductsList from '@src/components/ProductsList';
+import ProductsList from '@src/components/Product/List';
 import { useAppSelector } from '@src/redux/hooks';
 import React from 'react';
 

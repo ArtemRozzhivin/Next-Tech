@@ -78,7 +78,7 @@ const Input = ({
           onFocus={onFocus}
           onBlur={onBlur}
           className={cx(
-            'p-3 shadow-sm border-2 text-darksecond border-colorMain hover:border-colorSecond rounded-md focus:border-colorSecond block w-full sm:text-sm',
+            'p-3 shadow-sm border-2 text-darkmain border-colorMain hover:border-colorSecond rounded-md focus:border-colorSecond block w-full sm:text-sm',
             {
               'border-red-300 text-red-900 placeholder-red-300': isError,
               'cursor-text': disabled,
