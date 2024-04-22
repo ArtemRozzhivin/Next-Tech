@@ -11,10 +11,10 @@ interface IPagePlaceholder {
 const PagePlaceholder = ({ icon, title, description, btn }: IPagePlaceholder) => {
   return (
     <div className='flex flex-col justify-center items-center gap-1 text-center'>
-      {icon ? icon : <FaceFrownIcon className='text-colorMain w-20 h-20' />}
+      {icon ? icon : <FaceFrownIcon className='text-colorMain w-14 h-14 md:w-20 md:h-20' />}
       <div className='flex flex-col justify-center items-center gap-[2px]'>
-        <h4 className='text-2xl font-semibold'>{title}</h4>
-        {description && <p className='text-lg'>{description}</p>}
+        <h4 className='text-lg md:text-2xl font-semibold'>{title}</h4>
+        {description && <p className='text-sm md:text-lg'>{description}</p>}
       </div>
 
       {!!btn && btn}

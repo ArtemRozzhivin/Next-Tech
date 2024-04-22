@@ -4,6 +4,7 @@ import { HeartIcon, MinusIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/o
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
 import { productsActions } from '@src/redux/reducers/Products/products';
+import routes from '@src/routes';
 import Button from '@src/ui/Button';
 import Modal from '@src/ui/Modal';
 import Image from 'next/image';
@@ -63,7 +64,7 @@ const AddedProductModal = ({
       type='info'
       isOpened={isOpen}>
       <div className='flex flex-col gap-8'>
-        <div className='flex items-center gap-4'>
+        <div className='flex flex-col sm:flex-row items-center gap-4'>
           <div className='bg-white p-3'>
             <Image
               className='h-full w-full object-contain'
@@ -77,14 +78,14 @@ const AddedProductModal = ({
           <div className='w-full flex-grow flex flex-col items-center justify-center gap-6'>
             <div className='w-full flex items-start justify-between'>
               <div>
-                <div className='text-2xl'>{product.model}</div>
-                <div className='text-lg text-gray-600'>
+                <div className='sm:text-2xl'>{product.model}</div>
+                <div className='sm:text-lg text-gray-600'>
                   {product.version}, {product.category}
                 </div>
               </div>
-              <div className='text-2xl font-semibold'>{product.price} ₴</div>
+              <div className='sm:text-2xl font-semibold'>{product.price} ₴</div>
             </div>
-            <div className='w-full flex items-center justify-between'>
+            <div className='w-full flex flex-col sm:flex-row gap-5 sm:gap-0 items-center justify-between'>
               <div className='flex items-center justify-center gap-4'>
                 {inWishlist ? (
                   <Button
@@ -125,19 +126,28 @@ const AddedProductModal = ({
           </div>
         </div>
 
-        <div className='flex items-center justify-between gap-10'>
-          <Button giant noBorder onClick={() => setOpenModal(false)}>
+        <div className='flex flex-col sm:flex-row items-center justify-between gap-10'>
+          <Button
+            className='text-sm px-2.5 py-1.5 sm:px-6 sm:py-3 sm:text-base'
+            noBorder
+            onClick={() => setOpenModal(false)}>
             Продовжити покупки
           </Button>
 
           <div className='flex items-center gap-3'>
-            <Link className='h-full' href='/cart'>
-              <Button giant primary onClick={() => setOpenModal(false)}>
+            <Link className='h-full' href={routes.cart}>
+              <Button
+                className='text-sm px-2.5 py-1.5 sm:px-6 sm:py-3 sm:text-base'
+                primary
+                onClick={() => setOpenModal(false)}>
                 Перейти до кошику
               </Button>
             </Link>
-            <Link className='h-full' href='/cart'>
-              <Button giant secondary onClick={() => setOpenModal(false)}>
+            <Link className='h-full' href={routes.ordering}>
+              <Button
+                className='text-sm px-2.5 py-1.5 sm:px-6 sm:py-3 sm:text-base'
+                secondary
+                onClick={() => setOpenModal(false)}>
                 Оформити замовлення
               </Button>
             </Link>

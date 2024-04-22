@@ -29,7 +29,6 @@ const GoogleAuth: React.FC<IGoogleAuth> = ({ className }) => {
   const redirectToMainPage = (user: string) => {
     router.push('/');
     addUserHistory(user);
-    console.log(user, 'USER');
   };
 
   const googleSignin = async () => {

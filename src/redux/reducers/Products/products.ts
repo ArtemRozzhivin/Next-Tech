@@ -1,7 +1,6 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import _filter from 'lodash/filter';
 import _map from 'lodash/map';
-import { User } from 'firebase/auth';
 import { IOrderedItem, IProductCartItem, IProductItem } from '../../models';
 
 const calculateTotalCount = (cartProducts: IProductCartItem[]) => {

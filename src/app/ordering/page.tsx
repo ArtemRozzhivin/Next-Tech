@@ -13,6 +13,7 @@ import comfy from '@src/assets/comfy.svg';
 import cx from 'clsx';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import {
+  ArrowLeftIcon,
   EnvelopeIcon,
   FaceFrownIcon,
   FaceSmileIcon,
@@ -238,7 +239,7 @@ const OrderingSearchCityModal = ({
                 label='Місто доставки'
                 value={field.value}
                 onChange={(e) => handleChange(e, field)}
-                className='rounded text-xl'
+                className='pr-9 rounded md:text-xl'
                 placeholder='Введіть назву вашого міста'
                 clearIcon
                 onClear={handleClickClear}
@@ -249,14 +250,14 @@ const OrderingSearchCityModal = ({
           <div className='max-h-80 overflow-auto flex flex-col gap-2 my-3'>
             {allCities.length === 0 && !city ? (
               <PagePlaceholder
-                title='You have not entered a city name yet'
-                description='Please enter a city name '
+                title='Ви ще не ввели назву міста'
+                description='Будь ласка, введіть назву міста'
                 icon={<FaceSmileIcon className='text-colorMain w-20 h-20' />}
               />
             ) : allCities.length === 0 && city && fetchCitiesError ? (
               <PagePlaceholder
                 title={fetchCitiesError}
-                description='Please enter a city name '
+                description='Будь ласка, введіть назву міста'
                 icon={<FaceFrownIcon className='text-colorMain w-20 h-20' />}
               />
             ) : allCities.length === 0 && city && !fetchCitiesError ? (
@@ -266,7 +267,11 @@ const OrderingSearchCityModal = ({
             ) : (
               <div>
                 {allCities.map((city) => (
-                  <Button onClick={() => handleClickOnCity(city)} giant noBorder>
+                  <Button
+                    key={city.Ref}
+                    onClick={() => handleClickOnCity(city)}
+                    className='text-xs md:px-6 md:py-3 md:text-base'
+                    noBorder>
                     {city.Present}
                   </Button>
                 ))}
@@ -363,6 +368,7 @@ const OrderingSearchAdressModal = ({
                 icon={<HomeModernIcon className='w-5 h-5' />}
                 clearIcon
                 onClear={handleClickClear}
+                className='pr-9'
               />
             )}
           />
@@ -370,14 +376,14 @@ const OrderingSearchAdressModal = ({
           <div className='max-h-80 overflow-auto flex flex-col gap-2 my-3'>
             {allAdresses.length === 0 && !adress ? (
               <PagePlaceholder
-                title='You have not entered a adress yet'
-                description='Please enter a adress name '
+                title='Ви ще не ввели адресу'
+                description='Будь ласка, введіть адресу'
                 icon={<FaceSmileIcon className='text-colorMain w-20 h-20' />}
               />
             ) : allAdresses.length === 0 && adress && fetchAdressesError ? (
               <PagePlaceholder
                 title={fetchAdressesError}
-                description='Please enter a city name '
+                description='Будь ласка, введіть адресу'
                 icon={<FaceFrownIcon className='text-colorMain w-20 h-20' />}
               />
             ) : allAdresses.length === 0 && adress && !fetchAdressesError ? (
@@ -387,7 +393,12 @@ const OrderingSearchAdressModal = ({
             ) : (
               <div className='flex flex-col gap-2'>
                 {allAdresses.map((item) => (
-                  <Button onClick={() => handleClickOnAdress(item)} giant noBorder>
+                  <Button
+                    key={item.SettlementStreetRef}
+                    className='text-xs md:px-6 md:py-3 md:text-base'
+                    onClick={() => handleClickOnAdress(item)}
+                    giant
+                    noBorder>
                     {item.Present}
                   </Button>
                 ))}
@@ -429,8 +440,6 @@ const OrderingSearchOfficeAddressModal = ({
     handleOfficeAdressInput(e);
     field.onChange(e.target.value);
   };
-
-  console.log(officeAdress, 'officeAdress');
 
   const handleClickOnOfficeAdress = (officeAdress: IOfficeAdress) => {
     handleOfficeAdressClick(officeAdress);
@@ -514,7 +523,11 @@ const OrderingSearchOfficeAddressModal = ({
             ) : (
               <div className='flex flex-col gap-2'>
                 {allOfficeAdresses.map((item: IOfficeAdress) => (
-                  <Button onClick={() => handleClickOnOfficeAdress(item)} giant noBorder>
+                  <Button
+                    key={item.Ref}
+                    onClick={() => handleClickOnOfficeAdress(item)}
+                    giant
+                    noBorder>
                     {item.Description}
                   </Button>
                 ))}
@@ -531,7 +544,7 @@ const PersonalInfoForm = () => {
   const { control } = useFormContext();
 
   return (
-    <div className='flex items-center gap-5'>
+    <div className='flex flex-col md:flex-row items-start md:items-start gap-5'>
       <Controller
         name='lastName'
         control={control}
@@ -585,7 +598,7 @@ const HouseInfoForm = () => {
   const { control } = useFormContext();
 
   return (
-    <div className='flex items-center gap-5'>
+    <div className='flex flex-col xs:flex-row items-start xs:items-center gap-5'>
       <Controller
         name='house'
         control={control}
@@ -658,6 +671,8 @@ const defaultValues: IFormData = {
   officeAdress: '',
 };
 
+const novaPoshtaKey = process.env.NEXT_PUBLIC_NOVAPOSHTA_API_KEY;
+
 export const Ordering = () => {
   const { cartProducts, productToOrdering, productsCountToOrdering, productsPriceToOrdering } =
     useAppSelector((state) => state.products);
@@ -707,7 +722,7 @@ export const Ordering = () => {
       dispatch(errorsActions.clearErrors());
 
       const { data } = await axios.post('https://api.novaposhta.ua/v2.0/json/', {
-        apiKey: 'd2525e4f0272ebd8bcf60e2b8d77820e',
+        apiKey: novaPoshtaKey,
         modelName: 'Address',
         calledMethod: 'searchSettlements',
         methodProperties: {
@@ -720,8 +735,6 @@ export const Ordering = () => {
       if (!data.success) throw new Error(data.errors[0]);
       if (data.success && data.data[0].Addresses.length === 0) throw new Error('Cities not found');
 
-      console.log(data, 'DATA');
-
       setAllCities(data.data[0].Addresses);
     } catch (error) {
       console.log(error.message, 'ERROR');
@@ -729,14 +742,12 @@ export const Ordering = () => {
     }
   };
 
-  console.log(errors, 'ERRORS');
-
   const fetchAdress = async (value: string) => {
     try {
       dispatch(errorsActions.clearErrors());
 
       const { data } = await axios.post('https://api.novaposhta.ua/v2.0/json/', {
-        apiKey: 'd2525e4f0272ebd8bcf60e2b8d77820e',
+        apiKey: novaPoshtaKey,
         modelName: 'Address',
         calledMethod: 'searchSettlementStreets',
         methodProperties: {
@@ -747,9 +758,7 @@ export const Ordering = () => {
 
       if (!data.success) throw new Error(data.errors[0]);
       if (data.success && data.data[0].Addresses.length === 0)
-        throw new Error('Adresses not found');
-
-      console.log(data, 'DATA');
+        throw new Error('Адреси не знайдено');
 
       setAllAdresses(data.data[0].Addresses);
     } catch (error) {
@@ -763,7 +772,7 @@ export const Ordering = () => {
       dispatch(errorsActions.clearErrors());
 
       const { data } = await axios.post('https://api.novaposhta.ua/v2.0/json/', {
-        apiKey: 'd2525e4f0272ebd8bcf60e2b8d77820e',
+        apiKey: novaPoshtaKey,
         modelName: 'Address',
         calledMethod: 'getWarehouses',
         methodProperties: {
@@ -772,8 +781,6 @@ export const Ordering = () => {
         },
       });
 
-      console.log(data, 'DATA');
-
       if (!data.success) throw new Error(data.errors[0]);
       if (data.success && data.data.length === 0) {
         setAllOfficeAddress(data.data);
@@ -781,14 +788,11 @@ export const Ordering = () => {
       }
 
       setAllOfficeAddress(data.data);
-      // setAllOfficeAddress(data.data[0].Addresses);
     } catch (error) {
       console.log(error.message, 'ERROR');
       dispatch(errorsActions.failedFetchOfficesError(error));
     }
   };
-
-  console.log(allOfficeAddress, 'allOfficeAddress');
 
   const debouncedCallback = useDebouncedCallback((callback) => {
     callback();
@@ -835,17 +839,11 @@ export const Ordering = () => {
     setAllOfficeAddress([]);
   };
 
-  const redirectToPreviousPage = () => {
-    router.back();
-  };
-
   const clearCart = () => {
-    console.log('clearCart');
     const newCartProducts = cartProducts.filter(
       (item1) => !productToOrdering.some((item2) => item1.product.id === item2.product.id),
     );
 
-    console.log(newCartProducts, 'newCartProducts');
     dispatch(productsActions.setProductsToCart(newCartProducts));
     dispatch(productsActions.clearProductsToOrdering());
   };
@@ -891,17 +889,31 @@ export const Ordering = () => {
     });
   };
 
+  const redirectToPreviousPage = () => {
+    router.back();
+  };
+
   return (
-    <div className='flex flex-col gap-5 p-5'>
+    <div className='flex flex-col gap-5 p-3 md:p-5'>
+      <button
+        onClick={redirectToPreviousPage}
+        className='flex items-center gap-2 hover:text-colorMain'>
+        <ArrowLeftIcon className='w-4 h-4 sm:w-6 sm:h-6' />
+        <h2 className='sm:text-xl font-semibold'>Назад</h2>
+      </button>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className='flex items-start gap-3'>
-          <div className='flex-1 flex flex-col gap-5'>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className='flex flex-col 2xl:flex-row items-start gap-3'>
+          <div className='w-full flex-1 flex flex-col gap-5'>
             <div className='flex flex-col gap-5'>
               <div className='text-2xl font-semibold'>1. Товари</div>
               <div className='flex flex-col gap-3 justify-center items-center'>
                 {productToOrdering.map((item) => (
-                  <div className='border border-gray-300 shadow-sm bg-white rounded-md w-full p-5'>
-                    <ProductOrderingItem key={item.product.version} {...item} />
+                  <div
+                    key={item.product.version}
+                    className='border border-gray-300 shadow-sm bg-white rounded-md w-full p-[6px] 2xl:p-5'>
+                    <ProductOrderingItem {...item} />
                   </div>
                 ))}
               </div>
@@ -909,8 +921,8 @@ export const Ordering = () => {
 
             <div className='flex flex-col gap-5'>
               <div className='text-2xl font-semibold'>2. Контактна інформація</div>
-              <div className='rounded-md p-5 border border-gray-300 shadow-sm bg-white'>
-                <div className='flex items-center gap-20'>
+              <div className='w-full rounded-md 2xl:p-5 2xl:border border-gray-300 shadow-sm bg-white'>
+                <div className='flex items-center'>
                   <Controller
                     name='phone'
                     control={control}
@@ -933,7 +945,7 @@ export const Ordering = () => {
 
             <div className='flex flex-col gap-5'>
               <div className='text-2xl font-semibold'>3. Спосіб доставки</div>
-              <div className='flex flex-col gap-5 rounded-md p-5 border border-gray-300 shadow-sm bg-white'>
+              <div className='flex flex-col gap-5 rounded-md p-[6px] 2xl:p-5 border border-gray-300 shadow-sm bg-white'>
                 <>
                   <OrderingSearchCityModal
                     isSearchCityOpen={isSearchCityOpen}
@@ -960,8 +972,8 @@ export const Ordering = () => {
                         isChecked={currentDelivery?.id === 'courier-nova-poshta'}
                         isActive={!city}
                       />
-                      <div className='flex items-center gap-3'>
-                        <div>Кур'єр Нова пошта </div>
+                      <div className='w-full justify-between flex items-center gap-3'>
+                        <div className='text-sm md:text-base'>Кур'єр Нова пошта </div>
                         <div>
                           <Image
                             width={65}
@@ -1009,8 +1021,8 @@ export const Ordering = () => {
                         isChecked={currentDelivery?.id === 'courier-comfy'}
                         isActive={!city}
                       />
-                      <div className='flex items-center gap-3'>
-                        <div>Кур'єр COMFY </div>
+                      <div className='w-full flex items-center justify-between gap-3'>
+                        <div className='text-sm md:text-base'>Кур'єр COMFY </div>
                         <div>
                           <Image
                             width={65}
@@ -1059,8 +1071,8 @@ export const Ordering = () => {
                         isChecked={currentDelivery?.id === 'to-nova-poshta-office'}
                         isActive={!city}
                       />
-                      <div className='flex items-center gap-3'>
-                        <div>До відділення Нової пошти</div>
+                      <div className='w-full justify-between flex items-center gap-3'>
+                        <div className='text-sm md:text-base'>До відділення Нової пошти</div>
                         <div>
                           <Image
                             width={65}
@@ -1095,24 +1107,24 @@ export const Ordering = () => {
             </div>
           </div>
 
-          <div className='rounded-md flex flex-col gap-10 border border-gray-300 shadow-sm bg-white p-5'>
+          <div className='w-full 2xl:w-auto rounded-md flex flex-col gap-4 md:gap-10 border border-gray-300 shadow-sm bg-white p-5'>
             <div className='flex flex-col gap-3'>
-              <div className='text-2xl flex items-center gap-32 justify-between'>
+              <div className='text-lg sm:text-2xl flex items-center 2xl:gap-32 justify-between'>
                 <div>Кількість товарів:</div>
                 <div className='font-semibold'>{productsCountToOrdering} шт.</div>
               </div>
-              <div className='text-2xl flex items-center gap-32 justify-between'>
+              <div className='text-lg sm:text-2xl flex items-center 2xl:gap-32 justify-between'>
                 <div>Сумма:</div>
-                <div className='font-semibold'>{productsPriceToOrdering} ₴</div>
+                <div className='font-semibold'>{productsPriceToOrdering}₴</div>
               </div>
             </div>
 
             <div className='w-full h-0.5 bg-neutral-100 opacity-100 dark:opacity-50' />
 
             <div className='flex flex-col gap-10'>
-              <div className='flex items-center gap-32 justify-between'>
-                <div className='text-3xl'>До сплати: </div>
-                <div className='font-semibold text-3xl'>{productsPriceToOrdering} ₴</div>
+              <div className='flex items-center 2xl:gap-32 justify-between'>
+                <div className='text-xl sm:text-3xl'>До сплати: </div>
+                <div className='font-semibold text-xl sm:text-3xl'>{productsPriceToOrdering}₴</div>
               </div>
               <div className='flex flex-col gap-2'>
                 {Object.keys(errors).length !== 0 && isInfoRight && (

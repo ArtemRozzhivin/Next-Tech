@@ -69,16 +69,16 @@ export const Cart = () => {
             <button
               onClick={redirectToPreviousPage}
               className='flex items-center gap-2 hover:text-colorMain'>
-              <ArrowLeftIcon className='w-6 h-6' />
-              <h2 className='text-xl font-semibold'>Назад</h2>
+              <ArrowLeftIcon className='w-4 h-4 sm:w-6 sm:h-6' />
+              <h2 className='sm:text-xl font-semibold'>Назад</h2>
             </button>
             {!!cartTotalCount ? <div className='text-gray-600'>{cartTotalCount} товарів</div> : ''}
           </div>
 
-          <div className='flex items-start gap-3'>
-            <div className='flex-1 flex flex-col gap-3'>
-              <div className='rounded-md bg-white border border-gray-300 p-5'>
-                <Button onClick={clearCart} danger primary>
+          <div className='flex flex-col xl:flex-row items-start gap-3'>
+            <div className='w-full flex-1 flex flex-col gap-3'>
+              <div className='rounded-md xs:bg-white xs:border xs:border-gray-300 xs:p-2 md:p-5'>
+                <Button className='w-full xs:w-auto' onClick={clearCart} danger primary>
                   <div className='flex justify-start items-center gap-3'>
                     <TrashIcon className='w-5 h-5' />
                     <div>Очистити кошик</div>
@@ -92,21 +92,23 @@ export const Cart = () => {
               </div>
             </div>
 
-            <div className='rounded-md flex flex-col gap-10 bg-white border border-gray-300 p-5'>
-              <div className='flex flex-col gap-3'>
-                <div className='text-2xl flex items-center gap-32 justify-between'>
-                  <div>{productsCountToOrdering} товарів на суму</div>
-                  <div className='font-semibold'>{productsPriceToOrdering} ₴</div>
+            <div className='w-full rounded-md flex flex-col gap-3 xl:gap-10 bg-white border border-gray-300 p-2 md:p-5'>
+              <div className='flex flex-col gap-1 xl:gap-3'>
+                <div className='text-lg mdtext-2xl flex items-center justify-between'>
+                  <div>Кількість товарів:</div>
+                  <div className='font-semibold'>{productsCountToOrdering} шт.</div>
                 </div>
-                <div className='flex items-center gap-32 justify-between'>
-                  <div className='text-3xl'>Загальна сума</div>
-                  <div className='font-semibold text-3xl'>{productsPriceToOrdering} ₴</div>
+                <div className='flex items-center justify-between'>
+                  <div className='text-xl md:text-3xl'>Загальна сума:</div>
+                  <div className='font-semibold text-xl md:text-3xl'>
+                    {productsPriceToOrdering}₴
+                  </div>
                 </div>
               </div>
 
               <div className='flex flex-col gap-2'>
                 {productToOrdering.length === 0 && (
-                  <div className='font-semibold text-sm text-center text-gray-600'>
+                  <div className='font-semibold text-xs sm:text-sm text-center text-gray-600'>
                     Щоб продовжити виберіть принаймні один товар
                   </div>
                 )}

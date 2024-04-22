@@ -86,7 +86,7 @@ const Signup = (): JSX.Element => {
 
         router.push('/');
       } catch (error) {
-        console.log('ERROR', error);
+        console.log(error, 'ERROR');
       }
     }
   };

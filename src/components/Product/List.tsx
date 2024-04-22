@@ -57,13 +57,13 @@ const ProductList = ({ items, gridLayout = 'large' }: IProductList) => {
       <div>
         <div
           className={cx('grid grid-flow-row gap-1', {
-            'grid-cols-4': gridLayout === 'large',
-            'grid-cols-5': gridLayout === 'small',
+            'grid-cols-1 sm:grid-cols-4': gridLayout === 'large',
+            'grid-cols-2 sm:grid-cols-5': gridLayout === 'small',
           })}>
           {!!items ? (
             items.map((item) => (
               <ProductCard
-                key={item.product.model}
+                key={item.product.id}
                 item={item}
                 addToWishList={(product: IProductItem) => handleAddProductToWishlist(product)}
                 addProductToCart={handleAddProductToCart}

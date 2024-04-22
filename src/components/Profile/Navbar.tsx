@@ -35,6 +35,43 @@ const navbarMenu: IMenuItem[] = [
   },
 ];
 
+export const ProfileMobileNavBar = ({ displayName, email, onMenuItem }: IProfileNavbar) => {
+  const [menuItem, setMenuItem] = useState<IMenuItem>();
+
+  const handleClickMenuItem = (item: IMenuItem) => {
+    onMenuItem(item);
+    setMenuItem(item);
+  };
+
+  return (
+    <div className='border-t border-gray-300 h-full flex flex-col'>
+      <ul className='flex justify-center gap-5 p-3'>
+        <li className='hover:text-colorMain transition-all'>
+          <Link
+            onClick={() => setMenuItem(null)}
+            href={routes.profile}
+            className='text-xl flex items-center gap-2'>
+            <UserIcon className='w-7 h-7' />
+          </Link>
+        </li>
+
+        {navbarMenu.map((item) => (
+          <li className='hover:text-colorMain transition-all' key={item.title}>
+            <button
+              onClick={() => handleClickMenuItem(item)}
+              className={cx(
+                'text-xl flex items-center gap-2',
+                item.title === menuItem?.title && 'text-colorMain',
+              )}>
+              {item.icon}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
 interface IProfileNavbar {
   displayName?: string;
   email?: string;

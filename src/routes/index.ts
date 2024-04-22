@@ -4,7 +4,7 @@ const routes = Object.freeze({
   signin: '/signin',
   profile: '/profile',
   wishlist: '/profile/wishlist',
-  orders: '/profile/orders',
+  purchases: '/profile/purchases',
   cart: '/cart',
   ordering: '/ordering',
 });

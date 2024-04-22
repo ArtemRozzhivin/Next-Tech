@@ -7,6 +7,8 @@ interface IСustomPagination {
 }
 
 const СustomPagination = ({ allPages, onChange }: IСustomPagination) => {
+  const size = window.innerWidth < 640 ? 'medium' : 'large';
+
   return (
     <div>
       <Pagination
@@ -15,7 +17,7 @@ const СustomPagination = ({ allPages, onChange }: IСustomPagination) => {
         onChange={(e, page) => onChange(page - 1)}
         count={allPages}
         defaultPage={1}
-        size='large'
+        size={size}
         color='primary'
         shape='rounded'
       />

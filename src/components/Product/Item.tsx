@@ -77,11 +77,13 @@ const ProductItem = ({ addProductToCart, addToWishList, item }: IProductItem) =>
       <div className='flex-1 flex flex-col mt-4 px-5 pb-5'>
         <div>
           <a href='#'>
-            <h5 className='text-xl tracking-tight text-darkmain'>{product.model}</h5>
+            <h5 className='text-sm sm:text-xl tracking-tight text-darkmain'>{product.model}</h5>
           </a>
           <div className='mt-2 mb-5 flex items-center justify-between'>
             <p>
-              <span className='text-xl font-semibold text-darkmain'>{product.price} ₴</span>
+              <span className='text-sm sm:text-xl font-semibold text-darkmain'>
+                {product.price} ₴
+              </span>
             </p>
           </div>
         </div>

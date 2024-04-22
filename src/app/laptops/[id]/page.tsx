@@ -346,12 +346,12 @@ const InfoBlock = ({ title, info }: { title: string; info: string | null | undef
   return (
     <>
       {info ? (
-        <div className='flex items-start justify-between'>
+        <div className='text-xs flex items-start justify-between'>
           <div className='flex-1 flex items-end'>
             {title}
             <div className='flex-1 border-b-2 border-dashed'></div>
           </div>
-          <div className='max-w-md text-right'>{info}</div>
+          <div className='text-right'>{info}</div>
         </div>
       ) : null}
     </>
@@ -361,7 +361,7 @@ const InfoBlock = ({ title, info }: { title: string; info: string | null | undef
 const CharacteristicsItem = ({ title, info }: { title: string; info: ReactNode[] }) => {
   return (
     <div className='flex flex-col gap-1'>
-      <h2 className='text-xl font-medium'>{title}</h2>
+      <h2 className='text-lg sm:text-xl font-medium'>{title}</h2>
       <div className='flex flex-col gap-1'>
         {info.map((item, index) => (
           <div key={index}>{item}</div>
@@ -374,7 +374,9 @@ const CharacteristicsItem = ({ title, info }: { title: string; info: ReactNode[]
 const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
   return (
     <div>
-      <h2 className='text-2xl font-semibold'>Характеристики {product?.product.model}</h2>
+      <h2 className='text-xl mb-2 sm:mb-6 sm:text-2xl font-semibold'>
+        Характеристики {product?.product.model}
+      </h2>
 
       <div className='flex flex-col gap-5'>
         <CharacteristicsItem
@@ -575,13 +577,13 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
       <div className='flex flex-wrap -mx-4'>
         <div className='w-full mb-8 md:w-1/2 md:mb-0'>
           <div className='sticky top-0 z-10 overflow-hidden '>
-            <div className='relative mb-6 lg:mb-10 lg:h-2/4'>
+            <div className='flex justify-center items-center relative mb-2 sm:mb-6 lg:mb-10 lg:h-2/4'>
               <Image
-                width={500}
-                height={500}
+                width={window.innerWidth < 640 ? 250 : 500}
+                height={window.innerWidth < 640 ? 250 : 500}
                 src={currentDetailProduct?.image?.large}
                 alt='product'
-                className='object-cover w-full lg:h-full'
+                className='object-contain sm:w-full lg:h-full'
               />
             </div>
           </div>
@@ -589,10 +591,10 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
         <div className='w-full px-4 md:w-1/2'>
           <div className='lg:pl-20'>
             <div className='mb-8'>
-              <h2 className='max-w-xl mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl'>
+              <h2 className='max-w-xl mb-2 sm:mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl'>
                 {product?.product.model}
               </h2>
-              <p className='inline-block mb-6 text-4xl font-bold text-gray-700 dark:text-gray-400'>
+              <p className='inline-block mb-2 sm:mb-6 text-xl sm:text-4xl font-bold text-gray-700 dark:text-gray-400'>
                 <span>{currentDetailProduct?.product?.price}₴</span>
               </p>
               <div>
@@ -751,12 +753,12 @@ const LaptopDetail: React.FC = ({ params }) => {
   }, []);
 
   return (
-    <section className='overflow-hidden p-10 flex flex-col gap-5 bg-white'>
+    <section className='overflow-hidden p-2 sm:p-10 flex flex-col gap-5 bg-white'>
       <button
         onClick={redirectToPreviousPage}
         className='flex items-center gap-2 hover:text-colorMain'>
-        <ArrowLeftIcon className='w-6 h-6' />
-        <h2 className='text-xl font-semibold'>Назад</h2>
+        <ArrowLeftIcon className='w-4 h-4 sm:w-6 sm:h-6' />
+        <h2 className='sm:text-xl font-semibold'>Назад</h2>
       </button>
 
       {productDetail && productDB ? (

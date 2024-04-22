@@ -32,12 +32,4 @@ const GoogleGSVG = ({ className }: { className?: string }): JSX.Element => (
   </svg>
 );
 
-GoogleGSVG.propTypes = {
-  className: PropTypes.string,
-};
-
-GoogleGSVG.defaultProps = {
-  className: '',
-};
-
 export default GoogleGSVG;

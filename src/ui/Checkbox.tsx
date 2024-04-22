@@ -73,29 +73,4 @@ const Checkbox = ({
   );
 };
 
-// Define the prop types for the component
-Checkbox.propTypes = {
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  checked: PropTypes.bool.isRequired,
-  hint: PropTypes.string,
-  onChange: PropTypes.func,
-  id: PropTypes.string,
-  className: PropTypes.string,
-  name: PropTypes.string,
-  hintClassName: PropTypes.string,
-  disabled: PropTypes.bool,
-};
-
-// Define the default props for the component
-Checkbox.defaultProps = {
-  label: '',
-  hint: '',
-  onChange: () => {},
-  id: '',
-  className: '',
-  name: '',
-  hintClassName: '',
-  disabled: false,
-};
-
 export default memo(Checkbox);

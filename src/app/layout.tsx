@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='uk'>
-      <body className={cx(inter.className, 'bg-white h-screen')}>
+      <body className={cx(inter.className, 'bg-white')}>
         <StoreProvider>
           <ToastContainer
             position='bottom-right'
@@ -33,10 +33,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             theme='light'
           />
           <div className='h-full flex flex-col'>
-            <div className='mb-20'>
-              <div className='w-full fixed left-0 top-0 z-50'>
-                <Header />
-              </div>
+            <div className='w-full sticky left-0 top-0 z-50'>
+              <Header />
             </div>
             <div className='flex-1'>{children}</div>
             <Footer />

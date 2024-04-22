@@ -16,7 +16,7 @@ const Purchases = () => {
       {!!userHistory?.purchases?.length ? (
         <div className='flex flex-col gap-5'>
           {userHistory.purchases?.map((purchase) => (
-            <OrderedProductItem email={user?.email} purchase={purchase} />
+            <OrderedProductItem key={purchase.product.id} email={user?.email} purchase={purchase} />
           ))}
         </div>
       ) : (

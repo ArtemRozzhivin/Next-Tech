@@ -13,8 +13,6 @@ import { auth } from '@src/firebaseConfig';
 import Image from 'next/image';
 
 const Profile = () => {
-  console.log();
-
   return (
     <div className='flex flex-col gap-4'>
       <h3 className='text-3xl font-semibold'>Особиста інформація</h3>

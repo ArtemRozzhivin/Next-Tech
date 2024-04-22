@@ -4,8 +4,6 @@ import Flag from 'react-flagkit';
 import techLogo from '@assets/techLogo.png';
 
 const Footer = (): JSX.Element => {
-  const year = new Date().getFullYear();
-
   return (
     <footer className='bg-darkmain text-lightmain' aria-labelledby='footer-heading'>
       <h2 id='footer-heading' className='sr-only'>
@@ -36,7 +34,7 @@ const Footer = (): JSX.Element => {
                 &nbsp;
               </a>
             </p>
-            <p className='text-base pt-10'>© 2023 NextTech. All rights reserved.</p>
+            <p className='text-base pt-10'>© 2024 NextTech. All rights reserved.</p>
           </div>
         </div>
       </div>

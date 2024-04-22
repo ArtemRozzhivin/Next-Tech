@@ -1,35 +1,44 @@
 'use client';
 
-import Categories from '@src/components/Categories';
-import { auth, db } from '@src/firebaseConfig';
-import { useAppDispatch } from '@src/redux/hooks';
-import Input from '@src/ui/Input';
+import { auth } from '@src/firebaseConfig';
+import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import { onAuthStateChanged } from 'firebase/auth';
-import { useEffect } from 'react';
 import { authActions } from '@redux/reducers/auth';
-import { addUserHistory, getUserHistory } from '@src/api/user';
-import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
-import { fetchproductToFireBase } from '@src/utils/fetchProductToFirebase';
+import { getUserHistory } from '@src/api/user';
+import { productsActions } from '@src/redux/reducers/Products/products';
 import Laptops from './laptops/page';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const dispatch = useAppDispatch();
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      getUserHistory(user).then((userHistory) => {
-        console.log(userHistory);
-        if (userHistory) dispatch(productsActions.setUserHistory(userHistory));
-      });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const loginedUser = {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          metadata: {
+            creationTime: user.metadata.creationTime,
+            lastSignInTime: user.metadata.lastSignInTime,
+          },
+        };
 
-      dispatch(authActions.setUser(user));
-    } else {
-      dispatch(authActions.logout());
-    }
-  });
+        getUserHistory(loginedUser).then((userHistory) => {
+          if (userHistory) dispatch(productsActions.setUserHistory(userHistory));
+        });
+
+        dispatch(authActions.setUser(loginedUser));
+      } else {
+        dispatch(authActions.logout());
+      }
+    });
+  }, []);
 
   return (
-    <main className='px-10'>
+    <main className='px-2 sm:px-5 lg:px-10'>
       <Laptops />
     </main>
   );

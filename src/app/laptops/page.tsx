@@ -9,8 +9,7 @@ import algoliasearch, { SearchIndex } from 'algoliasearch';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import largeTile from '@assets/largeTile.svg';
-import smallTile from '@assets/smallTile.svg';
+
 import cx from 'clsx';
 import ProductFilterItem from '@src/components/Filters/ProductFilterItem';
 import { IProductItem } from '@src/redux/models';
@@ -19,6 +18,8 @@ import { InstantSearch } from 'react-instantsearch';
 import СustomPagination from '@src/ui/Pagination';
 import ResetFilters from '@src/components/Filters/Reset';
 import Loader from '@src/components/Loader';
+import ToggleProductDisplay from '@src/components/ToggleProductDisplay';
+import FiltersMobileBlock from '@src/components/Filters/MobileBlock';
 
 const client = algoliasearch('Q2QOIT41TW', '09737b1233e8e42a12c90f0a08a08dd6');
 const index = client.initIndex('product_search');
@@ -156,8 +157,6 @@ const Laptops = () => {
       filtersArray.push(selectedСore.map((option) => `product.cores:${option}`).join(' OR '));
     }
 
-    console.log(filtersArray, 'filtersArray');
-
     let filters = filterPrice;
     if (filtersArray.length > 0) {
       filters += ` AND ${filtersArray.join(' AND ')}`;
@@ -166,8 +165,6 @@ const Laptops = () => {
     customIndex
       .search(value, { page: currentPage, hitsPerPage: 15, filters: filters })
       .then((response) => {
-        console.log(response, 'hits');
-
         setPagination({
           nbPages: response.nbPages,
           page: response.page,
@@ -227,8 +224,6 @@ const Laptops = () => {
     setSelectedOptions: React.SetStateAction<string[]>,
     value: string,
   ) => {
-    console.log(setSelectedOptions, 'setSelectedOptions');
-
     if (selectedOptions.includes(value)) {
       setSelectedOptions(selectedOptions.filter((item) => item !== value));
     } else {
@@ -267,225 +262,225 @@ const Laptops = () => {
 
   return (
     <>
-      <InstantSearch indexName={'product_search'} searchClient={client}>
-        <div className='p-5 flex flex-col gap-5'>
-          <PageTitle
-            searchProduct={searchProduct}
-            selectedBrands={selectedBrands}
-            selectedDisplay={selectedDisplay}
-            selectedProcessor={selectedProcessor}
-            selectedRam={selectedRam}
-            selectedOs={selectedOs}
-            selectedСore={selectedСore}
-          />
+      <div className='sm:p-5 flex flex-col gap-2 sm:gap-5'>
+        <PageTitle
+          searchProduct={searchProduct}
+          selectedBrands={selectedBrands}
+          selectedDisplay={selectedDisplay}
+          selectedProcessor={selectedProcessor}
+          selectedRam={selectedRam}
+          selectedOs={selectedOs}
+          selectedСore={selectedСore}
+        />
 
-          <div className='border-t border-gray-300 h-full flex items-start gap-5'>
-            <div className='w-1/2'>
-              <FiltersBlock
-                priceFrom={priceFrom}
-                setPriceFrom={setPriceFrom}
-                onResetPrice={handleResetPrice}
-                acceptedPrice={acceptedPrice}
-                priceTo={priceTo}
-                setPriceTo={setPriceTo}
-                onClickPrice={handleClickPrice}
-                selectedBrand={selectedBrands}
-                setSelectedBrand={(value) =>
-                  handleCheckboxChange(selectedBrands, setSelectedBrands, value)
-                }
-                selectedProcessor={selectedProcessor}
-                setSelectedProcessor={(value) =>
-                  handleCheckboxChange(selectedProcessor, setSelectedProcessor, value)
-                }
-                selectedDisplay={selectedDisplay}
-                setSelectedDisplay={(value) =>
-                  handleCheckboxChange(selectedDisplay, setSelectedDisplay, value)
-                }
-                selectedRam={selectedRam}
-                setSelectedRam={(value) => handleCheckboxChange(selectedRam, setSelectedRam, value)}
-                selectedOs={selectedOs}
-                setSelectedOs={(value) => handleCheckboxChange(selectedOs, setSelectedOs, value)}
-                selectedСore={selectedСore}
-                setSelectedСore={(value) =>
-                  handleCheckboxChange(selectedСore, setSelectedСore, value)
-                }
-              />
-            </div>
+        <div className='border-t border-gray-300 h-full flex items-start gap-5'>
+          <div className='hidden sm:block w-1/2'>
+            <FiltersBlock
+              priceFrom={priceFrom}
+              setPriceFrom={setPriceFrom}
+              onResetPrice={handleResetPrice}
+              acceptedPrice={acceptedPrice}
+              priceTo={priceTo}
+              setPriceTo={setPriceTo}
+              onClickPrice={handleClickPrice}
+              selectedBrand={selectedBrands}
+              setSelectedBrand={(value) =>
+                handleCheckboxChange(selectedBrands, setSelectedBrands, value)
+              }
+              selectedProcessor={selectedProcessor}
+              setSelectedProcessor={(value) =>
+                handleCheckboxChange(selectedProcessor, setSelectedProcessor, value)
+              }
+              selectedDisplay={selectedDisplay}
+              setSelectedDisplay={(value) =>
+                handleCheckboxChange(selectedDisplay, setSelectedDisplay, value)
+              }
+              selectedRam={selectedRam}
+              setSelectedRam={(value) => handleCheckboxChange(selectedRam, setSelectedRam, value)}
+              selectedOs={selectedOs}
+              setSelectedOs={(value) => handleCheckboxChange(selectedOs, setSelectedOs, value)}
+              selectedСore={selectedСore}
+              setSelectedСore={(value) =>
+                handleCheckboxChange(selectedСore, setSelectedСore, value)
+              }
+            />
+          </div>
 
-            <div className='flex flex-col gap-1'>
-              <div className='bg-white p-3 rounded-md flex items-end gap-5 justify-between'>
+          <div className='flex flex-col gap-1'>
+            <div className='bg-white py-3 rounded-md sm:flex items-center gap-1 sm:gap-5 justify-between'>
+              <div className='flex-1'>
                 <Input
                   icon={<MagnifyingGlassIcon className='w-6 h-6 text-colorMain' />}
                   clearIcon
                   onClear={handleClearSearchProduct}
-                  label='Пошук товарів'
                   placeholder='Введіть назву товару'
                   value={searchProduct}
                   onChange={handleSearchProduct}
-                  className='shadow-lg w-1/2'
+                  className='shadow-lg w-full my-2 sm:my-0'
+                />
+              </div>
+
+              <div className='flex items-center gap-[6px] sm:gap-3'>
+                <Dropdown
+                  className='inline-flex shadow-lg'
+                  title={
+                    <div className='flex items-center gap-1'>
+                      <span className='hidden sm:inline'>{sortingValue.title}</span>
+                      <ArrowsUpDownIcon className='w-6 h-6' />
+                    </div>
+                  }
+                  items={sortingOptions}
+                  keyExtractor={(item) => item.title}
+                  labelExtractor={(item) => item.title}
+                  onSelect={(item) => handleSorting(item)}
                 />
 
-                <div className='flex items-center gap-3'>
-                  <Dropdown
-                    className='inline-flex shadow-lg'
-                    title={
-                      <div className='flex items-center gap-1'>
-                        {sortingValue.title}
-                        <ArrowsUpDownIcon className='w-6 h-6' />
-                      </div>
-                    }
-                    items={sortingOptions}
-                    keyExtractor={(item) => item.title}
-                    labelExtractor={(item) => item.title}
-                    onSelect={(item) => handleSorting(item)}
-                  />
+                <ToggleProductDisplay gridLayout={gridLayout} handleGridLayout={handleGridLayout} />
 
-                  <div className='flex items-center gap-2 border border-gray-300 shadow-lg p-1 rounded-md'>
-                    <button
-                      onClick={() => handleGridLayout('large')}
-                      className={cx(
-                        'hover:bg-slate-100 hover:shadow-md transition-all rounded-md p-1',
-                        gridLayout === 'large' && 'bg-lightmain shadow-xl',
-                      )}>
-                      <Image
-                        width={32}
-                        height={32}
-                        src={largeTile}
-                        alt='filter'
-                        className='w-6 h-6'
-                      />
-                    </button>
-                    <button
-                      onClick={() => handleGridLayout('small')}
-                      className={cx(
-                        'hover:bg-slate-100 hover:shadow-md transition-all rounded-md p-1',
-                        gridLayout === 'small' && 'bg-lightmain shadow-lg',
-                      )}>
-                      <Image
-                        width={32}
-                        height={32}
-                        src={smallTile}
-                        alt='filter'
-                        className='w-6 h-6'
-                      />
-                    </button>
-                  </div>
-                </div>
+                <FiltersMobileBlock
+                  priceFrom={priceFrom}
+                  setPriceFrom={setPriceFrom}
+                  onResetPrice={handleResetPrice}
+                  acceptedPrice={acceptedPrice}
+                  priceTo={priceTo}
+                  setPriceTo={setPriceTo}
+                  onClickPrice={handleClickPrice}
+                  selectedBrand={selectedBrands}
+                  setSelectedBrand={(value) =>
+                    handleCheckboxChange(selectedBrands, setSelectedBrands, value)
+                  }
+                  selectedProcessor={selectedProcessor}
+                  setSelectedProcessor={(value) =>
+                    handleCheckboxChange(selectedProcessor, setSelectedProcessor, value)
+                  }
+                  selectedDisplay={selectedDisplay}
+                  setSelectedDisplay={(value) =>
+                    handleCheckboxChange(selectedDisplay, setSelectedDisplay, value)
+                  }
+                  selectedRam={selectedRam}
+                  setSelectedRam={(value) =>
+                    handleCheckboxChange(selectedRam, setSelectedRam, value)
+                  }
+                  selectedOs={selectedOs}
+                  setSelectedOs={(value) => handleCheckboxChange(selectedOs, setSelectedOs, value)}
+                  selectedСore={selectedСore}
+                  setSelectedСore={(value) =>
+                    handleCheckboxChange(selectedСore, setSelectedСore, value)
+                  }
+                />
               </div>
-              <div className='py-2 flex items-center flex-wrap gap-2'>
-                {acceptedPrice !== null && (
-                  <ProductFilterItem
-                    title='Ціна'
-                    value={`${acceptedPrice.from} - ${acceptedPrice.to} грн`}
-                    onClick={handleResetPrice}
-                  />
-                )}
-                {selectedBrands.length > 0 && (
-                  <div className='flex items-center gap-2'>
-                    {selectedBrands.map((item) => (
-                      <ProductFilterItem
-                        title='Бренд'
-                        key={item}
-                        value={item}
-                        onClick={() =>
-                          handleCheckboxChange(selectedBrands, setSelectedBrands, item)
-                        }
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {selectedDisplay.length > 0 && (
-                  <div className='flex items-center gap-2'>
-                    {selectedDisplay.map((item) => (
-                      <ProductFilterItem
-                        title='Діагональ екрану'
-                        key={item}
-                        value={item}
-                        onClick={() =>
-                          handleCheckboxChange(selectedDisplay, setSelectedDisplay, item)
-                        }
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {selectedProcessor.length > 0 && (
-                  <div className='flex items-center gap-2'>
-                    {selectedProcessor.map((item) => (
-                      <ProductFilterItem
-                        title='Виробник процесора'
-                        key={item}
-                        value={item}
-                        onClick={() =>
-                          handleCheckboxChange(selectedProcessor, setSelectedProcessor, item)
-                        }
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {selectedRam.length > 0 && (
-                  <div className='flex items-center gap-2'>
-                    {selectedRam.map((item) => (
-                      <ProductFilterItem
-                        title="Об'єм ОЗП"
-                        key={item}
-                        value={item}
-                        onClick={() => handleCheckboxChange(selectedRam, setSelectedRam, item)}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {selectedСore.length > 0 && (
-                  <div className='flex items-center gap-2'>
-                    {selectedСore.map((item) => (
-                      <ProductFilterItem
-                        title='Кількість ядер'
-                        key={item}
-                        value={item}
-                        onClick={() => handleCheckboxChange(selectedСore, setSelectedСore, item)}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {selectedOs.length > 0 && (
-                  <div className='flex items-center gap-2'>
-                    {selectedOs.map((item) => (
-                      <ProductFilterItem
-                        title='Операційна система'
-                        key={item}
-                        value={item}
-                        onClick={() => handleCheckboxChange(selectedOs, setSelectedOs, item)}
-                      />
-                    ))}
-                  </div>
-                )}
-
-                {(acceptedPrice !== null || selectedBrands.length > 0) && (
-                  <ResetFilters title='Скинути фільтри' onClick={handleResetFilters} />
-                )}
-              </div>
-
-              {laptops.length > 0 ? (
-                <ProductsList gridLayout={gridLayout} items={laptops} />
-              ) : (
-                <div className='py-20'>
-                  <Loader />
+            </div>
+            <div className='py-2 flex items-center flex-wrap gap-2'>
+              {acceptedPrice !== null && (
+                <ProductFilterItem
+                  title='Ціна'
+                  value={`${acceptedPrice.from} - ${acceptedPrice.to} грн`}
+                  onClick={handleResetPrice}
+                />
+              )}
+              {selectedBrands.length > 0 && (
+                <div className='flex items-center gap-2'>
+                  {selectedBrands.map((item) => (
+                    <ProductFilterItem
+                      title='Бренд'
+                      key={item}
+                      value={item}
+                      onClick={() => handleCheckboxChange(selectedBrands, setSelectedBrands, item)}
+                    />
+                  ))}
                 </div>
               )}
 
-              {laptops.length > 0 && (
-                <div className='flex justify-center items-center py-5'>
-                  <СustomPagination allPages={pagination?.nbPages} onChange={handleChangePage} />
+              {selectedDisplay.length > 0 && (
+                <div className='flex items-center gap-2'>
+                  {selectedDisplay.map((item) => (
+                    <ProductFilterItem
+                      title='Діагональ екрану'
+                      key={item}
+                      value={item}
+                      onClick={() =>
+                        handleCheckboxChange(selectedDisplay, setSelectedDisplay, item)
+                      }
+                    />
+                  ))}
                 </div>
+              )}
+
+              {selectedProcessor.length > 0 && (
+                <div className='flex items-center gap-2'>
+                  {selectedProcessor.map((item) => (
+                    <ProductFilterItem
+                      title='Виробник процесора'
+                      key={item}
+                      value={item}
+                      onClick={() =>
+                        handleCheckboxChange(selectedProcessor, setSelectedProcessor, item)
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+
+              {selectedRam.length > 0 && (
+                <div className='flex items-center gap-2'>
+                  {selectedRam.map((item) => (
+                    <ProductFilterItem
+                      title="Об'єм ОЗП"
+                      key={item}
+                      value={item}
+                      onClick={() => handleCheckboxChange(selectedRam, setSelectedRam, item)}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {selectedСore.length > 0 && (
+                <div className='flex items-center gap-2'>
+                  {selectedСore.map((item) => (
+                    <ProductFilterItem
+                      title='Кількість ядер'
+                      key={item}
+                      value={item}
+                      onClick={() => handleCheckboxChange(selectedСore, setSelectedСore, item)}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {selectedOs.length > 0 && (
+                <div className='flex items-center gap-2'>
+                  {selectedOs.map((item) => (
+                    <ProductFilterItem
+                      title='Операційна система'
+                      key={item}
+                      value={item}
+                      onClick={() => handleCheckboxChange(selectedOs, setSelectedOs, item)}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {(acceptedPrice !== null || selectedBrands.length > 0) && (
+                <ResetFilters title='Скинути фільтри' onClick={handleResetFilters} />
               )}
             </div>
+
+            {laptops.length > 0 ? (
+              <ProductsList gridLayout={gridLayout} items={laptops} />
+            ) : (
+              <div className='py-20'>
+                <Loader />
+              </div>
+            )}
+
+            {laptops.length > 0 && (
+              <div className='flex justify-center items-center py-5'>
+                <СustomPagination allPages={pagination?.nbPages} onChange={handleChangePage} />
+              </div>
+            )}
           </div>
         </div>
-      </InstantSearch>
+      </div>
     </>
   );
 };

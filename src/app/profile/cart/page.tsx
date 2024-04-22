@@ -48,7 +48,7 @@ export const Cart = () => {
             {!!cartTotalCount ? <div className='text-gray-600'>{cartTotalCount} товарів</div> : ''}
           </div>
 
-          <div className='flex items-start gap-3'>
+          <div className='flex flex-col items-start gap-3'>
             <div className='flex-1 flex flex-col gap-3'>
               <div className='rounded-md bg-white border border-gray-300 p-5'>
                 <Button onClick={clearCart} danger primary>
@@ -60,7 +60,7 @@ export const Cart = () => {
               </div>
               <div className='flex flex-col gap-3 justify-center items-center'>
                 {cartProducts.map((item) => (
-                  <ProductCartItem key={item.product.version} {...item} />
+                  <ProductCartItem key={item.product.id} {...item} />
                 ))}
               </div>
             </div>

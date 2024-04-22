@@ -23,7 +23,7 @@ const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () =>
               alt='avatar'
             />
           )}
-          <span>{user.displayName}</span>
+          <span className='hidden sm:inline-block'>{user.displayName}</span>
           <ChevronDownIcon className='h-4 w-4 ml-1 stroke-2' aria-hidden='true' />
         </Menu.Button>
       </div>
@@ -66,7 +66,7 @@ const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () =>
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  href='#'
+                  href={routes.purchases}
                   className={cx('block px-4 py-2 text-sm text-gray-700 dark:text-gray-50', {
                     'bg-gray-100 dark:bg-slate-800': active,
                   })}>

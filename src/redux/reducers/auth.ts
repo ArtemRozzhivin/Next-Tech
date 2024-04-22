@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
-import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import _filter from 'lodash/filter';
 import _map from 'lodash/map';
 import { User } from 'firebase/auth';

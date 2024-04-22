@@ -54,7 +54,7 @@ const Input = ({
   };
 
   return (
-    <div className={className}>
+    <div>
       <div
         className={cx({
           'flex justify-between': label && hint,
@@ -84,6 +84,7 @@ const Input = ({
               'cursor-text': disabled,
               'pl-10': icon,
             },
+            className,
           )}
           placeholder={placeholder}
           aria-describedby={`${identifier}-optional`}

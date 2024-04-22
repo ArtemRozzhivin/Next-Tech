@@ -12,7 +12,6 @@ import { toast } from 'react-toastify';
 const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
   const dispatch = useAppDispatch();
   const isChecked = useAppSelector(selectProductToOrdering(product.id));
-  console.log(isChecked, 'isChecked');
 
   const handlePlusProduct = () => {
     dispatch(productsActions.plusProductCart(product.id));
@@ -39,10 +38,10 @@ const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
   };
 
   return (
-    <div className='rounded-md w-full bg-white border border-gray-300 p-5'>
+    <div className='rounded-md w-full bg-white border border-gray-300 p-2 md:p-5'>
       <div className='flex items-center gap-3'>
         <Checkbox large onChange={removeFromProductsToOrdering} checked={isChecked} />
-        <div className='bg-white p-3'>
+        <div className='bg-white p-1 sm:p-3'>
           <Image
             className='h-full w-full object-contain'
             width={100}
@@ -52,27 +51,29 @@ const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
           />
         </div>
         <div className='w-full flex-grow flex flex-col items-center justify-center gap-2'>
-          <div className='w-full flex items-center justify-between'>
-            <div>
+          <div className='w-full flex gap-3 items-center justify-between'>
+            <div className='text-xs xs:text-sm lg:text-base'>
               <div>{product.model}</div>
               <div>
                 {product.version}, {product.category}
               </div>
             </div>
-            <div className='text-2xl font-semibold'>{product.price} ₴</div>
+            <div className='hidden sm:block text-lg lg:text-2xl font-semibold'>
+              {product.price * count}₴
+            </div>
           </div>
-          <div className='w-full flex items-center justify-between'>
+          <div className='w-full hidden sm:flex gap-3 items-center justify-between'>
             <div className='flex items-center justify-center gap-4'>
               <Button secondary>
                 <div className='flex items-center justify-center gap-1'>
                   <HeartIcon className='w-5 h-5' />
-                  <div>В обране</div>
+                  <div className='hidden md:block'>В обране</div>
                 </div>
               </Button>
               <Button onClick={removeFromCart} semiDanger>
                 <div className='flex items-center justify-center gap-1'>
                   <TrashIcon className='w-5 h-5' />
-                  <div>Видалити</div>
+                  <div className='hidden md:block'>Видалити</div>
                 </div>
               </Button>
             </div>
@@ -88,6 +89,33 @@ const ProductCartItem = ({ product, image, count }: IProductCartItem) => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className='sm:hidden pt-3 w-full flex gap-3 items-center justify-between'>
+        <div className='flex items-center justify-center gap-2'>
+          <Button className='w-7 h-7' secondary>
+            <div className='flex items-center justify-center gap-1'>
+              <HeartIcon className='w-5 h-5' />
+            </div>
+          </Button>
+          <Button className='w-7 h-7' onClick={removeFromCart} semiDanger>
+            <div className='flex items-center justify-center gap-1'>
+              <TrashIcon className='w-5 h-5' />
+            </div>
+          </Button>
+        </div>
+
+        <div className='flex items-center gap-2'>
+          <Button className='w-7 h-7' onClick={handleMinusProduct} secondary>
+            <MinusIcon className='w-5 h-5' />
+          </Button>
+          <div className='text-sm'>{count}</div>
+          <Button className='w-7 h-7' onClick={handlePlusProduct} secondary>
+            <PlusIcon className='w-5 h-5' />
+          </Button>
+        </div>
+
+        <div className='text-lg lg:text-2xl font-semibold'>{product.price * count}₴</div>
       </div>
     </div>
   );

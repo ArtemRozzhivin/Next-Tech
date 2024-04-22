@@ -79,24 +79,27 @@ const Modal = ({
               },
             )}>
             <div className='flex flex-col gap-3'>
-              <div className='flex items-center'>
+              <div className='flex gap-2 items-center'>
                 {type === 'success' && (
-                  <div className='sm:mr-3 mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:h-10 sm:w-10'>
+                  <div className='sm:mr-3 mx-auto flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full bg-green-100 sm:h-12 sm:w-12'>
                     <CheckIcon className='h-6 w-6 text-green-600' aria-hidden='true' />
                   </div>
                 )}
                 {type === 'error' && (
-                  <div className='sm:mr-3 mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:h-10 sm:w-10'>
+                  <div className='sm:mr-3 mx-auto flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full bg-red-100 sm:h-12 sm:w-12'>
                     <ExclamationTriangleIcon className='h-6 w-6 text-red-600' aria-hidden='true' />
                   </div>
                 )}
                 {type === 'info' && (
-                  <div className='sm:mr-3 mx-auto flex-shrink-0 flex items-center text-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:h-10 sm:w-10'>
-                    <InformationCircleIcon className='h-6 w-6 text-blue-600' aria-hidden='true' />
+                  <div className='sm:mr-3 mx-auto flex-shrink-0 flex items-center text-center justify-center h-8 w-8 rounded-full bg-blue-100 sm:h-12 sm:w-12'>
+                    <InformationCircleIcon
+                      className='h-4 w-4 sm:h-6 sm:w-6 text-blue-600'
+                      aria-hidden='true'
+                    />
                   </div>
                 )}
                 {type === 'warning' && (
-                  <div className='sm:mr-3 mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 sm:h-10 sm:w-10'>
+                  <div className='sm:mr-3 mx-auto flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full bg-orange-100 sm:h-12 sm:w-12'>
                     <ExclamationTriangleIcon
                       className='h-6 w-6 text-amber-600'
                       aria-hidden='true'
@@ -104,16 +107,16 @@ const Modal = ({
                   </div>
                 )}
                 {type === 'confirmed' && (
-                  <div className='sm:mr-3 mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:h-10 sm:w-10'>
+                  <div className='sm:mr-3 mx-auto flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full bg-green-100 sm:h-12 sm:w-12'>
                     <UserGroupIcon className='h-6 w-6 text-green-600' aria-hidden='true' />
                   </div>
                 )}
-                <div className='mt-3 text-center sm:mt-0 sm:text-left w-full'>
+                <div className='text-center sm:mt-0 sm:text-left w-full'>
                   {title && (
                     <Dialog.Title
                       as='h3'
                       className={cx(
-                        'flex items-center text-lg leading-6 font-medium text-gray-900 dark:text-gray-50',
+                        'flex items-center text-sm sm:text-lg leading-6 font-medium text-gray-900 dark:text-gray-50',
                         {
                           'justify-between': !closeText,
                           'justify-center sm:justify-start': closeText,

@@ -31,7 +31,7 @@ const OrderingProductItem = ({ purchase, email }: IProductOrderingItem) => {
     <button
       onClick={() => setIsInfoOpen((prevState) => !prevState)}
       className='border border-gray-300 rounded-md shadow-sm hover:shadow-xl group p-5 bg-white transition-all'>
-      <div className='flex justify-end'>
+      <div className='mb-4 md:mb-0 flex justify-end'>
         {isInfoOpen ? (
           <div className='flex items-center gap-1'>
             Згорнути <ChevronUpIcon className='w-6 h-6' />
@@ -44,6 +44,12 @@ const OrderingProductItem = ({ purchase, email }: IProductOrderingItem) => {
       </div>
 
       <div className='flex flex-col gap-5'>
+        <ProductOrderingItem
+          count={purchase.count}
+          image={purchase.image}
+          product={purchase.product}
+        />
+
         {isInfoOpen && (
           <div className='flex flex-col gap-5'>
             <div className='flex justify-start'>
@@ -54,7 +60,7 @@ const OrderingProductItem = ({ purchase, email }: IProductOrderingItem) => {
               />
             </div>
 
-            <div className='flex items-center gap-10'>
+            <div className='flex flex-col md:flex-row text-left md:items-center gap-5 md:gap-10'>
               {purchase.info.city?.Present && (
                 <OrderedInfoBlock title='Місто' text={purchase.info.city?.Present} />
               )}
@@ -72,7 +78,7 @@ const OrderingProductItem = ({ purchase, email }: IProductOrderingItem) => {
               />
             </div>
 
-            <div className='flex items-center gap-10'>
+            <div className='flex flex-col md:flex-row text-start md:items-center gap-5 md:gap-10'>
               <OrderedInfoBlock
                 title="Прізвище Ім'я По-батькові"
                 text={`${purchase.info.lastName} ${purchase.info.firstName} ${purchase.info.patronymic}`}
@@ -83,12 +89,6 @@ const OrderingProductItem = ({ purchase, email }: IProductOrderingItem) => {
             </div>
           </div>
         )}
-
-        <ProductOrderingItem
-          count={purchase.count}
-          image={purchase.image}
-          product={purchase.product}
-        />
       </div>
     </button>
   );

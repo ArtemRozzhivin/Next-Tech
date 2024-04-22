@@ -49,6 +49,7 @@ const FilterItem = ({ title, options, selectedOptions, onClickOption }: IFilterI
           <Disclosure.Panel className='flex flex-col gap-2 text-sm text-gray-500'>
             {options.map((item) => (
               <Checkbox
+                key={item}
                 checked={selectedOptions.includes(item)}
                 onChange={() => onClickOption(item)}
                 name={item}
