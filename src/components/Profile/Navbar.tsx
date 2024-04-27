@@ -3,6 +3,7 @@
 import {
   ClipboardDocumentListIcon,
   HeartIcon,
+  HomeIcon,
   ShoppingCartIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
@@ -35,22 +36,22 @@ const navbarMenu: IMenuItem[] = [
   },
 ];
 
-export const ProfileMobileNavBar = ({ displayName, email, onMenuItem }: IProfileNavbar) => {
-  const [menuItem, setMenuItem] = useState<IMenuItem>();
-
+export const ProfileMobileNavBar = ({ onMenuItem }: IProfileNavbar) => {
   const handleClickMenuItem = (item: IMenuItem) => {
     onMenuItem(item);
-    setMenuItem(item);
   };
 
   return (
     <div className='border-t border-gray-300 h-full flex flex-col'>
       <ul className='flex justify-center gap-5 p-3'>
         <li className='hover:text-colorMain transition-all'>
-          <Link
-            onClick={() => setMenuItem(null)}
-            href={routes.profile}
-            className='text-xl flex items-center gap-2'>
+          <Link href={routes.main} className='text-xl flex items-center gap-2'>
+            <HomeIcon className='w-7 h-7' />
+          </Link>
+        </li>
+
+        <li className='hover:text-colorMain transition-all'>
+          <Link href={routes.profile} className='text-xl flex items-center gap-2'>
             <UserIcon className='w-7 h-7' />
           </Link>
         </li>
@@ -59,10 +60,7 @@ export const ProfileMobileNavBar = ({ displayName, email, onMenuItem }: IProfile
           <li className='hover:text-colorMain transition-all' key={item.title}>
             <button
               onClick={() => handleClickMenuItem(item)}
-              className={cx(
-                'text-xl flex items-center gap-2',
-                item.title === menuItem?.title && 'text-colorMain',
-              )}>
+              className={'text-xl flex items-center gap-2'}>
               {item.icon}
             </button>
           </li>
@@ -88,7 +86,7 @@ const ProfileNavbar = ({ displayName, email, onMenuItem }: IProfileNavbar) => {
 
   return (
     <div className='h-full flex flex-col'>
-      <div className='border-b border-gray-300 p-5'>
+      <div className='border-b border-gray-300 p-[6px] lg:p-5'>
         {displayName && email && (
           <Link href={routes.profile} className='group flex items-center gap-2'>
             <div>
@@ -101,7 +99,7 @@ const ProfileNavbar = ({ displayName, email, onMenuItem }: IProfileNavbar) => {
           </Link>
         )}
       </div>
-      <ul className='flex flex-col justify-center gap-3 p-5'>
+      <ul className='flex flex-col justify-center gap-3 p-[6px] lg:p-5'>
         {navbarMenu.map((item) => (
           <li className='hover:text-colorMain transition-all' key={item.title}>
             <button

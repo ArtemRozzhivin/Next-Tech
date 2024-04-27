@@ -15,16 +15,20 @@ export const handleAddToWishList = async (
   if (user) {
     try {
       const productRef = doc(db, 'users', user.uid);
+      const productToWishlist = {
+        product: product.product,
+        image: product.image,
+      };
 
-      if (userHistory?.wishlist?.find((item) => item.product.id === product.product.id)) {
+      if (userHistory?.wishlist?.find((item) => item.product.id === productToWishlist.product.id)) {
         await updateDoc(productRef, {
           user: user.uid,
-          wishlist: arrayRemove(product),
+          wishlist: arrayRemove(productToWishlist),
         });
       } else {
         await updateDoc(productRef, {
           user: user.uid,
-          wishlist: arrayUnion(product),
+          wishlist: arrayUnion(productToWishlist),
         });
       }
     } catch (error) {

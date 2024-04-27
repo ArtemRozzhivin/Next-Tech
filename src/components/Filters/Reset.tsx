@@ -10,9 +10,9 @@ const FiltersReset = ({ title, onClick }: IFiltersReset) => {
   return (
     <button
       onClick={onClick}
-      className='flex items-center justify-center gap-2 hover:text-red-700 transition-all'>
-      <p>{title}</p>
-      <XMarkIcon className='w-5 h-5' />
+      className='text-xs sm:text-base flex items-center justify-center gap-1 sm:gap-2 hover:text-red-700 transition-all'>
+      <p className='whitespace-nowrap'>{title}</p>
+      <XMarkIcon className='w-4 h-4 sm:w-5 sm:h-5' />
     </button>
   );
 };

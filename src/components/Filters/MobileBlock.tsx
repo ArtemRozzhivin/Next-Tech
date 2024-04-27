@@ -5,6 +5,7 @@ import Button from '@src/ui/Button';
 import Input from '@src/ui/Input';
 import React from 'react';
 import Checkbox from '@src/ui/Checkbox';
+import Modal from '@src/ui/Modal';
 
 const brandOptions = ['ASUS', 'HP', 'LG', 'Toshiba', 'DELL', 'Samsung', 'MSI', 'Lenovo', 'Acer'];
 const proccecorOptions = ['Intel', 'AMD', 'ARM'];
@@ -122,6 +123,11 @@ const FiltersMobileBlock = ({
     setIsOpen(!isOpen);
   };
 
+  const handleClickPrice = () => {
+    setIsOpen(false);
+    onClickPrice();
+  };
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -132,21 +138,29 @@ const FiltersMobileBlock = ({
 
   return (
     <>
-      <Button onClick={handleToggleOpen}>
-        <FunnelIcon className='w-7 h-7' />
+      <Button
+        className='w-full rounded-md border border-gray-300 shadow-lg px-3 md:px-4 py-2 bg-white text-sm font-medium text-gray-700 dark:text-gray-50 dark:border-gray-800 dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-colorThird'
+        onClick={handleToggleOpen}>
+        <div className='flex items-center gap-1'>
+          <FunnelIcon className='w-7 h-7' /> Фільтри
+        </div>
       </Button>
 
       {isOpen && (
-        <div className='p-2 mt-[68px] overflow-y-scroll z-40 absolute top-0 left-0 w-screen h-screen flex flex-col bg-white'>
-          <div className='flex justify-end'>
-            <Button onClick={() => setIsOpen(false)}>
+        <Modal
+          className='mt-16 w-full'
+          isOpened={true}
+          onClose={() => setIsOpen(false)}
+          size='full'>
+          <div className='mb-2 flex justify-end'>
+            <button className='p-2' onClick={() => setIsOpen(false)}>
               <XMarkIcon className='w-7 h-7' />
-            </Button>
+            </button>
           </div>
 
           <Disclosure defaultOpen>
             {({ open }) => (
-              <div className='bg-white border-b border-gray-300 px-4 py-5 flex flex-col gap-5'>
+              <div className='bg-white border-y border-gray-300 px-4 py-5 flex flex-col gap-5'>
                 <Disclosure.Button className='flex items-center w-full justify-between text-left text-sm font-medium hover:brightness-75'>
                   <span>Ціна</span>
                   <div className='border border-gray-300 rounded-full p-1'>
@@ -160,7 +174,7 @@ const FiltersMobileBlock = ({
                   </div>
                 </Disclosure.Button>
                 <Disclosure.Panel className='flex flex-col gap-3 text-sm text-gray-500'>
-                  <div className='flex items-center gap-2'>
+                  <div className='flex justify-center items-center gap-2'>
                     <div>від</div>
                     <Input
                       value={priceFrom}
@@ -180,7 +194,7 @@ const FiltersMobileBlock = ({
 
                   {priceFrom !== 1 || priceTo !== 70000 ? (
                     <div className='flex items-center gap-2 w-full'>
-                      <Button className='w-full' onClick={onClickPrice} large primary>
+                      <Button className='w-full' onClick={handleClickPrice} large primary>
                         Застосувати
                       </Button>
                       <Button className='w-full' onClick={handleResetPrice} large danger>
@@ -188,7 +202,7 @@ const FiltersMobileBlock = ({
                       </Button>
                     </div>
                   ) : (
-                    <Button onClick={onClickPrice} large primary>
+                    <Button onClick={handleClickPrice} large primary>
                       Застосувати
                     </Button>
                   )}
@@ -238,7 +252,7 @@ const FiltersMobileBlock = ({
             selectedOptions={selectedOs}
             onClickOption={(item) => setSelectedOs(item)}
           />
-        </div>
+        </Modal>
       )}
     </>
   );

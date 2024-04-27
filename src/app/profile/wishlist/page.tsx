@@ -10,15 +10,15 @@ const Wishlist = () => {
   const userHistory = useAppSelector((state) => state.products.userHistory);
 
   return (
-    <div className='flex flex-col gap-5'>
-      <h2 className='font-semibold text-2xl'>Ваш список бажань</h2>
+    <div className='p-2 flex flex-col gap-5'>
+      <h2 className='text-3xl font-semibold'>Ваш список бажань</h2>
       {!!userHistory?.wishlist?.length ? (
         <ProductsList items={userHistory?.wishlist} />
       ) : (
         <PagePlaceholder
           icon={<FaceFrownIcon className='w-10 h-10 text-colorMain' />}
-          title='No products found'
-          description='No products found, please reload the page'
+          title='Не знайдено жодного товару'
+          description='Можливо, ви ще не додали жодного товару до улюблених?'
         />
       )}
     </div>

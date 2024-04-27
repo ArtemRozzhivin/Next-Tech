@@ -46,7 +46,7 @@ const GoogleAuth: React.FC<IGoogleAuth> = ({ className }) => {
       regular>
       <>
         <GoogleGSVG className='w-5 h-5 mr-2' />
-        {'auth.common.google'}
+        Google
       </>
     </Button>
   );

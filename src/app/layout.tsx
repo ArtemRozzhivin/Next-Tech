@@ -2,12 +2,13 @@ import type { Metadata } from 'next';
 import Footer from '@src/components/Footer';
 import Header from '@src/components/Header';
 import { Inter } from 'next/font/google';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import './globals.css';
 import StoreProvider from './StoreProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import cx from 'clsx';
 import 'react-toastify/dist/ReactToastify.css';
+import MobileNavBar, { IMenuItem } from '@src/components/MobileNavbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -37,6 +38,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Header />
             </div>
             <div className='flex-1'>{children}</div>
+            <div className='block md:hidden w-full fixed left-0 bottom-0 bg-white z-40'>
+              <MobileNavBar />
+            </div>
             <Footer />
           </div>
         </StoreProvider>

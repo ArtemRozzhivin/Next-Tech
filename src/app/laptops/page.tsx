@@ -83,7 +83,7 @@ const PageTitle = ({
   selectedСore,
 }: iPageTitle) => {
   return (
-    <span className='text-3xl inline-flex items-center flex-wrap gap-2'>
+    <span className='py-2 text-lg md:text-3xl inline-flex items-center flex-wrap gap-2'>
       <span>Ноутбуки </span>
 
       {searchProduct !== '' && <span>по запиту: "{searchProduct}"</span>}
@@ -108,6 +108,8 @@ const Laptops = () => {
   const [priceFrom, setPriceFrom] = useState<number>(1);
   const [priceTo, setPriceTo] = useState<number>(70000);
   const [acceptedPrice, setAcceptedPrice] = useState<{ from: number; to: number } | null>(null);
+
+  console.log('laptops', laptops);
 
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedProcessor, setSelectedProcessor] = useState<string[]>([]);
@@ -261,20 +263,24 @@ const Laptops = () => {
   ]);
 
   return (
-    <>
+    <div className='w-full max-w-[1536px] flex justify-center items-center mx-auto'>
       <div className='sm:p-5 flex flex-col gap-2 sm:gap-5'>
-        <PageTitle
-          searchProduct={searchProduct}
-          selectedBrands={selectedBrands}
-          selectedDisplay={selectedDisplay}
-          selectedProcessor={selectedProcessor}
-          selectedRam={selectedRam}
-          selectedOs={selectedOs}
-          selectedСore={selectedСore}
-        />
+        <div className='hidden md:block'>
+          <PageTitle
+            searchProduct={searchProduct}
+            selectedBrands={selectedBrands}
+            selectedDisplay={selectedDisplay}
+            selectedProcessor={selectedProcessor}
+            selectedRam={selectedRam}
+            selectedOs={selectedOs}
+            selectedСore={selectedСore}
+          />
+        </div>
+
+        <div className='pt-2 text-lg block md:hidden'>Ноутбуки</div>
 
         <div className='border-t border-gray-300 h-full flex items-start gap-5'>
-          <div className='hidden sm:block w-1/2'>
+          <div className='hidden lg:block w-1/2'>
             <FiltersBlock
               priceFrom={priceFrom}
               setPriceFrom={setPriceFrom}
@@ -316,61 +322,70 @@ const Laptops = () => {
                   placeholder='Введіть назву товару'
                   value={searchProduct}
                   onChange={handleSearchProduct}
-                  className='shadow-lg w-full my-2 sm:my-0'
+                  className='shadow-lg my-2 sm:my-0'
                 />
               </div>
 
-              <div className='flex items-center gap-[6px] sm:gap-3'>
-                <Dropdown
-                  className='inline-flex shadow-lg'
-                  title={
-                    <div className='flex items-center gap-1'>
-                      <span className='hidden sm:inline'>{sortingValue.title}</span>
-                      <ArrowsUpDownIcon className='w-6 h-6' />
-                    </div>
-                  }
-                  items={sortingOptions}
-                  keyExtractor={(item) => item.title}
-                  labelExtractor={(item) => item.title}
-                  onSelect={(item) => handleSorting(item)}
-                />
+              <div className='flex justify-between md:justify-normal items-center gap-[6px] sm:gap-3'>
+                <div className='lg:hidden block'>
+                  <FiltersMobileBlock
+                    priceFrom={priceFrom}
+                    setPriceFrom={setPriceFrom}
+                    onResetPrice={handleResetPrice}
+                    acceptedPrice={acceptedPrice}
+                    priceTo={priceTo}
+                    setPriceTo={setPriceTo}
+                    onClickPrice={handleClickPrice}
+                    selectedBrand={selectedBrands}
+                    setSelectedBrand={(value) =>
+                      handleCheckboxChange(selectedBrands, setSelectedBrands, value)
+                    }
+                    selectedProcessor={selectedProcessor}
+                    setSelectedProcessor={(value) =>
+                      handleCheckboxChange(selectedProcessor, setSelectedProcessor, value)
+                    }
+                    selectedDisplay={selectedDisplay}
+                    setSelectedDisplay={(value) =>
+                      handleCheckboxChange(selectedDisplay, setSelectedDisplay, value)
+                    }
+                    selectedRam={selectedRam}
+                    setSelectedRam={(value) =>
+                      handleCheckboxChange(selectedRam, setSelectedRam, value)
+                    }
+                    selectedOs={selectedOs}
+                    setSelectedOs={(value) =>
+                      handleCheckboxChange(selectedOs, setSelectedOs, value)
+                    }
+                    selectedСore={selectedСore}
+                    setSelectedСore={(value) =>
+                      handleCheckboxChange(selectedСore, setSelectedСore, value)
+                    }
+                  />
+                </div>
 
-                <ToggleProductDisplay gridLayout={gridLayout} handleGridLayout={handleGridLayout} />
+                <div className='flex items-center gap-[6px] sm:gap-3'>
+                  <ToggleProductDisplay
+                    gridLayout={gridLayout}
+                    handleGridLayout={handleGridLayout}
+                  />
 
-                <FiltersMobileBlock
-                  priceFrom={priceFrom}
-                  setPriceFrom={setPriceFrom}
-                  onResetPrice={handleResetPrice}
-                  acceptedPrice={acceptedPrice}
-                  priceTo={priceTo}
-                  setPriceTo={setPriceTo}
-                  onClickPrice={handleClickPrice}
-                  selectedBrand={selectedBrands}
-                  setSelectedBrand={(value) =>
-                    handleCheckboxChange(selectedBrands, setSelectedBrands, value)
-                  }
-                  selectedProcessor={selectedProcessor}
-                  setSelectedProcessor={(value) =>
-                    handleCheckboxChange(selectedProcessor, setSelectedProcessor, value)
-                  }
-                  selectedDisplay={selectedDisplay}
-                  setSelectedDisplay={(value) =>
-                    handleCheckboxChange(selectedDisplay, setSelectedDisplay, value)
-                  }
-                  selectedRam={selectedRam}
-                  setSelectedRam={(value) =>
-                    handleCheckboxChange(selectedRam, setSelectedRam, value)
-                  }
-                  selectedOs={selectedOs}
-                  setSelectedOs={(value) => handleCheckboxChange(selectedOs, setSelectedOs, value)}
-                  selectedСore={selectedСore}
-                  setSelectedСore={(value) =>
-                    handleCheckboxChange(selectedСore, setSelectedСore, value)
-                  }
-                />
+                  <Dropdown
+                    className='inline-flex shadow-lg'
+                    title={
+                      <div className='flex items-center gap-1'>
+                        <span className='hidden sm:inline'>{sortingValue.title}</span>
+                        <ArrowsUpDownIcon className='w-6 h-6' />
+                      </div>
+                    }
+                    items={sortingOptions}
+                    keyExtractor={(item) => item.title}
+                    labelExtractor={(item) => item.title}
+                    onSelect={(item) => handleSorting(item)}
+                  />
+                </div>
               </div>
             </div>
-            <div className='py-2 flex items-center flex-wrap gap-2'>
+            <div className='my-2 md:my-0 py-2 flex md:flex-wrap items-center gap-1 md:gap-2 overflow-x-auto w-[95vw] md:w-full'>
               {acceptedPrice !== null && (
                 <ProductFilterItem
                   title='Ціна'
@@ -379,7 +394,7 @@ const Laptops = () => {
                 />
               )}
               {selectedBrands.length > 0 && (
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-1 md:gap-2'>
                   {selectedBrands.map((item) => (
                     <ProductFilterItem
                       title='Бренд'
@@ -481,7 +496,7 @@ const Laptops = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

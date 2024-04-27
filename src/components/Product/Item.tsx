@@ -25,6 +25,8 @@ const ProductItem = ({ addProductToCart, addToWishList, item }: IProductItem) =>
   const dispatch = useAppDispatch();
   const userHistory = useAppSelector((state) => state.products.userHistory);
 
+  console.log('item', item);
+
   useEffect(() => {
     if (userHistory?.wishlist) {
       const inWIshList = userHistory?.wishlist.some(
@@ -74,7 +76,7 @@ const ProductItem = ({ addProductToCart, addToWishList, item }: IProductItem) =>
           </button>
         </div>
       </div>
-      <div className='flex-1 flex flex-col mt-4 px-5 pb-5'>
+      <div className='flex-1 flex flex-col mt-2 px-2 pb-2 md:mt-4 md:px-5 md:pb-5'>
         <div>
           <a href='#'>
             <h5 className='text-sm sm:text-xl tracking-tight text-darkmain'>{product.model}</h5>
@@ -93,18 +95,16 @@ const ProductItem = ({ addProductToCart, addToWishList, item }: IProductItem) =>
               primary
               className='w-full bg-green-600 hover:bg-green-700 rounded-md border border-transparent px-5 py-2.5 text-sm font-medium text-white'>
               <div className='w-full text-center flex items-center justify-center gap-2'>
-                <CheckIcon className='w-6 h-6' />
-                In the cart
+                <CheckIcon className='w-4 h-4 md:w-6 md:h-6' />У кошику
               </div>
             </Button>
           ) : (
             <Button
               primary
               onClick={addToCart}
-              className='w-full rounded-md border border-transparent bg-colorMain px-5 py-2.5 text-sm font-medium text-white'>
+              className='w-full rounded-md border border-transparent bg-colorMain px-5 py-1.5 md:py-2.5 text-xs font-medium text-white'>
               <div className='w-full text-center flex items-center justify-center gap-2'>
-                <ShoppingCartIcon className='w-6 h-6' />
-                Add to cart
+                <ShoppingCartIcon className='w-4 h-4 md:w-6 md:h-6' />В кошик
               </div>
             </Button>
           )}

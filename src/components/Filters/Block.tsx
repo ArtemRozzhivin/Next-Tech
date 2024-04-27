@@ -134,7 +134,7 @@ const FiltersBlock = ({
               </div>
             </Disclosure.Button>
             <Disclosure.Panel className='flex flex-col gap-3 text-sm text-gray-500'>
-              <div className='flex items-center gap-2'>
+              <div className='flex flex-col xl:flex-row items-center gap-2'>
                 <div>від</div>
                 <Input
                   value={priceFrom}

@@ -31,16 +31,19 @@ const OrderingProductItem = ({ purchase, email }: IProductOrderingItem) => {
     <button
       onClick={() => setIsInfoOpen((prevState) => !prevState)}
       className='border border-gray-300 rounded-md shadow-sm hover:shadow-xl group p-5 bg-white transition-all'>
-      <div className='mb-4 md:mb-0 flex justify-end'>
-        {isInfoOpen ? (
-          <div className='flex items-center gap-1'>
-            Згорнути <ChevronUpIcon className='w-6 h-6' />
-          </div>
-        ) : (
-          <div className='flex items-center gap-1'>
-            Детальніше <ChevronDownIcon className='w-6 h-6' />
-          </div>
-        )}
+      <div className='flex items-center justify-between'>
+        <div className='text-gray-500'>{new Date(purchase.date).toLocaleString()}</div>
+        <div className='mb-4 md:mb-0 flex justify-end'>
+          {isInfoOpen ? (
+            <div className='flex items-center gap-1'>
+              Згорнути <ChevronUpIcon className='w-6 h-6' />
+            </div>
+          ) : (
+            <div className='flex items-center gap-1'>
+              Детальніше <ChevronDownIcon className='w-6 h-6' />
+            </div>
+          )}
+        </div>
       </div>
 
       <div className='flex flex-col gap-5'>

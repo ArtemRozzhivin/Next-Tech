@@ -31,7 +31,7 @@ const ProfileLayout = ({ children }: IProfileLayout) => {
   };
 
   return (
-    <div className='h-full sm:flex items-stretch'>
+    <div className='w-full max-w-[1536px] mx-auto h-full sm:flex items-stretch'>
       <div className='hidden md:block border-r border-gray-300'>
         <ProfileNavbar
           displayName={auth.currentUser?.displayName}

@@ -23,7 +23,7 @@ const ToggleProductDisplay = ({ handleGridLayout, gridLayout }: IToggleProductDi
     <>
       <button
         onClick={handleMobileToggleLayout}
-        className='sm:hidden inline-flex w-full rounded-md border border-gray-300 shadow-sm px-3 md:px-4 py-2 bg-white text-sm font-medium hover:bg-gray-50  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-colorThird'>
+        className='sm:hidden inline-flex rounded-md border border-gray-300 shadow-lg px-3 md:px-4 py-2 bg-white text-sm font-medium hover:bg-gray-50  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-colorThird'>
         {layout === 'large' ? (
           <Image width={32} height={32} src={smallTile} alt='filter' className='w-6 h-6' />
         ) : (

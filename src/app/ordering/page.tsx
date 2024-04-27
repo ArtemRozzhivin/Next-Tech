@@ -42,6 +42,7 @@ import { getUserHistory } from '@src/api/user';
 import { set } from 'lodash';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import routes from '@src/routes';
 
 interface ICity {
   AddressDeliveryAllowed: boolean;
@@ -265,7 +266,7 @@ const OrderingSearchCityModal = ({
                 <Loader />
               </div>
             ) : (
-              <div>
+              <div className='flex flex-col gap-2'>
                 {allCities.map((city) => (
                   <Button
                     key={city.Ref}
@@ -368,7 +369,7 @@ const OrderingSearchAdressModal = ({
                 icon={<HomeModernIcon className='w-5 h-5' />}
                 clearIcon
                 onClear={handleClickClear}
-                className='pr-9'
+                className='pr-9 rounded md:text-xl'
               />
             )}
           />
@@ -383,7 +384,7 @@ const OrderingSearchAdressModal = ({
             ) : allAdresses.length === 0 && adress && fetchAdressesError ? (
               <PagePlaceholder
                 title={fetchAdressesError}
-                description='Будь ласка, введіть адресу'
+                description='Будь ласка, введіть адресу правильно'
                 icon={<FaceFrownIcon className='text-colorMain w-20 h-20' />}
               />
             ) : allAdresses.length === 0 && adress && !fetchAdressesError ? (
@@ -495,6 +496,7 @@ const OrderingSearchOfficeAddressModal = ({
                 value={field.value}
                 onChange={(e) => handleChange(e, field)}
                 name='officeAdress'
+                className='pr-9 rounded md:text-xl'
                 icon={<EnvelopeIcon className='w-5 h-5' />}
                 placeholder='Введіть номер відділення або поштомат'
                 clearIcon
@@ -506,14 +508,14 @@ const OrderingSearchOfficeAddressModal = ({
           <div className='max-h-80 overflow-auto flex flex-col gap-2 my-3'>
             {allOfficeAdresses.length === 0 && !officeAdress ? (
               <PagePlaceholder
-                title='You have not entered a adress yet'
-                description='Please enter a adress name '
+                title='Ви ще не ввели адресу'
+                description='Будь ласка, введіть назву адреси'
                 icon={<FaceSmileIcon className='text-colorMain w-20 h-20' />}
               />
             ) : allOfficeAdresses.length === 0 && officeAdress && fetchOfficesError ? (
               <PagePlaceholder
                 title={fetchOfficesError}
-                description='Please enter a city name '
+                description='Будь ласка, введіть назву адреси правильно'
                 icon={<FaceFrownIcon className='text-colorMain w-20 h-20' />}
               />
             ) : allOfficeAdresses.length === 0 && officeAdress && !fetchOfficesError ? (
@@ -526,7 +528,7 @@ const OrderingSearchOfficeAddressModal = ({
                   <Button
                     key={item.Ref}
                     onClick={() => handleClickOnOfficeAdress(item)}
-                    giant
+                    className='text-xs md:px-6 md:py-3 md:text-base'
                     noBorder>
                     {item.Description}
                   </Button>
@@ -858,6 +860,7 @@ export const Ordering = () => {
         const orderedProducts = productToOrdering.map((item) => {
           return {
             ...item,
+            date: Date.now(),
             info: {
               method: currentDelivery,
               city: city,
@@ -877,6 +880,7 @@ export const Ordering = () => {
         });
 
         toast.success('Замовлення успішно оформлено');
+        router.push(routes.main);
         clearCart();
       } catch (error) {
         console.log(error);
@@ -894,7 +898,7 @@ export const Ordering = () => {
   };
 
   return (
-    <div className='flex flex-col gap-5 p-3 md:p-5'>
+    <div className='w-full max-w-[1536px] mx-auto flex flex-col gap-5 p-3 md:p-5'>
       <button
         onClick={redirectToPreviousPage}
         className='flex items-center gap-2 hover:text-colorMain'>
@@ -907,7 +911,7 @@ export const Ordering = () => {
           className='flex flex-col 2xl:flex-row items-start gap-3'>
           <div className='w-full flex-1 flex flex-col gap-5'>
             <div className='flex flex-col gap-5'>
-              <div className='text-2xl font-semibold'>1. Товари</div>
+              <div className='text-lg md:text-2xl font-semibold'>1. Товари</div>
               <div className='flex flex-col gap-3 justify-center items-center'>
                 {productToOrdering.map((item) => (
                   <div
@@ -920,9 +924,9 @@ export const Ordering = () => {
             </div>
 
             <div className='flex flex-col gap-5'>
-              <div className='text-2xl font-semibold'>2. Контактна інформація</div>
+              <div className='text-lg md:text-2xl font-semibold'>2. Контактна інформація</div>
               <div className='w-full rounded-md 2xl:p-5 2xl:border border-gray-300 shadow-sm bg-white'>
-                <div className='flex items-center'>
+                <div className=''>
                   <Controller
                     name='phone'
                     control={control}
@@ -944,7 +948,7 @@ export const Ordering = () => {
             </div>
 
             <div className='flex flex-col gap-5'>
-              <div className='text-2xl font-semibold'>3. Спосіб доставки</div>
+              <div className='text-lg md:text-2xl font-semibold'>3. Спосіб доставки</div>
               <div className='flex flex-col gap-5 rounded-md p-[6px] 2xl:p-5 border border-gray-300 shadow-sm bg-white'>
                 <>
                   <OrderingSearchCityModal

@@ -98,15 +98,17 @@ const productsSlice = createSlice({
         (item) => item.product.id === payload,
       );
 
-      if (existingProductToOrdering) {
+      if (existingProductToOrdering && existingProductToOrdering.count < 15) {
         existingProductToOrdering.count += 1;
         state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
         state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
       }
 
-      if (existingCartItem) {
+      if (existingCartItem && existingCartItem.count < 15) {
         existingCartItem.count += 1;
         state.cartTotalCount = calculateTotalCount(state.cartProducts);
+      } else if (existingCartItem && existingCartItem.count >= 15) {
+        return state;
       }
 
       state.currentProductToCart = {

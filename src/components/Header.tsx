@@ -37,49 +37,54 @@ const Header: React.FC<HeaderProps> = ({}) => {
   };
 
   return (
-    <div className='bg-darkmain text-lightmain flex justify-between items-center py-3'>
-      <button className='mx-1 md:hidden lg:mx-4'>
-        <Bars3Icon className='w-10 h-10' />
-      </button>
-      <Link href={routes.main} className='mx-1 flex lg:mx-4'>
-        <Image src={techLogo} width={40} alt='logo' />
-        <div className='hidden ml-3 md:block'>
-          <h3 className='font-bold text-xl uppercase leading-6'>Next Tech</h3>
-          <div className='text-xs lg:text-sm leading-4 text-grayApp'>Магазин найкращої техніки</div>
-        </div>
-      </Link>
-      <ul className='mx-1 flex gap-5 w-auto items-center lg:mx-4'>
-        <li>
-          <Link className='flex items-center gap-1' href='/cart'>
-            <Button noBorder className='sm:px-6 sm:py-3'>
-              <div className='relative'>
-                <ShoppingCartIcon className='h-8 w-8 text-lightmain' />
-                {!!cartTotalCount && (
-                  <div className='absolute -top-[7px] -right-1 bg-colorMain rounded-full text-white text-xs py-[1px] px-[5px]'>
-                    {cartTotalCount}
-                  </div>
-                )}
+    <header className='bg-darkmain'>
+      <div className='w-full max-w-[1536px] mx-auto text-lightmain flex justify-between items-center py-3'>
+        <button className='mx-1 md:hidden lg:mx-4'>
+          {/* <Bars3Icon className='w-10 h-10' /> */}
+          <Image src={techLogo} width={40} alt='logo' />
+        </button>
+        <Link href={routes.main} className='hidden md:flex mx-1 lg:mx-4'>
+          <Image src={techLogo} width={40} alt='logo' />
+          <div className='ml-3'>
+            <h3 className='font-bold text-xl uppercase leading-6'>Next Tech</h3>
+            <div className='text-xs lg:text-sm leading-4 text-grayApp'>
+              Магазин найкращої техніки
+            </div>
+          </div>
+        </Link>
+        <ul className='mx-1 flex gap-2 sm:gap-5 w-auto items-center lg:mx-4'>
+          <li>
+            <Link className='flex items-center gap-1' href='/cart'>
+              <Button noBorder className='sm:px-6 sm:py-3'>
+                <div className='relative'>
+                  <ShoppingCartIcon className='h-8 w-8 text-lightmain' />
+                  {!!cartTotalCount && (
+                    <div className='absolute -top-[7px] -right-1 bg-colorMain rounded-full text-white text-xs py-[1px] px-[5px]'>
+                      {cartTotalCount}
+                    </div>
+                  )}
+                </div>
+              </Button>
+            </Link>
+          </li>
+          <li>
+            {!!user ? (
+              <div>
+                <ProfileMenu user={user} logoutHandler={logoutHandler} />
               </div>
-            </Button>
-          </Link>
-        </li>
-        <li>
-          {!!user ? (
-            <div>
-              <ProfileMenu user={user} logoutHandler={logoutHandler} />
-            </div>
-          ) : (
-            <div>
-              <Link href='/signin'>
-                <Button noBorder giant>
-                  <UserIcon className='h-8 w-8 text-lightmain' />
-                </Button>
-              </Link>
-            </div>
-          )}
-        </li>
-      </ul>
-    </div>
+            ) : (
+              <div>
+                <Link href='/signin'>
+                  <Button noBorder giant>
+                    <UserIcon className='h-8 w-8 text-lightmain' />
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </li>
+        </ul>
+      </div>
+    </header>
   );
 };
 

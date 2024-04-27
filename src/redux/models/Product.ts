@@ -20,6 +20,7 @@ export interface IProductCartItem extends IProductItem {
 }
 
 export interface IOrderedItem extends IProductCartItem {
+  date: number;
   info: {
     method: string;
     city: string;

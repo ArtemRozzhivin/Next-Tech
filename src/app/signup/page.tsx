@@ -116,9 +116,7 @@ const Signup = (): JSX.Element => {
       <div className='bg-gray-50 dark:bg-slate-900 flex flex-col py-6 px-4 sm:px-6 lg:px-8'>
         <div className='flex min-h-full flex-1 flex-col justify-center py-6 sm:px-6 lg:px-8'>
           <div className='sm:mx-auto sm:w-full sm:max-w-md'>
-            <p className='text-center text-2xl text-gray-900 dark:text-gray-50'>
-              {'auth.signup.title'}
-            </p>
+            <p className='text-center text-2xl text-gray-900 dark:text-gray-50'>Реєстрація</p>
           </div>
           <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]'>
             <div className='bg-white dark:bg-slate-800/20 dark:ring-1 dark:ring-slate-800 px-6 py-12 shadow sm:rounded-lg sm:px-12'>
@@ -127,7 +125,8 @@ const Signup = (): JSX.Element => {
                   name='email'
                   id='email'
                   type='email'
-                  label={'auth.common.email'}
+                  label='Ел. пошта'
+                  placeholder='example@gmail.com'
                   value={form.email}
                   onChange={handleInput}
                   error={beenSubmitted ? errors.email : ''}
@@ -136,8 +135,8 @@ const Signup = (): JSX.Element => {
                   name='password'
                   id='password'
                   type='password'
-                  label={'auth.common.password'}
-                  hint={'auth.common.hint'}
+                  label={'Пароль'}
+                  placeholder='********'
                   value={form.password}
                   onChange={handleInput}
                   error={beenSubmitted ? errors.password : ''}
@@ -146,7 +145,8 @@ const Signup = (): JSX.Element => {
                   name='repeat'
                   id='repeat'
                   type='password'
-                  label={'auth.common.repeat'}
+                  label={'Повторіть пароль'}
+                  placeholder='********'
                   value={form.repeat}
                   onChange={handleInput}
                   error={beenSubmitted ? errors.repeat : ''}
@@ -157,7 +157,7 @@ const Signup = (): JSX.Element => {
                   loading={isLoading}
                   primary
                   giant>
-                  {'auth.signup.button'}
+                  {'Зареєструватись'}
                 </Button>
               </form>
 
@@ -167,8 +167,8 @@ const Signup = (): JSX.Element => {
                     <div className='w-full border-t border-gray-200 dark:border-gray-600' />
                   </div>
                   <div className='relative flex justify-center text-sm font-medium leading-6'>
-                    <span className='bg-white dark:bg-slate-800/20 px-6 text-gray-900 dark:text-gray-50'>
-                      {'auth.common.orContinueWith'}
+                    <span className='text-center bg-white px-6 text-gray-900'>
+                      Або зареєструйтесь за допомогою
                     </span>
                   </div>
                 </div>
@@ -178,13 +178,12 @@ const Signup = (): JSX.Element => {
               </div>
             </div>
 
-            <p className='mt-10 text-center text-sm text-gray-500 dark:text-gray-200'>
-              <span>{'auth.signup.alreadyAMember'} </span>
+            <p className='mt-10 text-center text-sm text-gray-500'>
+              <span>Вже маєте обліковий запис? </span>
               <Link
                 href={routes.signin}
-                className='font-semibold leading-6 text-colorMain hover:text-colorSecond'
-                aria-label={'titles.signin'}>
-                {'auth.common.signinInstead'}
+                className='font-semibold leading-6 text-colorMain hover:text-colorSecond'>
+                Увійдіть
               </Link>
             </p>
           </div>

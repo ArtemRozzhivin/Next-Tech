@@ -87,7 +87,7 @@ const Signin = () => {
     <div className='bg-gray-50 dark:bg-slate-900 flex flex-col py-6 px-4 sm:px-6 lg:px-8'>
       <div className='sm:mx-auto sm:w-full sm:max-w-md'>
         <h2 className='text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-gray-50'>
-          'auth.signin.title'
+          Авторизація
         </h2>
       </div>
       <div className='mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]'>
@@ -97,7 +97,7 @@ const Signin = () => {
               name='email'
               id='email'
               type='email'
-              label={'auth.common.email'}
+              label={'Ел. пошта'}
               value={form.email}
               className='mt-4'
               placeholder='example@gmail.com'
@@ -108,8 +108,8 @@ const Signin = () => {
               name='password'
               id='password'
               type='password'
-              label={'auth.common.password'}
-              hint={'auth.common.hint'}
+              label={'Пароль'}
+              placeholder='********'
               value={form.password}
               className='mt-4'
               onChange={handleInput}
@@ -122,7 +122,7 @@ const Signin = () => {
               className='w-full justify-center'
               type='submit'
               loading={isLoading}>
-              {'auth.signin.button'}
+              {'Увійти'}
             </Button>
           </form>
 
@@ -132,8 +132,8 @@ const Signin = () => {
                 <div className='w-full border-t border-gray-200 dark:border-gray-600' />
               </div>
               <div className='relative flex justify-center text-sm font-medium leading-6'>
-                <span className='bg-white dark:bg-slate-800/20 px-6 text-gray-900 dark:text-gray-50'>
-                  {'auth.common.orContinueWith'}
+                <span className='text-center bg-white dark:bg-slate-800/20 px-6 text-gray-900 dark:text-gray-50'>
+                  Або авторизуйтесь за допомогою
                 </span>
               </div>
             </div>
@@ -145,12 +145,12 @@ const Signin = () => {
       </div>
 
       <p className='mt-10 text-center text-sm text-gray-500 dark:text-gray-200'>
-        <span>{'auth.signup.notRegisteredYet'} </span>
+        <span>Все ще не маєте облікового запису? </span>
         <Link
           href={routes.signup}
           className='font-semibold leading-6 text-colorMain hover:text-colorSecond'
           aria-label={'titles.signup'}>
-          {'auth.common.signupInstead'}
+          {'Зареєструйтесь'}
         </Link>
       </p>
     </div>

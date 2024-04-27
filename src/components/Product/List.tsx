@@ -15,13 +15,14 @@ import { HeartIcon, TrashIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/o
 import { arrayRemove, arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@src/firebaseConfig';
 import { getUserHistory } from '@src/api/user';
-import AddedProductModal from '../AddedProductModal';
+import AddedProductModal from '../Modals/AddedProductModal';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { handleAddToWishList } from '@src/api/products';
 import cx from 'clsx';
 import { toast } from 'react-toastify';
 import routes from '@src/routes';
 import Link from 'next/link';
+import MustAuthModal from '../Modals/MustAuthModal';
 
 interface IProductList {
   items?: IProductItem[];
@@ -54,30 +55,28 @@ const ProductList = ({ items, gridLayout = 'large' }: IProductList) => {
 
   return (
     <>
-      <div>
+      {!!items ? (
         <div
           className={cx('grid grid-flow-row gap-1', {
-            'grid-cols-1 sm:grid-cols-4': gridLayout === 'large',
-            'grid-cols-2 sm:grid-cols-5': gridLayout === 'small',
+            'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4': gridLayout === 'large',
+            'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5': gridLayout === 'small',
           })}>
-          {!!items ? (
-            items.map((item) => (
-              <ProductCard
-                key={item.product.id}
-                item={item}
-                addToWishList={(product: IProductItem) => handleAddProductToWishlist(product)}
-                addProductToCart={handleAddProductToCart}
-              />
-            ))
-          ) : (
-            <PagePlaceholder
-              icon={<FaceFrownIcon className='w-10 h-10 text-colorMain' />}
-              title='No products found'
-              description='No products found, please reload the page'
+          {items.map((item) => (
+            <ProductCard
+              key={item.product.id}
+              item={item}
+              addToWishList={(product: IProductItem) => handleAddProductToWishlist(product)}
+              addProductToCart={handleAddProductToCart}
             />
-          )}
+          ))}
         </div>
-      </div>
+      ) : (
+        <PagePlaceholder
+          icon={<FaceFrownIcon className='w-10 h-10 text-colorMain' />}
+          title='Не знайдено жодного товару'
+          description='Будь ласка, перезавантажте сторінку'
+        />
+      )}
 
       {currentProductToCart && (
         <AddedProductModal
@@ -93,29 +92,8 @@ const ProductList = ({ items, gridLayout = 'large' }: IProductList) => {
           setOpenModal={setShowModal}
         />
       )}
-      <Modal
-        onClose={() => setMustAuthModal(false)}
-        title={'Обліковий запис'}
-        type='warning'
-        isOpened={mustAuthModal}>
-        <div className='flex flex-col items-center gap-2'>
-          <div className='text-lg'>Увійдіть до свого облікового запису для продовження</div>
-          <Link href={routes.signin}>
-            <Button giant primary>
-              Уввійти
-            </Button>
-          </Link>
-        </div>
 
-        <p className='mt-10 text-center text-sm text-gray-500 dark:text-gray-200'>
-          <span>Все ще не зареєстровані на сайті? </span>
-          <Link
-            href={routes.signup}
-            className='font-semibold leading-6 text-colorMain hover:text-colorSecond'>
-            Зареєструватись
-          </Link>
-        </p>
-      </Modal>
+      <MustAuthModal isOpen={mustAuthModal} onClose={() => setMustAuthModal(false)} />
     </>
   );
 };

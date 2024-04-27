@@ -15,6 +15,9 @@ import { toast } from 'react-toastify';
 import Modal from '@src/ui/Modal';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import MustAuthModal from '@src/components/Modals/MustAuthModal';
+import { handleAddToWishList } from '@src/api/products';
+import { IProductItem } from '@src/redux/models';
 
 export const Cart = () => {
   const {
@@ -26,6 +29,7 @@ export const Cart = () => {
   } = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { userHistory } = useAppSelector((state) => state.products);
   const user = useAppSelector((state) => state.auth.user);
   const [mustAuthModal, setMustAuthModal] = React.useState(false);
 
@@ -48,15 +52,23 @@ export const Cart = () => {
     }
   };
 
+  const handleAddProductToWishlist = (product: IProductItem) => {
+    if (user) {
+      handleAddToWishList(product, userHistory, user, dispatch);
+    } else {
+      setMustAuthModal(true);
+    }
+  };
+
   return (
-    <>
+    <div className='py-2 w-full max-w-[1536px] mx-auto'>
       {cartTotalCount === 0 ? (
         <div className='p-5 flex flex-col gap-5'>
           <button
             onClick={redirectToPreviousPage}
             className='flex items-center gap-2 hover:text-colorMain'>
-            <ArrowLeftIcon className='w-6 h-6' />
-            <h2 className='text-xl font-semibold'>До головної</h2>
+            <ArrowLeftIcon className='w-4 h-4 sm:w-6 sm:h-6' />
+            <h2 className='sm:text-xl font-semibold'>Назад</h2>
           </button>
           <PagePlaceholder
             title='Ваша корзина пуста'
@@ -64,7 +76,7 @@ export const Cart = () => {
           />
         </div>
       ) : (
-        <div className='flex flex-col gap-5 p-5'>
+        <div className='flex flex-col gap-5 p-2 md:p-5'>
           <div className='flex items-center gap-4'>
             <button
               onClick={redirectToPreviousPage}
@@ -87,18 +99,22 @@ export const Cart = () => {
               </div>
               <div className='flex flex-col gap-3 justify-center items-center'>
                 {cartProducts.map((item) => (
-                  <ProductCartItem key={item.product.version} {...item} />
+                  <ProductCartItem
+                    addToWishlist={() => handleAddProductToWishlist(item)}
+                    key={item.product.version}
+                    item={item}
+                  />
                 ))}
               </div>
             </div>
 
-            <div className='w-full rounded-md flex flex-col gap-3 xl:gap-10 bg-white border border-gray-300 p-2 md:p-5'>
+            <div className='w-full xl:w-1/3 rounded-md flex flex-col gap-3 xl:gap-10 bg-white border border-gray-300 p-2 md:p-5'>
               <div className='flex flex-col gap-1 xl:gap-3'>
-                <div className='text-lg mdtext-2xl flex items-center justify-between'>
+                <div className='text-lg gap-3 mdtext-2xl flex items-center justify-between'>
                   <div>Кількість товарів:</div>
                   <div className='font-semibold'>{productsCountToOrdering} шт.</div>
                 </div>
-                <div className='flex items-center justify-between'>
+                <div className='flex gap-3 items-center justify-between'>
                   <div className='text-xl md:text-3xl'>Загальна сума:</div>
                   <div className='font-semibold text-xl md:text-3xl'>
                     {productsPriceToOrdering}₴
@@ -126,30 +142,9 @@ export const Cart = () => {
           </div>
         </div>
       )}
-      <Modal
-        onClose={() => setMustAuthModal(false)}
-        title={'Обліковий запис'}
-        type='warning'
-        isOpened={mustAuthModal}>
-        <div className='flex flex-col items-center gap-2'>
-          <div className='text-lg'>Увійдіть до свого облікового запису для продовження</div>
-          <Link href={routes.signin}>
-            <Button giant primary>
-              Уввійти
-            </Button>
-          </Link>
-        </div>
 
-        <p className='mt-10 text-center text-sm text-gray-500 dark:text-gray-200'>
-          <span>Все ще не зареєстровані на сайті? </span>
-          <Link
-            href={routes.signup}
-            className='font-semibold leading-6 text-colorMain hover:text-colorSecond'>
-            Зареєструватись
-          </Link>
-        </p>
-      </Modal>
-    </>
+      <MustAuthModal isOpen={mustAuthModal} onClose={() => setMustAuthModal(false)} />
+    </div>
   );
 };
 

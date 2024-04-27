@@ -12,7 +12,7 @@ import { selectCartItemById } from '@src/redux/reducers/Products/selectors';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
 import { productsActions } from '@src/redux/reducers/Products/products';
 import { handleAddToWishList } from '@src/api/products';
-import AddedProductModal from '@src/components/AddedProductModal';
+import AddedProductModal from '@src/components/Modals/AddedProductModal';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import routes from '@src/routes';
@@ -20,6 +20,7 @@ import Modal from '@src/ui/Modal';
 import Link from 'next/link';
 import Loader from '@src/components/Loader';
 import algoliasearch from 'algoliasearch';
+import MustAuthModal from '@src/components/Modals/MustAuthModal';
 
 interface IProductDetail {
   product: {
@@ -574,18 +575,16 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
 
   return (
     <>
-      <div className='flex flex-wrap -mx-4'>
+      <div className='flex items-center gap-2 flex-wrap md:flex-nowrap'>
         <div className='w-full mb-8 md:w-1/2 md:mb-0'>
-          <div className='sticky top-0 z-10 overflow-hidden '>
-            <div className='flex justify-center items-center relative mb-2 sm:mb-6 lg:mb-10 lg:h-2/4'>
-              <Image
-                width={window.innerWidth < 640 ? 250 : 500}
-                height={window.innerWidth < 640 ? 250 : 500}
-                src={currentDetailProduct?.image?.large}
-                alt='product'
-                className='object-contain sm:w-full lg:h-full'
-              />
-            </div>
+          <div className='flex justify-center items-center relative mb-2 sm:mb-6 lg:mb-10 lg:h-2/4'>
+            <Image
+              width={window.innerWidth < 640 ? 250 : 500}
+              height={window.innerWidth < 640 ? 250 : 500}
+              src={currentDetailProduct?.image?.large}
+              alt='product'
+              className='object-contain sm:w-full lg:h-full'
+            />
           </div>
         </div>
         <div className='w-full px-4 md:w-1/2'>
@@ -647,8 +646,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
                   onClick={() => handleAddProductToWishlist(currentDetailProduct)}
                   large>
                   <div className='w-full text-center flex items-center justify-center gap-2'>
-                    <HeartIcon className='w-6 h-6' />
-                    До обраного
+                    <HeartIcon className='w-6 h-6' />В обране
                   </div>
                 </Button>
               )}
@@ -671,29 +669,8 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
           />
         )}
       </div>
-      <Modal
-        onClose={() => setMustAuthModal(false)}
-        title={'Обліковий запис'}
-        type='warning'
-        isOpened={mustAuthModal}>
-        <div className='flex flex-col items-center gap-2'>
-          <div className='text-lg'>Увійдіть до свого облікового запису для продовження</div>
-          <Link href={routes.signin}>
-            <Button giant primary>
-              Уввійти
-            </Button>
-          </Link>
-        </div>
 
-        <p className='mt-10 text-center text-sm text-gray-500 dark:text-gray-200'>
-          <span>Все ще не зареєстровані на сайті? </span>
-          <Link
-            href={routes.signup}
-            className='font-semibold leading-6 text-colorMain hover:text-colorSecond'>
-            Зареєструватись
-          </Link>
-        </p>
-      </Modal>
+      <MustAuthModal isOpen={mustAuthModal} onClose={() => setMustAuthModal(false)} />
     </>
   );
 };
@@ -753,7 +730,7 @@ const LaptopDetail: React.FC = ({ params }) => {
   }, []);
 
   return (
-    <section className='overflow-hidden p-2 sm:p-10 flex flex-col gap-5 bg-white'>
+    <section className='w-full max-w-[1536px] mx-auto overflow-hidden p-2 sm:p-10 flex flex-col gap-2 md:gap-5 bg-white'>
       <button
         onClick={redirectToPreviousPage}
         className='flex items-center gap-2 hover:text-colorMain'>
@@ -783,7 +760,7 @@ const LaptopDetail: React.FC = ({ params }) => {
             </Tab.List>
             <Tab.Panels className='mt-2'>
               {tabs.map((tab) => (
-                <Tab.Panel key={tab.id} className={'rounded-xl bg-white py-7'}>
+                <Tab.Panel key={tab.id} className={'rounded-xl bg-white py-2 md:py-7'}>
                   {tab.id === 1 ? (
                     <MainBlock product={productDetail} />
                   ) : (

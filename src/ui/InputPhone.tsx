@@ -28,6 +28,7 @@ export const InputPhone = ({
       <div>
         <InputLabel>{label}</InputLabel>
         <MuiTelInput
+          className='w-full'
           name={name}
           defaultCountry='UA'
           value={value}
