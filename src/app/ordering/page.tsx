@@ -637,7 +637,7 @@ const defaultValues: IFormData = {
 
 const novaPoshtaKey = process.env.NEXT_PUBLIC_NOVAPOSHTA_API_KEY;
 
-export const Ordering = () => {
+const Ordering = () => {
   const { cartProducts, productToOrdering, productsCountToOrdering, productsPriceToOrdering } =
     useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();

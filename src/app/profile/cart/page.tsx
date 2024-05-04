@@ -17,7 +17,7 @@ import MustAuthModal from '@src/components/Modals/MustAuthModal';
 import { handleAddToWishList } from '@src/api/products';
 import { IProductItem } from '@src/redux/models';
 
-export const Cart = () => {
+const Cart = () => {
   const {
     cartProducts,
     productsCountToOrdering,

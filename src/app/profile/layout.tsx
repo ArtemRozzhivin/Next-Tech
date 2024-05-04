@@ -24,7 +24,6 @@ interface IProfileLayout {
 
 const ProfileLayout = ({ children }: IProfileLayout) => {
   const router = useRouter();
-  const userHistory = useAppSelector((state) => state.products);
 
   const handleClickMenuItem = (item: IMenuItem) => {
     router.push(item.path);
