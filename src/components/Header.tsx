@@ -21,12 +21,11 @@ import { authActions } from '@src/redux/reducers/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import routes from '@src/routes';
+import { productsActions } from '@src/redux/reducers/Products/products';
 
 type HeaderProps = {};
 
 const Header: React.FC<HeaderProps> = ({}) => {
-  const pathname = usePathname();
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   const cartTotalCount = useAppSelector((state) => state.products.cartTotalCount);
@@ -34,6 +33,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
   const logoutHandler = async () => {
     await signOut(auth);
     dispatch(authActions.logout());
+    dispatch(productsActions.clearUserHistory());
   };
 
   return (

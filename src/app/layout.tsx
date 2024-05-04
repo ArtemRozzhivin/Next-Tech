@@ -2,13 +2,14 @@ import type { Metadata } from 'next';
 import Footer from '@src/components/Footer';
 import Header from '@src/components/Header';
 import { Inter } from 'next/font/google';
-import { notFound, useRouter } from 'next/navigation';
-import './globals.css';
 import StoreProvider from './StoreProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import cx from 'clsx';
 import 'react-toastify/dist/ReactToastify.css';
-import MobileNavBar, { IMenuItem } from '@src/components/MobileNavbar';
+import MobileNavBar from '@src/components/MobileNavbar';
+
+import './globals.css';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {

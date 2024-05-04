@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ChangeEvent, Fragment } from 'react';
+import React, { ChangeEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import Button from '@src/ui/Button';
 import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
@@ -39,7 +39,6 @@ import { validation } from './validation';
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@src/firebaseConfig';
 import { getUserHistory } from '@src/api/user';
-import { set } from 'lodash';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import routes from '@src/routes';

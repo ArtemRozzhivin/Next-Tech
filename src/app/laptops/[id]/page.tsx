@@ -15,9 +15,6 @@ import { handleAddToWishList } from '@src/api/products';
 import AddedProductModal from '@src/components/Modals/AddedProductModal';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import routes from '@src/routes';
-import Modal from '@src/ui/Modal';
-import Link from 'next/link';
 import Loader from '@src/components/Loader';
 import algoliasearch from 'algoliasearch';
 import MustAuthModal from '@src/components/Modals/MustAuthModal';
@@ -412,7 +409,11 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
             />,
             <InfoBlock
               title='Роздільна здатність'
-              info={`${product?.camera?.front_camera?.definition} ${product?.camera?.front_camera?.video_frame_rate}`}
+              info={product?.camera?.front_camera?.definition}
+            />,
+            <InfoBlock
+              title='Роздільна здатність (висота x ширина)'
+              info={product?.camera?.front_camera?.['resolution_(h_x_w)']}
             />,
           ]}
         />
@@ -473,7 +474,7 @@ const CharacteristicsBlock = ({ product }: { product: IProductDetail }) => {
             />,
             <InfoBlock
               title='Додаткові характеристики'
-              info={product?.inside?.audio?.number_of_speakers}
+              info={product?.inside?.audio?.additional_features}
             />,
           ]}
         />
@@ -538,6 +539,8 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
         (item) => item.product.id === currentDetailProduct?.product?.id,
       );
       setInWishlist(inWIshList);
+    } else {
+      setInWishlist(false);
     }
   }, [userHistory]);
 
@@ -681,7 +684,10 @@ const tabs = [
 ];
 
 const techspecsKey = process.env.NEXT_PUBLIC_TECHSPECSAPI_API_KEY;
-const client = algoliasearch('Q2QOIT41TW', '09737b1233e8e42a12c90f0a08a08dd6');
+const algoliaApplicationId = process.env.NEXT_PUBLIC_APPLICATION_ID as string;
+const algoliaSearchApiKey = process.env.NEXT_PUBLIC_SEARCH_API_KEY as string;
+
+const client = algoliasearch(algoliaApplicationId, algoliaSearchApiKey);
 const index = client.initIndex('product_search');
 
 const LaptopDetail: React.FC = ({ params }) => {

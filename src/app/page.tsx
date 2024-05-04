@@ -1,13 +1,13 @@
 'use client';
 
 import { auth } from '@src/firebaseConfig';
-import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
+import { useAppDispatch } from '@src/redux/hooks';
 import { onAuthStateChanged } from 'firebase/auth';
 import { authActions } from '@redux/reducers/auth';
 import { getUserHistory } from '@src/api/user';
 import { productsActions } from '@src/redux/reducers/Products/products';
 import Laptops from './laptops/page';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function Home() {
   const dispatch = useAppDispatch();

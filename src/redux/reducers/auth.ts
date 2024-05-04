@@ -2,9 +2,9 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User } from '@src/models/user';
 import _filter from 'lodash/filter';
 import _map from 'lodash/map';
-import { User } from 'firebase/auth';
 
 interface IAuthState {
   user: User | null;

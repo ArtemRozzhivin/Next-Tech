@@ -22,10 +22,7 @@ interface IProductItem {
 
 const ProductItem = ({ addProductToCart, addToWishList, item }: IProductItem) => {
   const [inWishlist, setInWishlist] = React.useState<boolean>(false);
-  const dispatch = useAppDispatch();
   const userHistory = useAppSelector((state) => state.products.userHistory);
-
-  console.log('item', item);
 
   useEffect(() => {
     if (userHistory?.wishlist) {
@@ -33,6 +30,8 @@ const ProductItem = ({ addProductToCart, addToWishList, item }: IProductItem) =>
         (product) => product.product.id === item.product.id,
       );
       setInWishlist(inWIshList);
+    } else {
+      setInWishlist(false);
     }
   }, [userHistory]);
 

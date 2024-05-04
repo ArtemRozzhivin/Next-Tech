@@ -15,6 +15,7 @@ const calculateTotalPrice = (cartProducts: IProductCartItem[]): number => {
 };
 
 export interface IUserHistory {
+  id: string;
   user: string;
   purchases: IOrderedItem[] | null;
   wishlist: IProductItem[] | null;
@@ -54,6 +55,10 @@ const productsSlice = createSlice({
 
     setUserHistory: (state, { payload }: PayloadAction<IUserHistory>) => {
       state.userHistory = payload;
+    },
+
+    clearUserHistory: (state) => {
+      state.userHistory = null;
     },
 
     setCurrentProductToCart: (state, { payload }: PayloadAction<IProductCartItem>) => {

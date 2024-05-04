@@ -34,6 +34,8 @@ const AddedProductModal = ({
         (product) => product.product.id === item.product.id,
       );
       setInWishlist(inWIshList);
+    } else {
+      setInWishlist(false);
     }
   }, [userHistory, item]);
 

@@ -1,32 +1,39 @@
 'use client';
 
-import { ArrowsUpDownIcon, HomeIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { ArrowsUpDownIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import FiltersBlock from '@src/components/Filters/Block';
 import ProductsList from '@src/components/Product/List';
 import Dropdown from '@src/ui/Dropdown';
 import Input from '@src/ui/Input';
 import algoliasearch, { SearchIndex } from 'algoliasearch';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
-import cx from 'clsx';
 import ProductFilterItem from '@src/components/Filters/ProductFilterItem';
 import { IProductItem } from '@src/redux/models';
-import Link from 'next/link';
-import { InstantSearch } from 'react-instantsearch';
 import СustomPagination from '@src/ui/Pagination';
 import ResetFilters from '@src/components/Filters/Reset';
 import Loader from '@src/components/Loader';
 import ToggleProductDisplay from '@src/components/ToggleProductDisplay';
 import FiltersMobileBlock from '@src/components/Filters/MobileBlock';
+import PagePlaceholder from '@src/components/PagePlaceholder';
 
-const client = algoliasearch('Q2QOIT41TW', '09737b1233e8e42a12c90f0a08a08dd6');
+const algoliaApplicationId = process.env.NEXT_PUBLIC_APPLICATION_ID as string;
+const algoliaSearchApiKey = process.env.NEXT_PUBLIC_SEARCH_API_KEY as string;
+
+const client = algoliasearch(algoliaApplicationId, algoliaSearchApiKey);
 const index = client.initIndex('product_search');
 const descPriceIndex = client.initIndex('product_search_price_desc');
 const ascPriceIndex = client.initIndex('product_search_price_asc');
 
-const sortingOptions = [
+interface ISortingOption {
+  title: string;
+  method: string;
+  index: SearchIndex;
+  name: string;
+}
+
+const sortingOptions: ISortingOption[] = [
   { title: 'Популярні', method: 'desc', index: index, name: 'prpduct_search' },
   {
     title: 'Від дешевших до дорогих',
@@ -109,8 +116,6 @@ const Laptops = () => {
   const [priceTo, setPriceTo] = useState<number>(70000);
   const [acceptedPrice, setAcceptedPrice] = useState<{ from: number; to: number } | null>(null);
 
-  console.log('laptops', laptops);
-
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedProcessor, setSelectedProcessor] = useState<string[]>([]);
   const [selectedDisplay, setSelectedDisplay] = useState<string[]>([]);
@@ -125,11 +130,14 @@ const Laptops = () => {
   const [currentPage, setCurrentPage] = useState<number | null>(0);
   const [pagination, setPagination] = useState<{ nbPages: number; page: number } | null>(null);
 
+  const [loading, setLoading] = useState<boolean>(true);
+
   const debouncedCallback = useDebouncedCallback((callback) => {
     callback();
   }, 1500);
 
   const fetchProducts = (customIndex: SearchIndex, value: string) => {
+    setLoading(true);
     const filtersArray: string[] = [];
     const filterPrice = `product.price:${priceFrom} TO ${priceTo}`;
 
@@ -165,7 +173,7 @@ const Laptops = () => {
     }
 
     customIndex
-      .search(value, { page: currentPage, hitsPerPage: 15, filters: filters })
+      .search(value, { page: currentPage, hitsPerPage: 15, filters: value ? filterPrice : filters })
       .then((response) => {
         setPagination({
           nbPages: response.nbPages,
@@ -173,6 +181,9 @@ const Laptops = () => {
         });
 
         setLaptops(response.hits);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -208,7 +219,7 @@ const Laptops = () => {
     setSelectedСore([]);
   };
 
-  const handleSearchProduct = (e: any) => {
+  const handleSearchProduct = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchProduct(e.target.value);
 
     debouncedCallback(() => {
@@ -217,13 +228,13 @@ const Laptops = () => {
     });
   };
 
-  const handleSorting = async (sort: any) => {
+  const handleSorting = async (sort: ISortingOption) => {
     setSortingValue(sort);
   };
 
   const handleCheckboxChange = (
     selectedOptions: string[],
-    setSelectedOptions: React.SetStateAction<string[]>,
+    setSelectedOptions: React.Dispatch<React.SetStateAction<string[]>>,
     value: string,
   ) => {
     if (selectedOptions.includes(value)) {
@@ -251,6 +262,7 @@ const Laptops = () => {
   useEffect(() => {
     handleFetch();
   }, [
+    searchProduct,
     sortingValue,
     selectedBrands,
     selectedDisplay,
@@ -480,12 +492,21 @@ const Laptops = () => {
               )}
             </div>
 
-            {laptops.length > 0 ? (
-              <ProductsList gridLayout={gridLayout} items={laptops} />
-            ) : (
+            {loading ? (
               <div className='py-20'>
                 <Loader />
               </div>
+            ) : (
+              <>
+                {laptops.length === 0 ? (
+                  <PagePlaceholder
+                    title='Товарів не знайдено'
+                    description='Спробуйте змінити параметри фільтрації або скиньте фільтри для перегляду доступних товарів'
+                  />
+                ) : (
+                  <ProductsList gridLayout={gridLayout} items={laptops} />
+                )}
+              </>
             )}
 
             {laptops.length > 0 && (

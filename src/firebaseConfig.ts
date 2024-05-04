@@ -1,5 +1,3 @@
-// Import the functions you need from the SDKs you need
-
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
@@ -11,21 +9,23 @@ import {
   signInWithPopup,
 } from 'firebase/auth';
 import { getStorage, ref } from 'firebase/storage';
-import { addUserHistory } from './api/user';
 
-// TODO: Add SDKs for Firebase products that you want to use
+const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+const authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN;
+const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+const storageBucket = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
+const messagingSenderId = process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID;
+const appId = process.env.NEXT_PUBLIC_FIREBASE_APP_ID;
+const measurementId = process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID;
 
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyADt6ad6jftwhdQZSTtI8ugDY8blpmconU',
-  authDomain: 'nexttech-e8ed2.firebaseapp.com',
-  projectId: 'nexttech-e8ed2',
-  storageBucket: 'nexttech-e8ed2.appspot.com',
-  messagingSenderId: '868976487692',
-  appId: '1:868976487692:web:5cfb2efa5337763d872d29',
-  measurementId: 'G-7W8YK2BMSF',
+  apiKey: apiKey,
+  authDomain: authDomain,
+  projectId: projectId,
+  storageBucket: storageBucket,
+  messagingSenderId: messagingSenderId,
+  appId: appId,
+  measurementId: measurementId,
 };
 
 export const signup = (email: string, password: string) => {
