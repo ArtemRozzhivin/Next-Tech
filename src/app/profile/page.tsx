@@ -1,14 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import {
-  UserIcon,
-  ShoppingCartIcon,
-  HeartIcon,
-  ClipboardDocumentListIcon,
-} from '@heroicons/react/24/outline';
-import { useAppSelector } from '@src/redux/hooks';
-import Wishlist from './wishlist/page';
+import React from 'react';
 import { auth } from '@src/firebaseConfig';
 import Image from 'next/image';
 

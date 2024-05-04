@@ -100,43 +100,6 @@ interface IOfficeAdress {
   SelfServiceWorkplacesCount: string;
   TotalMaxWeightAllowed: string;
   PlaceMaxWeightAllowed: string;
-  SendingLimitationsOnDimensions: {
-    Width: number;
-    Height: number;
-    Length: number;
-  };
-  ReceivingLimitationsOnDimensions: {
-    Width: number;
-    Height: number;
-    Length: number;
-  };
-  Reception: {
-    Monday: string;
-    Tuesday: string;
-    Wednesday: string;
-    Thursday: string;
-    Friday: string;
-    Saturday: string;
-    Sunday: string;
-  };
-  Delivery: {
-    Monday: string;
-    Tuesday: string;
-    Wednesday: string;
-    Thursday: string;
-    Friday: string;
-    Saturday: string;
-    Sunday: string;
-  };
-  Schedule: {
-    Monday: string;
-    Tuesday: string;
-    Wednesday: string;
-    Thursday: string;
-    Friday: string;
-    Saturday: string;
-    Sunday: string;
-  };
   DistrictCode: string;
   WarehouseStatus: string;
   WarehouseStatusDate: string;
