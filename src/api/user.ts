@@ -9,6 +9,7 @@ export const addUserHistory = async (userId: string) => {
 
   if (!userSnap.exists()) {
     await setDoc(userRef, { id: userId }, { merge: true });
+
     return;
   }
 };

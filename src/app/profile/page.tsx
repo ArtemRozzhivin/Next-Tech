@@ -14,7 +14,7 @@ const Profile = () => {
             className='rounded-full'
             width={80}
             height={80}
-            src={auth.currentUser?.photoURL}
+            src={auth.currentUser?.photoURL ?? ''}
             alt='user-avatar'
           />
         </div>

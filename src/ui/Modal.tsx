@@ -1,7 +1,6 @@
 'use client';
 
 import React, { Fragment, memo } from 'react';
-import PropTypes from 'prop-types';
 import cx from 'clsx';
 import { Dialog, Transition } from '@headlessui/react';
 import {

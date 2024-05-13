@@ -1,17 +1,9 @@
 'use client';
 
-import {
-  ClipboardDocumentListIcon,
-  HeartIcon,
-  HomeIcon,
-  ShoppingCartIcon,
-  UserIcon,
-} from '@heroicons/react/24/outline';
+import { HeartIcon, HomeIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import routes from '@src/routes';
-import cx from 'clsx';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 
 export interface IMenuItem {
   title: string;

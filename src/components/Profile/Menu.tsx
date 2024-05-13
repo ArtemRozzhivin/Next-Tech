@@ -6,8 +6,8 @@ import { Fragment } from 'react';
 import cx from 'clsx';
 import Image from 'next/image';
 import routes from '@src/routes';
-import { User } from 'firebase/auth';
 import Link from 'next/link';
+import { User } from '@src/models/user';
 
 const ProfileMenu = ({ user, logoutHandler }: { user: User; logoutHandler: () => void }) => {
   return (

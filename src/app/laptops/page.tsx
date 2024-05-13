@@ -127,7 +127,7 @@ const Laptops = () => {
   const [sortingValue, setSortingValue] = useState(sortingOptions[0]);
   const [gridLayout, setGridLayout] = useState<string>('large');
 
-  const [currentPage, setCurrentPage] = useState<number | null>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [pagination, setPagination] = useState<{ nbPages: number; page: number } | null>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -173,14 +173,18 @@ const Laptops = () => {
     }
 
     customIndex
-      .search(value, { page: currentPage, hitsPerPage: 15, filters: value ? filterPrice : filters })
+      .search(value, {
+        page: currentPage,
+        hitsPerPage: 15,
+        filters: value ? filterPrice : filters,
+      })
       .then((response) => {
         setPagination({
           nbPages: response.nbPages,
           page: response.page,
         });
 
-        setLaptops(response.hits);
+        setLaptops(response.hits as unknown as IProductItem[]);
       })
       .finally(() => {
         setLoading(false);
@@ -228,7 +232,7 @@ const Laptops = () => {
     });
   };
 
-  const handleSorting = async (sort: ISortingOption) => {
+  const handleSorting = (sort: ISortingOption) => {
     setSortingValue(sort);
   };
 
@@ -297,7 +301,6 @@ const Laptops = () => {
               priceFrom={priceFrom}
               setPriceFrom={setPriceFrom}
               onResetPrice={handleResetPrice}
-              acceptedPrice={acceptedPrice}
               priceTo={priceTo}
               setPriceTo={setPriceTo}
               onClickPrice={handleClickPrice}
@@ -344,7 +347,6 @@ const Laptops = () => {
                     priceFrom={priceFrom}
                     setPriceFrom={setPriceFrom}
                     onResetPrice={handleResetPrice}
-                    acceptedPrice={acceptedPrice}
                     priceTo={priceTo}
                     setPriceTo={setPriceTo}
                     onClickPrice={handleClickPrice}
@@ -509,9 +511,9 @@ const Laptops = () => {
               </>
             )}
 
-            {laptops.length > 0 && (
+            {pagination && laptops.length > 0 && (
               <div className='flex justify-center items-center py-5'>
-                <СustomPagination allPages={pagination?.nbPages} onChange={handleChangePage} />
+                <СustomPagination allPages={pagination.nbPages} onChange={handleChangePage} />
               </div>
             )}
           </div>

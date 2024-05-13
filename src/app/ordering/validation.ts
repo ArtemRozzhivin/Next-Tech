@@ -3,7 +3,7 @@ import * as yup from 'yup';
 const nameRegExp = /^[a-zA-Zа-яА-ЯіІїЇєЄ' -]+$/;
 
 export const validation = (cardType: string) => {
-  let shcema = yup.object().shape({
+  const shcema = yup.object().shape({
     firstName: yup
       .string()
       .required("Ім'я є обов'язковим")

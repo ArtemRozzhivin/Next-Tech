@@ -71,8 +71,8 @@ export const ProfileMobileNavBar = ({ onMenuItem }: IProfileNavbar) => {
 };
 
 interface IProfileNavbar {
-  displayName?: string;
-  email?: string;
+  displayName?: string | null;
+  email?: string | null;
   onMenuItem: (item: IMenuItem) => void;
 }
 

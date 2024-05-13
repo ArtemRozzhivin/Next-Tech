@@ -7,7 +7,6 @@ import { ChevronDownIcon as ChevronDownIconMini } from '@heroicons/react/20/soli
 import cx from 'clsx';
 import _map from 'lodash/map';
 import _isEmpty from 'lodash/isEmpty';
-import PropTypes from 'prop-types';
 
 // Define the prop types for the component
 interface IDropdown {

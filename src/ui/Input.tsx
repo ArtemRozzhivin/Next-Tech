@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import cx from 'clsx';
 import _isEmpty from 'lodash/isEmpty';
-import PropTypes from 'prop-types';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -50,7 +49,12 @@ const Input = ({
   const isError = !_isEmpty(error);
 
   const handleClear = () => {
-    onClear();
+    if (onClear) {
+      onClear();
+    }
+
+    onChange &&
+      onChange({ target: { value: '', name: identifier } } as React.ChangeEvent<HTMLInputElement>);
   };
 
   return (

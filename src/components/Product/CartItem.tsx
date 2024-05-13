@@ -1,4 +1,4 @@
-import { IProductCartItem, IProductItem } from '@src/redux/models';
+import { IProductCartItem } from '@src/redux/models';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Button from '@src/ui/Button';
@@ -58,13 +58,13 @@ const ProductCartItem = ({ addToWishlist, item }: IProductCartItemProps) => {
   return (
     <div className='rounded-md w-full bg-white border border-gray-300 p-2 md:p-5'>
       <div className='flex items-center gap-3'>
-        <Checkbox large onChange={removeFromProductsToOrdering} checked={isChecked} />
+        <Checkbox large onChange={removeFromProductsToOrdering} checked={!!isChecked} />
         <div className='bg-white p-1 sm:p-3'>
           <Image
             className='h-full w-full object-contain'
             width={100}
             height={100}
-            src={item.image.large ? item.image.large : item.image.front}
+            src={item.image.large ?? item.image.front}
             alt='product'
           />
         </div>

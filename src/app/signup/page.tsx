@@ -4,18 +4,12 @@ import React, { useState, useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import _size from 'lodash/size';
 import _keys from 'lodash/keys';
-import _omit from 'lodash/omit';
 import _isEmpty from 'lodash/isEmpty';
 
 import routes from '@src/routes';
 import Input from '@ui/Input';
 import Button from '@ui/Button';
-import {
-  isValidEmail,
-  isValidPassword,
-  MIN_PASSWORD_CHARS,
-  MAX_PASSWORD_CHARS,
-} from '@src/utils/validator';
+import { isValidEmail, isValidPassword } from '@src/utils/validator';
 import { signup } from '@src/firebaseConfig';
 import GoogleAuth from '@src/components/GoogleAuth';
 import { useRouter } from 'next/navigation';

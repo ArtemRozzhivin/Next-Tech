@@ -3,12 +3,18 @@
     "browser": true,
     "es2021": true
   },
-  "extends": "airbnb-base",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest"
   },
   "rules": {
+    "no-undef": "warn",
+    "@typescript-eslint/no-explicit-any": "warn",
     "linebreak-style": ["error", "unix"],
     "no-console": "off",
     "no-alert": "off",
@@ -27,14 +33,6 @@
       }
     ],
     "strict": ["off", "global"],
-    "newline-before-return": "error",
-    "max-len": [
-      "error",
-      {
-        "code": 130,
-        "tabWidth": 2,
-        "ignoreUrls": true
-      }
-    ]
+    "newline-before-return": "error"
   }
 }

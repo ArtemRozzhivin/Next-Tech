@@ -5,7 +5,7 @@ import { useAppDispatch } from '@src/redux/hooks';
 import { onAuthStateChanged } from 'firebase/auth';
 import { authActions } from '@redux/reducers/auth';
 import { getUserHistory } from '@src/api/user';
-import { productsActions } from '@src/redux/reducers/Products/products';
+import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
 import Laptops from './laptops/page';
 import { useEffect } from 'react';
 
@@ -27,7 +27,7 @@ export default function Home() {
         };
 
         getUserHistory(loginedUser).then((userHistory) => {
-          if (userHistory) dispatch(productsActions.setUserHistory(userHistory));
+          if (userHistory) dispatch(productsActions.setUserHistory(userHistory as IUserHistory));
         });
 
         dispatch(authActions.setUser(loginedUser));

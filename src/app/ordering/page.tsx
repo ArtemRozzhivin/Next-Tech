@@ -42,85 +42,7 @@ import { getUserHistory } from '@src/api/user';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import routes from '@src/routes';
-
-interface ICity {
-  AddressDeliveryAllowed: boolean;
-  Area: string;
-  DeliveryCity: string;
-  MainDescription: string;
-  ParentRegionCode: string;
-  ParentRegionTypes: string;
-  Present: string;
-  Ref: string;
-  Region: string;
-  RegionTypes: string;
-  RegionTypesCode: string;
-  SettlementTypeCode: string;
-  StreetsAvailability: boolean;
-  Warehouses: number;
-}
-
-interface IAdress {
-  Location: { lat: number; lon: number };
-  Present: string;
-  SettlementRef: string;
-  SettlementStreetDescription: string;
-  SettlementStreetDescriptionRu: string;
-  SettlementStreetRef: string;
-  StreetsType: string;
-  StreetsTypeDescription: string;
-}
-
-interface IOfficeAdress {
-  SiteKey: string;
-  Description: string;
-  DescriptionRu: string;
-  ShortAddress: string;
-  ShortAddressRu: string;
-  Phone: string;
-  TypeOfWarehouse: string;
-  Ref: string;
-  Number: string;
-  CityRef: string;
-  CityDescription: string;
-  CityDescriptionRu: string;
-  SettlementRef: string;
-  SettlementDescription: string;
-  SettlementAreaDescription: string;
-  SettlementRegionsDescription: string;
-  SettlementTypeDescription: string;
-  SettlementTypeDescriptionRu: string;
-  Longitude: string;
-  Latitude: string;
-  PostFinance: string;
-  BicycleParking: string;
-  PaymentAccess: string;
-  POSTerminal: string;
-  InternationalShipping: string;
-  SelfServiceWorkplacesCount: string;
-  TotalMaxWeightAllowed: string;
-  PlaceMaxWeightAllowed: string;
-  DistrictCode: string;
-  WarehouseStatus: string;
-  WarehouseStatusDate: string;
-  WarehouseIllusha: string;
-  CategoryOfWarehouse: string;
-  Direct: string;
-  RegionCity: string;
-  WarehouseForAgent: string;
-  GeneratorEnabled: string;
-  MaxDeclaredCost: string;
-  WorkInMobileAwis: string;
-  DenyToSelect: string;
-  CanGetMoneyTransfer: string;
-  HasMirror: string;
-  HasFittingRoom: string;
-  OnlyReceivingParcel: string;
-  PostMachineType: string;
-  PostalCodeUA: string;
-  WarehouseIndex: string;
-  BeaconCode: string;
-}
+import { IAdress, ICity, IOfficeAdress } from '@src/redux/models';
 
 interface IOrderingSearchCityModal {
   allCities: ICity[];
@@ -195,7 +117,7 @@ const OrderingSearchCityModal = ({
           <Controller
             name='city'
             control={control}
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <Input
                 icon={<MapIcon className='w-5 h-5' />}
                 name='city'
@@ -321,7 +243,7 @@ const OrderingSearchAdressModal = ({
           <Controller
             name='adress'
             control={control}
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <Input
                 label='Адреса доставки'
                 placeholder='Введіть вашу адресу'
@@ -374,7 +296,7 @@ const OrderingSearchAdressModal = ({
   );
 };
 
-interface IOrderingSearchAdressModal {
+interface IOrderingSearchOfficeAdressModal {
   allOfficeAdresses: IOfficeAdress[];
   isSearchOfficeAdressOpen: boolean;
   setIsSearchOfficeAdressOpen: (value: boolean) => void;
@@ -390,7 +312,7 @@ const OrderingSearchOfficeAddressModal = ({
   handleOfficeAdressInput,
   handleOfficeAdressClick,
   handleOfficeAdressClear,
-}: IOrderingSearchAdressModal) => {
+}: IOrderingSearchOfficeAdressModal) => {
   const { setValue, getValues, getFieldState, control } = useFormContext();
   const officeAdress = getValues('officeAdress');
   const { fetchOfficesError } = useAppSelector((state) => state.errors);
@@ -452,7 +374,7 @@ const OrderingSearchOfficeAddressModal = ({
           <Controller
             name='officeAdress'
             control={control}
-            render={({ field, fieldState }) => (
+            render={({ field }) => (
               <Input
                 label='Оберіть номер відділення або поштомат'
                 value={field.value}
@@ -618,7 +540,7 @@ interface IFormData {
   patronymic: string;
   house?: string;
   flat?: string;
-  city?: string;
+  city: string; // Change the type of 'city' to 'string' instead of 'string | undefined'
   adress?: string;
   officeAdress?: string;
 }
@@ -654,16 +576,14 @@ const Ordering = () => {
 
   const [isSearchAdressOpen, setIsSearchAdressOpen] = React.useState<boolean>(false);
   const [allAdresses, setAllAdresses] = React.useState<IAdress[]>([]);
-  const [searchAdress, setSearchAdress] = React.useState<string>('');
   const [address, setAddress] = React.useState<null | IAdress>(null);
 
   const [isSearchOfficeAddressOpen, setIsSearchOfficeAddressOpen] = React.useState<boolean>(false);
   const [allOfficeAddress, setAllOfficeAddress] = React.useState<IOfficeAdress[]>([]);
-  const [searchOfficeAddress, setSearchOfficeAddress] = React.useState<string>('');
   const [officeAddress, setOfficeAddress] = React.useState<null | IOfficeAdress>(null);
 
   const methods = useForm({
-    resolver: yupResolver(validation(currentDelivery?.type)),
+    resolver: yupResolver(validation(currentDelivery?.type || '')),
     defaultValues,
   });
 
@@ -700,9 +620,8 @@ const Ordering = () => {
       if (data.success && data.data[0].Addresses.length === 0) throw new Error('Cities not found');
 
       setAllCities(data.data[0].Addresses);
-    } catch (error) {
-      console.log(error.message, 'ERROR');
-      dispatch(errorsActions.failedFetchCitiesError(error));
+    } catch (error: any) {
+      dispatch(errorsActions.failedFetchCitiesError({ message: error.message }));
     }
   };
 
@@ -716,7 +635,7 @@ const Ordering = () => {
         calledMethod: 'searchSettlementStreets',
         methodProperties: {
           StreetName: value,
-          SettlementRef: city.Ref,
+          SettlementRef: city?.Ref,
         },
       });
 
@@ -725,9 +644,8 @@ const Ordering = () => {
         throw new Error('Адреси не знайдено');
 
       setAllAdresses(data.data[0].Addresses);
-    } catch (error) {
-      console.log(error.message, 'ERROR');
-      dispatch(errorsActions.failedFetchAdressesError(error));
+    } catch (error: any) {
+      dispatch(errorsActions.failedFetchAdressesError({ message: error.message }));
     }
   };
 
@@ -752,9 +670,8 @@ const Ordering = () => {
       }
 
       setAllOfficeAddress(data.data);
-    } catch (error) {
-      console.log(error.message, 'ERROR');
-      dispatch(errorsActions.failedFetchOfficesError(error));
+    } catch (error: any) {
+      dispatch(errorsActions.failedFetchOfficesError({ message: error.message }));
     }
   };
 
@@ -812,7 +729,7 @@ const Ordering = () => {
     dispatch(productsActions.clearProductsToOrdering());
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     if (Object.keys(errors).length !== 0) {
       return;
     }
@@ -848,11 +765,11 @@ const Ordering = () => {
         console.log(error);
         toast.error('Невдалося оформити замовлення');
       }
-    }
 
-    getUserHistory(user).then((userHistory) => {
-      if (userHistory) dispatch(productsActions.setUserHistory(userHistory as IUserHistory));
-    });
+      getUserHistory(user).then((userHistory) => {
+        if (userHistory) dispatch(productsActions.setUserHistory(userHistory as IUserHistory));
+      });
+    }
   };
 
   const redirectToPreviousPage = () => {
@@ -974,7 +891,7 @@ const Ordering = () => {
                   </div>
 
                   <div
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                    onClick={(e: React.MouseEvent<HTMLDivElement>) =>
                       handleDelivery(e.currentTarget.id, 'courier')
                     }
                     id='courier-comfy'
@@ -1010,7 +927,6 @@ const Ordering = () => {
                               handleAdressClick={handleAdressClick}
                               handleAdressClear={handleAdressClear}
                               handleAdressInput={handleAdressInput}
-                              searchAdress={searchAdress}
                               setIsSearchAdressOpen={setIsSearchAdressOpen}
                             />
                           </>
@@ -1024,7 +940,7 @@ const Ordering = () => {
                   </div>
 
                   <div
-                    onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                    onClick={(e: React.MouseEvent<HTMLDivElement>) =>
                       handleDelivery(e.currentTarget.id, 'office')
                     }
                     id='to-nova-poshta-office'
@@ -1059,7 +975,6 @@ const Ordering = () => {
                             handleOfficeAdressClick={handleOfficeAdressClick}
                             handleOfficeAdressClear={handleOfficeAdressClear}
                             handleOfficeAdressInput={handleOfficeAdressInput}
-                            searchOfficeAdress={searchOfficeAddress}
                             setIsSearchOfficeAdressOpen={setIsSearchOfficeAddressOpen}
                           />
                         </div>

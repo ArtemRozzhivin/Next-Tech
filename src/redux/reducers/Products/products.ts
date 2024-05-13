@@ -1,6 +1,5 @@
-import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import _filter from 'lodash/filter';
-import _map from 'lodash/map';
 import { IOrderedItem, IProductCartItem, IProductItem } from '../../models';
 
 const calculateTotalCount = (cartProducts: IProductCartItem[]) => {
@@ -103,23 +102,25 @@ const productsSlice = createSlice({
         (item) => item.product.id === payload,
       );
 
-      if (existingProductToOrdering && existingProductToOrdering.count < 15) {
-        existingProductToOrdering.count += 1;
-        state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
-        state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
-      }
+      if (state.currentProductToCart) {
+        if (existingProductToOrdering && existingProductToOrdering.count < 15) {
+          existingProductToOrdering.count += 1;
+          state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
+          state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
+        }
 
-      if (existingCartItem && existingCartItem.count < 15) {
-        existingCartItem.count += 1;
-        state.cartTotalCount = calculateTotalCount(state.cartProducts);
-      } else if (existingCartItem && existingCartItem.count >= 15) {
-        return state;
-      }
+        if (existingCartItem && existingCartItem.count < 15) {
+          existingCartItem.count += 1;
+          state.cartTotalCount = calculateTotalCount(state.cartProducts);
+        } else if (existingCartItem && existingCartItem.count >= 15) {
+          return state;
+        }
 
-      state.currentProductToCart = {
-        ...state.currentProductToCart,
-        count: ++state.currentProductToCart.count,
-      };
+        state.currentProductToCart = {
+          ...state.currentProductToCart,
+          count: ++state.currentProductToCart.count,
+        };
+      }
     },
 
     minusProductCart: (state, { payload }: PayloadAction<string>) => {
@@ -128,23 +129,25 @@ const productsSlice = createSlice({
         (item) => item.product.id === payload,
       );
 
-      if (existingProductToOrdering && existingCartItem.count > 1) {
-        existingProductToOrdering.count -= 1;
-        state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
-        state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
-      }
+      if (state.currentProductToCart) {
+        if (existingProductToOrdering && existingProductToOrdering.count > 1) {
+          existingProductToOrdering.count -= 1;
+          state.productsCountToOrdering = calculateTotalCount(state.productToOrdering);
+          state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
+        }
 
-      if (existingCartItem && existingCartItem.count > 1) {
-        existingCartItem.count -= 1;
-        state.cartTotalCount = calculateTotalCount(state.cartProducts);
-      } else if (existingCartItem && existingCartItem.count === 1) {
-        return state;
-      }
+        if (existingCartItem && existingCartItem.count > 1) {
+          existingCartItem.count -= 1;
+          state.cartTotalCount = calculateTotalCount(state.cartProducts);
+        } else if (existingCartItem && existingCartItem.count === 1) {
+          return state;
+        }
 
-      state.currentProductToCart = {
-        ...state.currentProductToCart,
-        count: --state.currentProductToCart.count,
-      };
+        state.currentProductToCart = {
+          ...state.currentProductToCart,
+          count: --state.currentProductToCart.count,
+        };
+      }
     },
 
     clearCart: (state) => {
@@ -169,7 +172,7 @@ const productsSlice = createSlice({
       state.productsPriceToOrdering = calculateTotalPrice(state.productToOrdering);
     },
 
-    setCurrentDetailProduct: (state, { payload }: PayloadAction<IProductItem>) => {
+    setCurrentDetailProduct: (state, { payload }: PayloadAction<IProductItem | null>) => {
       state.currentDetailProduct = payload;
     },
 

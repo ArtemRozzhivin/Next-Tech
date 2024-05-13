@@ -1,18 +1,14 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { ArrowLeftIcon, ArrowLongLeftIcon, TrashIcon } from '@heroicons/react/24/outline';
+import React from 'react';
+import { TrashIcon } from '@heroicons/react/24/outline';
 import ProductCartItem from '@src/components/Product/CartItem';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
 import Button from '@src/ui/Button';
-import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
-import { arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
-import { db } from '@src/firebaseConfig';
-import { getUserHistory } from '@src/api/user';
+import { productsActions } from '@src/redux/reducers/Products/products';
 import routes from '@src/routes';
 import PagePlaceholder from '@src/components/PagePlaceholder';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import MustAuthModal from '@src/components/Modals/MustAuthModal';
 import { handleAddToWishList } from '@src/api/products';
 import { IProductItem } from '@src/redux/models';

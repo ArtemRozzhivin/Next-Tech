@@ -1,16 +1,9 @@
 'use client';
 
-import {
-  ClipboardDocumentListIcon,
-  HeartIcon,
-  ShoppingCartIcon,
-  UserIcon,
-} from '@heroicons/react/24/outline';
 import ProfileNavbar, { ProfileMobileNavBar } from '@src/components/Profile/Navbar';
 import { auth } from '@src/firebaseConfig';
-import { useAppSelector } from '@src/redux/hooks';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface IMenuItem {
   title: string;

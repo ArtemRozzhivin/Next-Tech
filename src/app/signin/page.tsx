@@ -1,14 +1,13 @@
 'use client';
 
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import _keys from 'lodash/keys';
 import _isEmpty from 'lodash/isEmpty';
-import _isString from 'lodash/isString';
 import { signin } from '@src/firebaseConfig';
 import routes from '@src/routes';
 import Input from '@ui/Input';
 import Button from '@ui/Button';
-import { isValidEmail, isValidPassword, MIN_PASSWORD_CHARS } from '@src/utils/validator';
+import { isValidEmail, isValidPassword } from '@src/utils/validator';
 import GoogleAuth from '@src/components/GoogleAuth';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';

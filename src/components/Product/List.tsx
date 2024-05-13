@@ -5,23 +5,12 @@ import React, { useState } from 'react';
 import PagePlaceholder from '../PagePlaceholder';
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
 import { IProductCartItem, IProductItem } from '@src/redux/models';
-import Modal from '@src/ui/Modal';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
-import ProductCartItem from './CartItem';
-import { IUserHistory, productsActions } from '@src/redux/reducers/Products/products';
-import Button from '@src/ui/Button';
-import Image from 'next/image';
-import { HeartIcon, TrashIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { arrayRemove, arrayUnion, doc, setDoc, updateDoc } from 'firebase/firestore';
-import { db } from '@src/firebaseConfig';
-import { getUserHistory } from '@src/api/user';
+import { productsActions } from '@src/redux/reducers/Products/products';
 import AddedProductModal from '../Modals/AddedProductModal';
-import { getAuth, updateProfile } from 'firebase/auth';
 import { handleAddToWishList } from '@src/api/products';
 import cx from 'clsx';
 import { toast } from 'react-toastify';
-import routes from '@src/routes';
-import Link from 'next/link';
 import MustAuthModal from '../Modals/MustAuthModal';
 
 interface IProductList {
@@ -55,7 +44,7 @@ const ProductList = ({ items, gridLayout = 'large' }: IProductList) => {
 
   return (
     <>
-      {!!items ? (
+      {items ? (
         <div
           className={cx('grid grid-flow-row gap-1', {
             'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4': gridLayout === 'large',

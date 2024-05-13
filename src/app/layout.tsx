@@ -3,11 +3,11 @@ import Footer from '@src/components/Footer';
 import Header from '@src/components/Header';
 import { Inter } from 'next/font/google';
 import StoreProvider from './StoreProvider';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import cx from 'clsx';
-import 'react-toastify/dist/ReactToastify.css';
 import MobileNavBar from '@src/components/MobileNavbar';
 
+import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });

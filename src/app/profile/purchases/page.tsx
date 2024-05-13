@@ -5,7 +5,7 @@ import OrderedProductItem from '@src/components/Ordering/ProductItem';
 import PagePlaceholder from '@src/components/PagePlaceholder';
 import { useAppSelector } from '@src/redux/hooks';
 import { IOrderedItem } from '@src/redux/models';
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Purchases = () => {
   const userHistory = useAppSelector((state) => state.products.userHistory);
@@ -24,12 +24,12 @@ const Purchases = () => {
   return (
     <div className='p-2 flex flex-col gap-5'>
       <h2 className='text-3xl font-semibold'>Мої замовлення</h2>
-      {!!sortedPurchases ? (
+      {sortedPurchases ? (
         <div className='flex flex-col gap-5'>
           {sortedPurchases?.map((purchase) => (
             <OrderedProductItem
               key={purchase.product.id + purchase.date}
-              email={user?.email}
+              email={user?.email ?? ''}
               purchase={purchase}
             />
           ))}

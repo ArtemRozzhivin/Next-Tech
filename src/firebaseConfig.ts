@@ -39,6 +39,7 @@ export const logout = () => signOut(auth);
 
 export const loginWithGoogle = (callback: (user: string) => void) => {
   const googleProvide = new GoogleAuthProvider();
+
   return signInWithPopup(auth, googleProvide).then((res) => {
     callback(res.user.uid);
   });

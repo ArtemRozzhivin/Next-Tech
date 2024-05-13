@@ -12,7 +12,7 @@ const Wishlist = () => {
   return (
     <div className='p-2 flex flex-col gap-5'>
       <h2 className='text-3xl font-semibold'>Ваш список бажань</h2>
-      {!!userHistory?.wishlist?.length ? (
+      {userHistory?.wishlist?.length ? (
         <ProductsList items={userHistory?.wishlist} />
       ) : (
         <PagePlaceholder

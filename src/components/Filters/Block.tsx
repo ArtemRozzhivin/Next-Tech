@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Disclosure, RadioGroup } from '@headlessui/react';
-import { CheckIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import { Disclosure } from '@headlessui/react';
+import { ChevronUpIcon } from '@heroicons/react/24/outline';
 import Button from '@src/ui/Button';
 import Input from '@src/ui/Input';
 import React from 'react';
-import Checkbox from '@src/ui/Checkbox';
+import FilterItem from './FilterItem';
 
 const brandOptions = ['ASUS', 'HP', 'LG', 'Toshiba', 'DELL', 'Samsung', 'MSI', 'Lenovo', 'Acer'];
 const proccecorOptions = ['Intel', 'AMD', 'ARM'];
@@ -23,52 +22,10 @@ const osOptions = [
   'eShell',
 ];
 
-interface IFilterItem {
-  title: string;
-  options: string[];
-  selectedOptions: string;
-  onClickOption: (value: string) => void;
-}
-
-const FilterItem = ({ title, options, selectedOptions, onClickOption }: IFilterItem) => {
-  return (
-    <Disclosure defaultOpen>
-      {({ open }) => (
-        <div className='bg-white border-b border-gray-300 px-4 py-5 flex flex-col gap-5'>
-          <Disclosure.Button className='flex items-center w-full justify-between text-left text-sm font-medium hover:brightness-75'>
-            <div>{title}</div>
-
-            <div className='border border-gray-300 rounded-full p-1'>
-              <ChevronUpIcon
-                className={`${
-                  open ? 'rotate-180 transform transition-all' : 'rotate-0 transform transition-all'
-                } h-5 w-5 text-gray-400`}
-              />
-            </div>
-          </Disclosure.Button>
-          <Disclosure.Panel className='flex flex-col gap-2 text-sm text-gray-500'>
-            {options.map((item) => (
-              <Checkbox
-                key={item}
-                checked={selectedOptions.includes(item)}
-                onChange={() => onClickOption(item)}
-                name={item}
-                id={item}
-                label={item}
-              />
-            ))}
-          </Disclosure.Panel>
-        </div>
-      )}
-    </Disclosure>
-  );
-};
-
 interface IFiltersBlock {
   priceFrom: number;
   setPriceFrom: (value: number) => void;
   onResetPrice: () => void;
-  acceptedPrice: { from: number; to: number };
   priceTo: number;
   setPriceTo: (value: number) => void;
   onClickPrice: () => void;
@@ -95,7 +52,6 @@ const FiltersBlock = ({
   priceFrom,
   setPriceFrom,
   onResetPrice,
-  acceptedPrice,
   priceTo,
   setPriceTo,
   onClickPrice,
@@ -139,13 +95,13 @@ const FiltersBlock = ({
                 <Input
                   value={priceFrom}
                   type='number'
-                  onChange={(e) => setPriceFrom(Math.max(0, e.target.value))}
+                  onChange={(e) => setPriceFrom(Math.max(0, parseInt(e.target.value)))}
                 />
                 <div>до</div>
                 <Input
                   value={priceTo}
                   type='number'
-                  onChange={(e) => setPriceTo(Math.max(0, e.target.value))}
+                  onChange={(e) => setPriceTo(Math.max(0, parseInt(e.target.value)))}
                 />
                 {Number(priceFrom) > Number(priceTo) && <div className='text-red-600'>dsfdsf</div>}
               </div>

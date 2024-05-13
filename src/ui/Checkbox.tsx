@@ -1,9 +1,8 @@
 import React, { memo } from 'react';
 import cx from 'clsx';
-import PropTypes from 'prop-types';
 
 interface ICheckbox {
-  label: string | JSX.Element;
+  label?: string | JSX.Element;
   hint?: string | JSX.Element;
   id?: string;
   name?: string;
@@ -54,13 +53,15 @@ const Checkbox = ({
         />
       </div>
       <div className='ml-3 text-sm'>
-        <label
-          htmlFor={identifier}
-          className={cx('font-medium text-gray-700 dark:text-gray-200 cursor-pointer', {
-            '!cursor-not-allowed': disabled,
-          })}>
-          {label}
-        </label>
+        {label && (
+          <label
+            htmlFor={identifier}
+            className={cx('font-medium text-gray-700 dark:text-gray-200 cursor-pointer', {
+              '!cursor-not-allowed': disabled,
+            })}>
+            {label}
+          </label>
+        )}
         {hint && (
           <p
             id={`${identifier}-description`}

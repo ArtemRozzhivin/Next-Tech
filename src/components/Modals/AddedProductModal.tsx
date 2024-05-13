@@ -72,7 +72,7 @@ const AddedProductModal = ({
               className='h-full w-full object-contain'
               width={200}
               height={200}
-              src={image.large ? image.large : image.front}
+              src={image.large ?? image.front}
               alt='product'
             />
           </div>

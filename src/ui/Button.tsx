@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable react/button-has-type */
 import React, { ButtonHTMLAttributes, memo } from 'react';
 import cx from 'clsx';
 

@@ -1,31 +1,20 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from '@src/ui/Button';
-import {
-  HeartIcon,
-  ShoppingCartIcon,
-  ArrowRightIcon,
-  UserIcon,
-  Bars3Icon,
-} from '@heroicons/react/24/outline';
-import Dropdown from '../ui/Dropdown';
-import Flag from 'react-flagkit';
+import { ShoppingCartIcon, UserIcon } from '@heroicons/react/24/outline';
 import techLogo from '@assets/techLogo.png';
 import Image from 'next/image';
 import { auth } from '@src/firebaseConfig';
 import ProfileMenu from './Profile/Menu';
 import { useAppDispatch, useAppSelector } from '@src/redux/hooks';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { signOut } from 'firebase/auth';
 import { authActions } from '@src/redux/reducers/auth';
-import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import routes from '@src/routes';
 import { productsActions } from '@src/redux/reducers/Products/products';
 
-type HeaderProps = {};
-
-const Header: React.FC<HeaderProps> = ({}) => {
+const Header = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   const cartTotalCount = useAppSelector((state) => state.products.cartTotalCount);
@@ -68,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({}) => {
             </Link>
           </li>
           <li>
-            {!!user ? (
+            {user ? (
               <div>
                 <ProfileMenu user={user} logoutHandler={logoutHandler} />
               </div>

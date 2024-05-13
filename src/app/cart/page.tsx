@@ -79,7 +79,7 @@ const Cart = () => {
               <ArrowLeftIcon className='w-4 h-4 sm:w-6 sm:h-6' />
               <h2 className='sm:text-xl font-semibold'>Назад</h2>
             </button>
-            {!!cartTotalCount ? <div className='text-gray-600'>{cartTotalCount} товарів</div> : ''}
+            {cartTotalCount ? <div className='text-gray-600'>{cartTotalCount} товарів</div> : ''}
           </div>
 
           <div className='flex flex-col xl:flex-row items-start gap-3'>

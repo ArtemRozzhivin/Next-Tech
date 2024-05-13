@@ -162,184 +162,6 @@ interface IProductDetail {
   };
 }
 
-const data: IProductDetail = {
-  product: {
-    dedupe: 'Lenovo ThinkPad T T14s 21F6001BUS 21F6001BUS',
-    is_translated: true,
-    alias: 'T14s',
-    part_number: '21F6001BUS',
-    brand: 'Lenovo',
-    family: 'ThinkPad',
-    series: 'T',
-    version: '21F6001BUS',
-    model: 'Lenovo ThinkPad T T14s 21F6001BUS',
-    category: 'Laptops',
-    'ean/upc_code': '0196804854076, 196804854076',
-    id: '652675347cc299b687df723e',
-  },
-  date: {
-    released: '2023-03-31',
-  },
-  image: {
-    thumbnail:
-      'https://i.techspecs.io/product-images-thumbnail/laptops/955efb42-8f6d-465b-a26e-b71358855ac5.jpeg',
-    large:
-      'https://i.techspecs.io/product-images-large/laptops/94f1249a-656f-47b4-b397-c532caa0bfa1.jpeg',
-  },
-  key_aspects: {
-    release_date: '2023-03-31',
-    ram: '16 GB',
-    storage: '512 GB',
-    processor: 'i7-1355U',
-    integrated_graphics_card: 'Intel Iris Xe Graphics',
-    battery: '57 Wh',
-  },
-  design: {
-    body: {
-      type: 'Laptop',
-      style: 'Clamshell',
-      colors: 'Grey',
-      finish: 'Aluminium',
-      'width_(longer_side)': '317.5 mm',
-      weight: '1.48 kg',
-      'height_(shorter_side)': '226.9 mm',
-      thickness: '16.9 mm',
-    },
-    keyboard: {
-      language: 'English',
-      additional_features: 'Backlight, Numeric Keypad, Spill Resistant Keyboard',
-    },
-    touchpad: {
-      pointing_device: 'ThinkPad UltraNav',
-    },
-    security: {
-      lock_slot_type: 'Kensington',
-      additional_features: 'Lock Slot',
-    },
-  },
-  display: {
-    type: 'IPS',
-    definition: 'WUXGA',
-    diagonal: '14 inch',
-    'resolution_(h_x_w)': '1920 x 1200 pixels',
-    aspect_ratio: '16:10',
-    brightness: '300 cd/m²',
-    contrast_ratio: '600:1',
-    additional_features: 'LED Backlight, Anti Glare',
-    color_gamut: '45%',
-    rgb_color_space: 'NTSC',
-  },
-  camera: {
-    front_camera: {
-      definition: 'Full HD',
-      'resolution_(h_x_w)': '1920 x 1080 pixels',
-      privacy: 'Privacy shutter',
-      additional_features: 'Camera Module, Privacy Shutter',
-    },
-  },
-  inside: {
-    cpu: {
-      number_of_cores: '10',
-      max_turbo_speed: '5 GHz',
-      brand: 'Intel',
-      model: 'i7-1355U',
-      generation: '13th gen Intel Core i7',
-      family: 'Intel Core i7',
-      motherboard_chipset: 'Intel SoC',
-      cache: '12 MB',
-    },
-    ram: {
-      capacity: '16 GB',
-      maximum_capacity: '16 GB',
-      type: 'LPDDR5x-SDRAM',
-      clock_speed: '4800 MHz',
-      form_factor: 'On-board',
-      channel: 'Dual-channel',
-    },
-    gpu: {
-      integrated_card_model: 'Intel Iris Xe Graphics',
-      integrated_card_family: 'Intel Iris Xe Graphics',
-      additional_features: 'Integrated Graphics Card',
-    },
-    storage: {
-      total_capacity: '512 GB',
-    },
-    ssd: {
-      capacity: '512 GB',
-      total_ssd_capacity: '512 GB',
-      number_of_ssds: '1',
-      storage_type: 'SSD',
-      ssd_interface: 'PCI Express 4.0',
-      ssd_form_factor: 'M.2',
-    },
-    battery: {
-      'capacity_(mah)': '57 Wh',
-      type: 'Lithium Polymer (LiPo)',
-      additional_features: 'Fast Charging',
-    },
-    power: {
-      power: '65 W',
-      voltage: '100 - 240 V',
-      frequency: '50/60 Hz',
-    },
-    wireless: {
-      wifi_standards:
-        '802.11a, Wi-Fi 5 (802.11ac), 802.11b, Wi-Fi 6 (802.11ax), 802.11g, Wi-Fi 4 (802.11n), Wi-Fi 6E (802.11ax)',
-      wifi_adapter: 'Intel Wi-Fi 6E AX211',
-      bluetooth_version: '5.1',
-      type_of_antenna: '2x2',
-      additional_features: 'Bluetooth Module, Not installed',
-    },
-    audio: {
-      number_of_speakers: '2',
-      speaker_power: '2 W',
-      sound_system: 'Dolby Audio',
-      number_of_microphones: '2',
-      chip: 'Realtek ALC3287',
-      additional_features: 'Headphone Microphone Combo Jack, Microphone',
-    },
-    security: {
-      'tpm_(trusted_platform_module)_version': '2.0',
-      password_protection: 'Present',
-      additional_features: 'Trusted Platform Module (TPM)',
-    },
-    software: {
-      operating_system_version: 'Windows 11 Pro',
-      operating_system_language: 'English',
-      type_of_password_protection: 'Power on, SSD, Supervisor',
-    },
-    ports: {
-      'number_of_usb_3,2_gen_1_type_a_ports': '2',
-      number_of_thunderbolt_4_ports: '2',
-      number_of_hdmi_ports: '1',
-      'usb_(universal_serial_bus)_sleep_and_charge_ports': '1',
-      additional_features:
-        'Sleep and Charge, USB Power Delivery, USB Type C DisplayPort Alternate Mode',
-    },
-    sensors: {
-      sensors: 'Fingerprint Reader',
-    },
-  },
-  no: {
-    touchscreen: 'Touchscreen',
-    numeric_keypad: 'Numeric Keypad',
-    card_reader: 'Card Reader',
-    ethernet_card: 'Ethernet',
-    dedicated_card: 'Dedicated Graphics Card',
-    'nfc_(near_field_communication)': 'NFC (Near Field Communication)',
-    smart_card_reader: 'Smart Card Reader',
-  },
-  No: {
-    Touchscreen: 'Touchscreen',
-    Dedicated_Card: 'Dedicated Graphics Card',
-    Card_Reader: 'Card Reader',
-    'NFC_(Near_Field_Communication)': 'NFC (Near Field Communication)',
-    Ethernet_Card: 'Ethernet',
-    Numeric_Keypad: 'Numeric Keypad',
-    Smart_Card_Reader: 'Smart Card Reader',
-  },
-};
-
 const InfoBlock = ({ title, info }: { title: string; info: string | null | undefined }) => {
   return (
     <>
@@ -531,7 +353,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
     (state) => state.products,
   );
   const [mustAuthModal, setMustAuthModal] = React.useState(false);
-  const itemCart = useAppSelector(selectCartItemById(currentDetailProduct?.product?.id));
+  const itemCart = useAppSelector(selectCartItemById(currentDetailProduct?.product?.id ?? ''));
 
   useEffect(() => {
     if (userHistory?.wishlist) {
@@ -563,7 +385,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
 
   const removeFromCart = async () => {
     if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
-      dispatch(productsActions.removeFromCart(currentDetailProduct?.product?.id));
+      dispatch(productsActions.removeFromCart(currentDetailProduct?.product?.id ?? ''));
       toast.info('Товар видалено з кошика');
     }
   };
@@ -584,7 +406,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
             <Image
               width={window.innerWidth < 640 ? 250 : 500}
               height={window.innerWidth < 640 ? 250 : 500}
-              src={currentDetailProduct?.image?.large}
+              src={currentDetailProduct?.image?.large ?? ''}
               alt='product'
               className='object-contain sm:w-full lg:h-full'
             />
@@ -616,7 +438,7 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
               </div>
             </div>
             <div className='w-full flex items-center gap-2'>
-              {!!itemCart ? (
+              {itemCart ? (
                 <Button className='w-full' onClick={removeFromCart} large danger>
                   <div className='w-full text-center flex items-center justify-center gap-2'>
                     <TrashIcon className='w-6 h-6' />
@@ -634,7 +456,9 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
               {inWishlist ? (
                 <Button
                   className='w-full bg-green-600 hover:bg-green-700 text-white'
-                  onClick={() => handleAddProductToWishlist(currentDetailProduct)}
+                  onClick={() =>
+                    currentDetailProduct && handleAddProductToWishlist(currentDetailProduct)
+                  }
                   large
                   primary>
                   <div className='flex items-center justify-center gap-1'>
@@ -646,7 +470,9 @@ const MainBlock = ({ product }: { product: IProductDetail }) => {
                 <Button
                   className='w-full'
                   secondary
-                  onClick={() => handleAddProductToWishlist(currentDetailProduct)}
+                  onClick={() =>
+                    currentDetailProduct && handleAddProductToWishlist(currentDetailProduct)
+                  }
                   large>
                   <div className='w-full text-center flex items-center justify-center gap-2'>
                     <HeartIcon className='w-6 h-6' />В обране
@@ -690,14 +516,19 @@ const algoliaSearchApiKey = process.env.NEXT_PUBLIC_SEARCH_API_KEY as string;
 const client = algoliasearch(algoliaApplicationId, algoliaSearchApiKey);
 const index = client.initIndex('product_search');
 
-const LaptopDetail: React.FC = ({ params }) => {
+const LaptopDetail = ({ params }: { params: { id: string } }) => {
   const dispatch = useAppDispatch();
   const [productDetail, setProductDetail] = React.useState<IProductDetail | null>(null);
   const [productDB, setProductDB] = React.useState<any | null>(null);
 
   const fetchProductDB = () => {
-    index.getObject(params.id).then((response) => {
-      dispatch(productsActions.setCurrentDetailProduct(response));
+    index.getObject(params.id).then((response: any) => {
+      const product = {
+        product: response.product,
+        image: response.image,
+      };
+
+      dispatch(productsActions.setCurrentDetailProduct(product));
       setProductDB(response);
     });
   };

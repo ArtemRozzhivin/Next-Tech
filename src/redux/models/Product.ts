@@ -22,9 +22,34 @@ export interface IProductCartItem extends IProductItem {
 export interface IOrderedItem extends IProductCartItem {
   date: number;
   info: {
-    method: string;
-    city: string;
-    address: string;
+    method: {
+      id: string;
+      type: string;
+    };
+    city: {
+      AddressDeliveryAllowed: boolean;
+      Area: string;
+      DeliveryCity: string;
+      MainDescription: string;
+      ParentRegionCode: string;
+      ParentRegionTypes: string;
+      Present: string;
+      Ref: string;
+      Region: string;
+      RegionTypes: string;
+      RegionTypesCode: string;
+      SettlementTypeCode: string;
+      StreetsAvailability: string;
+      Warehouses: string;
+    };
+    address: {
+      Present: string;
+      Description: string;
+      SettlementRef: string;
+      SettlementStreetDescription: string;
+      SettlementStreetRef: string;
+      StreetsType: string;
+    };
     phone: string;
     email: string;
     firstName: string;

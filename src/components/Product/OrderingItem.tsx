@@ -1,26 +1,8 @@
-import { IProductCartItem, IProductItem } from '@src/redux/models';
+import { IProductCartItem } from '@src/redux/models';
 import React from 'react';
 import Image from 'next/image';
-import { useAppDispatch } from '@src/redux/hooks';
-import { productsActions } from '@src/redux/reducers/Products/products';
 
 const ProductOrderingItem = ({ product, image, count }: IProductCartItem) => {
-  const dispatch = useAppDispatch();
-
-  const handlePlusProduct = () => {
-    dispatch(productsActions.plusProductCart(product.id));
-  };
-
-  const handleMinusProduct = () => {
-    dispatch(productsActions.minusProductCart(product.id));
-  };
-
-  const removeFromCart = async () => {
-    if (window.confirm('Ви впевнені, що хочете видалити цей товар з кошика?')) {
-      dispatch(productsActions.removeFromCart(product.id));
-    }
-  };
-
   return (
     <div className='rounded-md w-full bg-white'>
       <div className='flex flex-col md:flex-row items-center gap-5'>
@@ -29,7 +11,7 @@ const ProductOrderingItem = ({ product, image, count }: IProductCartItem) => {
             className='h-full w-full object-contain group-hover:scale-110 transition-all'
             width={window.innerWidth > 400 ? 100 : 70}
             height={window.innerWidth > 400 ? 100 : 70}
-            src={image.large ? image.large : image.front}
+            src={image.large ?? image.front}
             alt='product'
           />
         </div>
