@@ -18,18 +18,12 @@
     "linebreak-style": ["error", "unix"],
     "no-console": "off",
     "no-alert": "off",
+    "indent": "off",
     "no-multiple-empty-lines": [
       "error",
       {
         "max": 4,
         "maxEOF": 1
-      }
-    ],
-    "indent": [
-      "error",
-      2,
-      {
-        "SwitchCase": 1
       }
     ],
     "strict": ["off", "global"],
