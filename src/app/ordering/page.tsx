@@ -9,7 +9,8 @@ import ProductOrderingItem from '@src/components/Product/OrderingItem';
 import Input from '@src/ui/Input';
 import Image from 'next/image';
 import novaPoshta from '@src/assets/novaPoshta.svg';
-import comfy from '@src/assets/comfy.svg';
+import techLogo from '@assets/techLogo.png';
+
 import cx from 'clsx';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import {
@@ -19,11 +20,11 @@ import {
   FaceSmileIcon,
   HomeModernIcon,
   MapIcon,
+  PhoneIcon,
 } from '@heroicons/react/24/outline';
 import Modal from '@src/ui/Modal';
 import axios from 'axios';
 import { useDebouncedCallback } from 'use-debounce';
-import { InputPhone } from '@src/ui/InputPhone';
 import PagePlaceholder from '@src/components/PagePlaceholder';
 import Loader from '@src/components/Loader';
 import { errorsActions } from '@src/redux/reducers/errors';
@@ -533,6 +534,61 @@ const OrderingCheck = ({ isChecked, isActive }: { isChecked: boolean; isActive: 
   );
 };
 
+const PaymentByCard = () => {
+  const { control } = useFormContext();
+
+  return (
+    <div className='flex flex-col xs:flex-row items-start xs:items-center gap-5'>
+      <Controller
+        name='cardNumber'
+        control={control}
+        render={({ field, fieldState }) => (
+          <Input
+            name='cardNumber'
+            type='text'
+            label='Номер картки'
+            value={field.value}
+            onChange={(e) => field.onChange(e.target.value)}
+            placeholder='**** **** **** ****'
+            error={fieldState.error?.message}
+          />
+        )}
+      />
+      <Controller
+        name='cardExpiration'
+        control={control}
+        render={({ field, fieldState }) => (
+          <Input
+            name='cardExpiration'
+            type='text'
+            label='Термін дії'
+            value={field.value}
+            placeholder='MM/YY'
+            onChange={(e) => field.onChange(e.target.value)}
+            error={fieldState.error?.message}
+          />
+        )}
+      />
+
+      <Controller
+        name='cardCVV'
+        control={control}
+        render={({ field, fieldState }) => (
+          <Input
+            name='cardCVV'
+            type='text'
+            label='CVV'
+            value={field.value}
+            placeholder='***'
+            onChange={(e) => field.onChange(e.target.value)}
+            error={fieldState.error?.message}
+          />
+        )}
+      />
+    </div>
+  );
+};
+
 interface IFormData {
   phone: string;
   lastName: string;
@@ -540,9 +596,12 @@ interface IFormData {
   patronymic: string;
   house?: string;
   flat?: string;
-  city: string; // Change the type of 'city' to 'string' instead of 'string | undefined'
+  city: string;
   adress?: string;
   officeAdress?: string;
+  cardNumber?: string;
+  cardExpiration?: string;
+  cardCVV?: string;
 }
 
 const defaultValues: IFormData = {
@@ -555,6 +614,9 @@ const defaultValues: IFormData = {
   city: '',
   adress: '',
   officeAdress: '',
+  cardNumber: '',
+  cardExpiration: '',
+  cardCVV: '',
 };
 
 const novaPoshtaKey = process.env.NEXT_PUBLIC_NOVAPOSHTA_API_KEY;
@@ -568,6 +630,10 @@ const Ordering = () => {
   const [currentDelivery, setCurrentDelivery] = React.useState<{ id: string; type: string } | null>(
     null,
   );
+  const [currentPayment, setCurrentPayment] = React.useState<{ id: string; type: string } | null>(
+    null,
+  );
+
   const [isInfoRight, setIsInfoRight] = React.useState<boolean | null>(null);
 
   const [isSearchCityOpen, setIsSearchCityOpen] = React.useState<boolean>(false);
@@ -583,7 +649,7 @@ const Ordering = () => {
   const [officeAddress, setOfficeAddress] = React.useState<null | IOfficeAdress>(null);
 
   const methods = useForm({
-    resolver: yupResolver(validation(currentDelivery?.type || '')),
+    resolver: yupResolver(validation(currentDelivery?.type || '', currentPayment?.type || '')),
     defaultValues,
   });
 
@@ -598,6 +664,11 @@ const Ordering = () => {
     if (city === null) return null;
 
     setCurrentDelivery({ id, type });
+    clearErrors();
+  };
+
+  const handlePayment = (id: string, type: string) => {
+    setCurrentPayment({ id, type });
     clearErrors();
   };
 
@@ -742,6 +813,7 @@ const Ordering = () => {
             date: Date.now(),
             info: {
               method: currentDelivery,
+              payment: currentPayment,
               city: city,
               address: currentDelivery?.type === 'office' ? officeAddress : address,
               phone: data.phone,
@@ -811,13 +883,16 @@ const Ordering = () => {
                     control={control}
                     render={({ field, fieldState }) => (
                       <>
-                        <InputPhone
+                        <Input
                           name='phone'
                           label='Номер телефону'
                           value={field.value}
                           placeholder='+380 96 335 0479'
                           onChange={(value) => field.onChange(value)}
                           error={fieldState.error?.message}
+                          icon={<PhoneIcon className='w-5 h-5' />}
+                          className='pr-9 rounded'
+                          clearIcon
                         />
                       </>
                     )}
@@ -894,30 +969,30 @@ const Ordering = () => {
                     onClick={(e: React.MouseEvent<HTMLDivElement>) =>
                       handleDelivery(e.currentTarget.id, 'courier')
                     }
-                    id='courier-comfy'
+                    id='courier-next-tech'
                     className={cx(
                       'p-5 rounded-md border border-colorMain flex flex-col gap-5',
                       !city && 'border-gray-300',
                     )}>
                     <div className='flex items-center gap-3'>
                       <OrderingCheck
-                        isChecked={currentDelivery?.id === 'courier-comfy'}
+                        isChecked={currentDelivery?.id === 'courier-next-tech'}
                         isActive={!city}
                       />
                       <div className='w-full flex items-center justify-between gap-3'>
-                        <div className='text-sm md:text-base'>Кур'єр COMFY </div>
-                        <div>
+                        <div className='text-sm md:text-base'>Кур'єр NextTech </div>
+                        <div className='w-[65px] flex justify-center'>
                           <Image
-                            width={65}
-                            height={65}
-                            src={comfy}
+                            width={35}
+                            height={25}
+                            src={techLogo}
                             alt='delivery-icon'
                             className='ogg-inline-tab__media-img'
                           />
                         </div>
                       </div>
                     </div>
-                    {currentDelivery?.id === 'courier-comfy' && (
+                    {currentDelivery?.id === 'courier-next-tech' && (
                       <div className='flex flex-col gap-5'>
                         <div>
                           <>
@@ -980,6 +1055,58 @@ const Ordering = () => {
                         </div>
 
                         <PersonalInfoForm />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className='flex flex-col gap-5'>
+              <div className='text-lg md:text-2xl font-semibold'>4. Оплата</div>
+              <div className='flex flex-col gap-5 rounded-md p-[6px] 2xl:p-5 border border-gray-300 shadow-sm bg-white'>
+                <div className='flex flex-col gap-5'>
+                  <div
+                    onClick={(e: React.MouseEvent<HTMLDivElement>) =>
+                      handlePayment(e.currentTarget.id, 'payment-on-receipt')
+                    }
+                    id='payment-on-receipt'
+                    className={cx(
+                      'p-5 rounded-md border border-colorMain flex flex-col gap-5',
+                      !currentDelivery && 'border-gray-300',
+                    )}>
+                    <div className='flex items-center gap-3'>
+                      <OrderingCheck
+                        isChecked={currentPayment?.id === 'payment-on-receipt'}
+                        isActive={!currentDelivery}
+                      />
+                      <div className='w-full'>
+                        <div className='text-sm md:text-base'>Оплата при отриманні</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={(e: React.MouseEvent<HTMLDivElement>) =>
+                      handlePayment(e.currentTarget.id, 'card-payment')
+                    }
+                    id='card-payment'
+                    className={cx(
+                      'p-5 rounded-md border border-colorMain flex flex-col gap-5',
+                      !currentDelivery && 'border-gray-300',
+                    )}>
+                    <div className='flex items-center gap-3'>
+                      <OrderingCheck
+                        isChecked={currentPayment?.id === 'card-payment'}
+                        isActive={!currentDelivery}
+                      />
+                      <div className='w-full'>
+                        <div className='text-sm md:text-base'>Оплата карткою</div>
+                      </div>
+                    </div>
+                    {currentPayment?.id === 'card-payment' && (
+                      <div className='flex flex-col gap-5'>
+                        <PaymentByCard />
                       </div>
                     )}
                   </div>

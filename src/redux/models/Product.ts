@@ -26,6 +26,10 @@ export interface IOrderedItem extends IProductCartItem {
       id: string;
       type: string;
     };
+    payment: {
+      id: string;
+      type: string;
+    };
     city: {
       AddressDeliveryAllowed: boolean;
       Area: string;

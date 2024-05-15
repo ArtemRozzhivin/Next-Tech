@@ -18,10 +18,21 @@ const OrderingProductItem = ({ purchase, email }: IProductOrderingItem) => {
     switch (methodId) {
       case 'courier-nova-poshta':
         return 'Кур’єр Нова Пошта';
-      case 'courier-comfy':
-        return "Кур'єр Comfy";
+      case 'courier-next-tech':
+        return "Кур'єр NextTech";
       case 'to-nova-poshta-office':
         return 'Поштомат або відділення Нова Пошта';
+      default:
+        return '';
+    }
+  };
+
+  const transformPaymentMethod = (methodId: string) => {
+    switch (methodId) {
+      case 'payment-on-receipt':
+        return 'Оплата при отриманні';
+      case 'card-payment':
+        return 'Оплата карткою';
       default:
         return '';
     }
@@ -55,11 +66,17 @@ const OrderingProductItem = ({ purchase, email }: IProductOrderingItem) => {
 
         {isInfoOpen && (
           <div className='flex flex-col gap-5'>
-            <div className='flex justify-start'>
+            <div className='flex flex-col justify-start gap-5'>
               <OrderedInfoBlock
                 title='Спосіб доставки'
                 text={purchase.info.method.id}
                 textExtractor={(text) => transformDeliveryMethod(text)}
+              />
+
+              <OrderedInfoBlock
+                title='Спосіб оплати'
+                text={purchase.info.payment.id}
+                textExtractor={(text) => transformPaymentMethod(text)}
               />
             </div>
 

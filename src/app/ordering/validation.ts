@@ -1,8 +1,11 @@
 import * as yup from 'yup';
 
 const nameRegExp = /^[a-zA-Zа-яА-ЯіІїЇєЄ' -]+$/;
+const cardNumberRegExp = /^(\d{4} ){3}\d{4}$/;
+const cardExpirationRegExp = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/; // Регулярний вираз для формату "MM/YY"
+const cardCVVRegExp = /^[0-9]{3,4}$/;
 
-export const validation = (cardType: string) => {
+export const validation = (cardType: string, paymentType: string) => {
   const shcema = yup.object().shape({
     firstName: yup
       .string()
@@ -33,6 +36,28 @@ export const validation = (cardType: string) => {
     officeAdress:
       cardType === 'office'
         ? yup.string().required("Адреса відділення є обов'язковою")
+        : yup.string().notRequired(),
+
+    cardNumber:
+      paymentType === 'card-payment'
+        ? yup
+            .string()
+            .required('Номер карти є обовязковим')
+            .matches(cardNumberRegExp, 'Номер карти повинен бути у форматі **** **** **** ****')
+        : yup.string().notRequired(),
+    cardExpiration:
+      paymentType === 'card-payment'
+        ? yup
+            .string()
+            .required('Термін дії карти є обовязковим')
+            .matches(cardExpirationRegExp, 'Невірний формат')
+        : yup.string().notRequired(),
+    cardCVV:
+      paymentType === 'card-payment'
+        ? yup
+            .string()
+            .required('CVV код є обовязковим')
+            .matches(cardCVVRegExp, 'CVV код повинен містити 3 або 4 цифри')
         : yup.string().notRequired(),
   });
 
